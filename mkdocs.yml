@@ -1,0 +1,93 @@
+site_name: CRA & Dev
+site_description: >-
+  Des articles courts, une technique de développement par épisode, pour aider les
+  développeurs à se rapprocher des exigences du Cyber Resilience Act.
+site_url: https://adntio.github.io/cra-dev-wiki/
+site_author: ADNT Sàrl
+copyright: Copyright © 2026 ADNT Sàrl · CC BY-SA 4.0
+
+repo_url: https://github.com/ADNTIO/cra-dev-wiki
+repo_name: ADNTIO/cra-dev-wiki
+edit_uri: edit/main/docs/
+
+nav:
+  - Accueil: fr/index.md
+  - Épisodes:
+      - "Ne stockez plus un secret en clair": fr/CRA-Dev-01-DPAPI.md
+      - "Faites confiance, mais vérifiez": fr/CRA-Dev-02-Integrite.md
+      - "Corriger ce qu'on ignore": fr/CRA-Dev-03-SBOM-VEX.md
+      - "Un colis sans expéditeur": fr/CRA-Dev-04-Authenticode.md
+  - Ressources:
+      - "DPAPI en détail": fr/ressources/DPAPI-Article-de-fond.md
+
+theme:
+  name: material
+  language: fr
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Passer au mode sombre
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Passer au mode clair
+  features:
+    - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - content.code.copy
+    - content.action.edit
+    - search.suggest
+    - search.highlight
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.details
+
+plugins:
+  - search
+  - i18n:
+      docs_structure: folder
+      languages:
+        - locale: fr
+          default: true
+          name: Français
+          build: true
+        - locale: en
+          name: English
+          build: true
+          nav_translations:
+            Accueil: Home
+            Épisodes: Episodes
+            Ressources: Resources
+            "Ne stockez plus un secret en clair": "Never store a secret in plaintext"
+            "Faites confiance, mais vérifiez": "Trust, but verify"
+            "Corriger ce qu'on ignore": "Fix what you don't know"
+            "Un colis sans expéditeur": "A parcel with no sender"
+            "DPAPI en détail": "DPAPI in detail"
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ADNTIO
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/111904110
