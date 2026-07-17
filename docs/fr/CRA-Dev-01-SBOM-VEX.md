@@ -1,6 +1,6 @@
 # Vous ne pouvez pas corriger ce que vous ignorez : SBOM et VEX
 
-> **CRA & Dev #3** · [Série « CRA & Dev »](index.md) · Lecture : environ 7 min · CI, multiplateforme ·
+> **CRA & Dev #1** · [Série « CRA & Dev »](index.md) · Lecture : environ 7 min · CI, multiplateforme ·
 > Outils : cdxgen, CycloneDX, Dependency-Track
 
 ## Ce que demande le CRA
@@ -148,8 +148,8 @@ font passer la gestion des vulnérabilités du déclaratif au concret.
 
 ---
 
-*Épisode précédent : [Faites confiance, mais vérifiez, signer vos
-données](CRA-Dev-02-Integrite.md).*
+*Épisode suivant : [Un colis sans expéditeur, signez vos
+binaires](CRA-Dev-02-Authenticode.md).*
 
 [cdxgen]: https://github.com/CycloneDX/cdxgen
 [dtrack]: https://dependencytrack.org/

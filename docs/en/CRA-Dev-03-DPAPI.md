@@ -1,6 +1,6 @@
 # Never store a secret in plaintext again: Windows DPAPI
 
-> **CRA & Dev #1** · ["CRA & Dev" series](index.md) · Reading time: about 5 min · Windows · Examples:
+> **CRA & Dev #3** · ["CRA & Dev" series](index.md) · Reading time: about 5 min · Windows · Examples:
 > Rust, Python, .NET
 
 ## What the CRA requires
@@ -124,7 +124,7 @@ threat model.
 
 ---
 
-*Next in the "CRA & Dev" series: coming soon.*
+*Previous episode: [An unsigned .exe is a parcel with no sender, sign your binaries](CRA-Dev-02-Authenticode.md).*
 
 *To go deeper (MasterKey, DPAPI-NG, macOS/Linux comparison, full history), see the
 in-depth article (currently French, [English translation pending](ressources/DPAPI-Article-de-fond.md)).*

@@ -1,6 +1,6 @@
 # An unsigned .exe is a parcel with no sender: sign your binaries
 
-> **CRA & Dev #4** · ["CRA & Dev" series](index.md) · Reading time: about 6 min · Windows ·
+> **CRA & Dev #2** · ["CRA & Dev" series](index.md) · Reading time: about 6 min · Windows ·
 > Tools: signtool, PowerShell, Azure Trusted Signing
 
 ## What the CRA requires
@@ -14,7 +14,7 @@ the recipient can confirm it really comes from you and that it wasn't opened in
 transit. An unsigned `.exe` arrives anonymous, and nothing tells your installer apart
 from a booby-trapped copy.
 
-In episode 2 we signed data. Here we sign the executable itself, with the native
+Signing data is one thing; here we sign the executable itself, with the native
 Windows mechanism: **Authenticode**.
 
 > This series presents technical practices that contribute to CRA compliance. On
@@ -93,7 +93,7 @@ integrity and update requirements.
 ---
 
 *Previous episode: [You can't fix what you don't know you're running, SBOM and
-VEX](CRA-Dev-03-SBOM-VEX.md).*
+VEX](CRA-Dev-01-SBOM-VEX.md).*
 
 [signtool]: https://learn.microsoft.com/en-us/dotnet/framework/tools/signtool-exe
 [trusted-signing]: https://learn.microsoft.com/en-us/azure/trusted-signing/

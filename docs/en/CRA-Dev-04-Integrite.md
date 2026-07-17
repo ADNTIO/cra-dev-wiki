@@ -1,6 +1,6 @@
 # Trust, but verify: sign your data to prove nobody tampered with it
 
-> **CRA & Dev #2** · ["CRA & Dev" series](index.md) · Reading time: about 6 min · Cross-platform ·
+> **CRA & Dev #4** · ["CRA & Dev" series](index.md) · Reading time: about 6 min · Cross-platform ·
 > Examples: Rust, Python, .NET
 
 ## What the CRA requires
@@ -135,7 +135,7 @@ Ed25519 is not in the BCL.
    `CryptographicOperations.FixedTimeEquals`, never `==` or `Equals`.
 3. Integrity does not replace confidentiality. An HMAC or a signature proves that
    data was not modified, but does not hide it. If it is sensitive, encrypt it too
-   (see [episode 1](CRA-Dev-01-DPAPI.md)).
+   (see the [DPAPI episode](CRA-Dev-03-DPAPI.md)).
 
 ## Takeaway
 
@@ -147,7 +147,7 @@ integrity requirement.
 ---
 
 *Previous episode: [Never store a secret in plaintext again, Windows
-DPAPI](CRA-Dev-01-DPAPI.md).*
+DPAPI](CRA-Dev-03-DPAPI.md).*
 
 [ed25519-dalek]: https://crates.io/crates/ed25519-dalek
 [nsec]: https://nsec.rocks/

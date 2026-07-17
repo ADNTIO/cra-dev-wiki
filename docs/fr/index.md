@@ -14,10 +14,10 @@ protège et ce qu'elle ne protège pas.
 
 | # | Titre | Exigence CRA | Réf. Annexe I | Plateforme |
 | --- | --- | --- | --- | --- |
-| 01 | [Ne stockez plus jamais un secret en clair : la DPAPI de Windows](CRA-Dev-01-DPAPI.md) | Confidentialité, chiffrement au repos | Partie I, point 2, e) | Windows |
-| 02 | [Faites confiance, mais vérifiez : signer vos données](CRA-Dev-02-Integrite.md) | Intégrité des données | Partie I, point 2, f) | Multiplateforme |
-| 03 | [Vous ne pouvez pas corriger ce que vous ignorez : SBOM et VEX](CRA-Dev-03-SBOM-VEX.md) | Gestion des vulnérabilités, SBOM | Partie II, point 1 | CI, multiplateforme |
-| 04 | [Un .exe non signé, c'est un colis sans expéditeur : signez vos binaires](CRA-Dev-04-Authenticode.md) | Intégrité et mise à jour sécurisée | Partie I, point 2, c) et f) | Windows |
+| 01 | [Vous ne pouvez pas corriger ce que vous ignorez : SBOM et VEX](CRA-Dev-01-SBOM-VEX.md) | Gestion des vulnérabilités, SBOM | Partie II, point 1 | CI, multiplateforme |
+| 02 | [Un .exe non signé, c'est un colis sans expéditeur : signez vos binaires](CRA-Dev-02-Authenticode.md) | Intégrité et mise à jour sécurisée | Partie I, point 2, c) et f) | Windows |
+| 03 | [Ne stockez plus jamais un secret en clair : la DPAPI de Windows](CRA-Dev-03-DPAPI.md) | Confidentialité, chiffrement au repos | Partie I, point 2, e) | Windows |
+| 04 | [Faites confiance, mais vérifiez : signer vos données](CRA-Dev-04-Integrite.md) | Intégrité des données | Partie I, point 2, f) | Multiplateforme |
 
 La liste s'enrichira au fil des épisodes.
 

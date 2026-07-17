@@ -1,6 +1,6 @@
 # You can't fix what you don't know you're running: SBOM and VEX
 
-> **CRA & Dev #3** · ["CRA & Dev" series](index.md) · Reading time: about 7 min · CI, cross-platform ·
+> **CRA & Dev #1** · ["CRA & Dev" series](index.md) · Reading time: about 7 min · CI, cross-platform ·
 > Tools: cdxgen, CycloneDX, Dependency-Track
 
 ## What the CRA requires
@@ -143,7 +143,7 @@ vulnerability handling from paperwork to practice.
 
 ---
 
-*Previous episode: [Trust, but verify, sign your data](CRA-Dev-02-Integrite.md).*
+*Next episode: [An unsigned .exe is a parcel with no sender, sign your binaries](CRA-Dev-02-Authenticode.md).*
 
 [cdxgen]: https://github.com/CycloneDX/cdxgen
 [dtrack]: https://dependencytrack.org/

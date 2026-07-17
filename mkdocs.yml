@@ -13,10 +13,10 @@ edit_uri: edit/main/docs/
 nav:
   - Accueil: fr/index.md
   - Épisodes:
-      - "Ne stockez plus un secret en clair": fr/CRA-Dev-01-DPAPI.md
-      - "Faites confiance, mais vérifiez": fr/CRA-Dev-02-Integrite.md
-      - "Corriger ce qu'on ignore": fr/CRA-Dev-03-SBOM-VEX.md
-      - "Un colis sans expéditeur": fr/CRA-Dev-04-Authenticode.md
+      - "Corriger ce qu'on ignore": fr/CRA-Dev-01-SBOM-VEX.md
+      - "Un colis sans expéditeur": fr/CRA-Dev-02-Authenticode.md
+      - "Ne stockez plus un secret en clair": fr/CRA-Dev-03-DPAPI.md
+      - "Faites confiance, mais vérifiez": fr/CRA-Dev-04-Integrite.md
   - Ressources:
       - "DPAPI en détail": fr/ressources/DPAPI-Article-de-fond.md
 

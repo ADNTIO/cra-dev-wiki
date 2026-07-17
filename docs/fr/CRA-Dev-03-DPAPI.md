@@ -1,6 +1,6 @@
 # Ne stockez plus jamais un secret en clair : la DPAPI de Windows
 
-> **CRA & Dev #1** · [Série « CRA & Dev »](index.md) · Lecture : environ 5 min · Windows · Exemples :
+> **CRA & Dev #3** · [Série « CRA & Dev »](index.md) · Lecture : environ 5 min · Windows · Exemples :
 > Rust, Python, .NET
 
 ## Ce que demande le CRA
@@ -129,7 +129,7 @@ l'employer en connaissant son modèle de menace.
 
 ---
 
-*Prochain épisode de la série « CRA & Dev » : à venir.*
+*Épisode précédent : [Un colis sans expéditeur, signez vos binaires](CRA-Dev-02-Authenticode.md).*
 
 *Pour aller plus loin (MasterKey, DPAPI-NG, comparaison macOS/Linux, historique
 complet), voir l'[article de fond dédié](ressources/DPAPI-Article-de-fond.md).*

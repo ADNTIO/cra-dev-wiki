@@ -1,6 +1,6 @@
 # Un .exe non signé, c'est un colis sans expéditeur : signez vos binaires
 
-> **CRA & Dev #4** · [Série « CRA & Dev »](index.md) · Lecture : environ 6 min · Windows ·
+> **CRA & Dev #2** · [Série « CRA & Dev »](index.md) · Lecture : environ 6 min · Windows ·
 > Outils : signtool, PowerShell, Azure Trusted Signing
 
 ## Ce que demande le CRA
@@ -15,7 +15,7 @@ un expéditeur vérifié : le destinataire peut confirmer qu'il vient bien de vo
 qu'on ne l'a pas ouvert en route. Un `.exe` non signé arrive anonyme, et rien ne
 distingue votre installeur de sa version piégée.
 
-À l'épisode 2, on signait de la donnée. Ici, on signe l'exécutable lui-même, avec le
+Signer une donnée est une chose ; ici, on signe l'exécutable lui-même, avec le
 mécanisme natif de Windows : **Authenticode**.
 
 > Cette série présente des pratiques techniques qui contribuent à la conformité au
@@ -99,7 +99,7 @@ CRA.
 ---
 
 *Épisode précédent : [Vous ne pouvez pas corriger ce que vous ignorez, SBOM et
-VEX](CRA-Dev-03-SBOM-VEX.md).*
+VEX](CRA-Dev-01-SBOM-VEX.md).*
 
 [signtool]: https://learn.microsoft.com/en-us/dotnet/framework/tools/signtool-exe
 [trusted-signing]: https://learn.microsoft.com/en-us/azure/trusted-signing/

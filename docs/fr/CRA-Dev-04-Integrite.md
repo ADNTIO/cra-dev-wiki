@@ -1,6 +1,6 @@
 # Faites confiance, mais vérifiez : signer vos données pour prouver qu'on n'y a pas touché
 
-> **CRA & Dev #2** · [Série « CRA & Dev »](index.md) · Lecture : environ 6 min · Multiplateforme ·
+> **CRA & Dev #4** · [Série « CRA & Dev »](index.md) · Lecture : environ 6 min · Multiplateforme ·
 > Exemples : Rust, Python, .NET
 
 ## Ce que demande le CRA
@@ -139,7 +139,7 @@ BouncyCastle, Ed25519 n'étant pas dans la BCL.
    `Equals`.
 3. L'intégrité ne remplace pas la confidentialité. Un HMAC ou une signature prouve
    qu'une donnée n'a pas été modifiée, mais ne la cache pas. Si elle est sensible,
-   chiffrez-la aussi (voir l'[épisode 1](CRA-Dev-01-DPAPI.md)).
+   chiffrez-la aussi (voir l'[épisode DPAPI](CRA-Dev-03-DPAPI.md)).
 
 ## À retenir
 
@@ -151,7 +151,7 @@ primitives, disponibles partout, pour répondre à l'exigence d'intégrité du C
 ---
 
 *Épisode précédent : [Ne stockez plus jamais un secret en clair, la DPAPI de
-Windows](CRA-Dev-01-DPAPI.md).*
+Windows](CRA-Dev-03-DPAPI.md).*
 
 [ed25519-dalek]: https://crates.io/crates/ed25519-dalek
 [nsec]: https://nsec.rocks/

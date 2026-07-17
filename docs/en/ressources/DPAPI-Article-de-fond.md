@@ -2,7 +2,7 @@
 
 > English translation pending. This long-form, fully sourced article is currently
 > available in French. The short episode
-> [CRA & Dev #1: DPAPI](../CRA-Dev-01-DPAPI.md) is already available in English.
+> [CRA & Dev #3: DPAPI](../CRA-Dev-03-DPAPI.md) is already available in English.
 >
 > Read the full French version:
 > [DPAPI, article de fond](../../fr/ressources/DPAPI-Article-de-fond.md).
