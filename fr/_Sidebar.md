@@ -6,6 +6,7 @@
 - [01. DPAPI (Windows)](CRA-Dev-01-DPAPI.md)
 - [02. Intégrité, signer et vérifier](CRA-Dev-02-Integrite.md)
 - [03. SBOM et VEX](CRA-Dev-03-SBOM-VEX.md)
+- [04. Signer vos binaires (Authenticode)](CRA-Dev-04-Authenticode.md)
 
 **Ressources**
 - [DPAPI, article de fond](ressources/DPAPI-Article-de-fond.md)
