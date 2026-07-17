@@ -20,6 +20,10 @@ distingue votre installeur de sa version piégée.
 À l'épisode 2, on signait de la donnée. Ici, on signe l'exécutable lui-même, avec le
 mécanisme natif de Windows : **Authenticode**.
 
+> Cette série présente des pratiques techniques qui contribuent à la conformité au
+> CRA. Leur mise en œuvre ne suffit pas, à elle seule, à démontrer la conformité
+> complète d'un produit.
+
 ## Le piège classique
 
 Trois erreurs, toutes fréquentes.
@@ -46,8 +50,12 @@ l'option `/tr`.
 
 ```powershell
 # Signer avec empreinte SHA-256 et horodatage RFC 3161 (indispensable)
-signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 MonApp.exe
+signtool sign /a /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 MonApp.exe
 ```
+
+L'option `/a` laisse signtool sélectionner automatiquement le meilleur certificat du
+magasin. En CI, on désigne plutôt le certificat par son empreinte, ou on passe par un
+fournisseur de clé (KSP) ou un outil connecté à un HSM.
 
 La vérification confirme la signature et la chaîne de confiance.
 

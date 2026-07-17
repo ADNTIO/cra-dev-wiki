@@ -17,6 +17,10 @@ télécharge doit pouvoir être vérifiée avant d'être utilisée. Un fichier d
 un message entre deux services, une mise à jour : si quelqu'un l'a modifié en
 chemin, vous devez pouvoir le détecter.
 
+> Cette série présente des pratiques techniques qui contribuent à la conformité au
+> CRA. Leur mise en œuvre ne suffit pas, à elle seule, à démontrer la conformité
+> complète d'un produit.
+
 ## Le piège classique
 
 Réflexe fréquent : « je stocke un hash SHA-256 à côté du fichier, et je compare ».
@@ -24,10 +28,10 @@ Réflexe fréquent : « je stocke un hash SHA-256 à côté du fichier, et je co
 attaquant qui modifie le fichier recalcule simplement le hash et remplace l'ancien.
 Un hash seul ne prouve rien sur l'origine de la donnée.
 
-Deuxième piège, plus subtil : comparer deux empreintes avec `==`. La comparaison
-s'arrête au premier octet différent, ce qui laisse fuiter, par le temps de réponse,
-combien d'octets sont corrects. C'est exploitable. Une vérification d'intégrité se
-compare toujours en temps constant.
+Deuxième piège, plus subtil : comparer deux empreintes avec `==`. Une comparaison
+classique s'arrête au premier octet différent et peut introduire une fuite
+temporelle sur le nombre d'octets corrects. Utilisez systématiquement les primitives
+de vérification fournies par la bibliothèque, qui évitent cette classe de problème.
 
 Il faut donc un secret dans la boucle. Deux outils selon le cas.
 

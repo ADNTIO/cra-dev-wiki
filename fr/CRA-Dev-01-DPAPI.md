@@ -7,13 +7,19 @@
 
 ## Ce que demande le CRA
 
-À partir du 11 décembre 2027, le Cyber Resilience Act
-([Règlement (UE) 2024/2847][eu-cra]) s'applique à tout logiciel vendu dans l'UE.
-Parmi ses règles : les données sensibles stockées doivent être chiffrées.
+À partir du 11 décembre 2027, la majorité des produits comportant des éléments
+numériques commercialisés dans l'Union européenne devront respecter les exigences du
+Cyber Resilience Act ([Règlement (UE) 2024/2847][eu-cra]). L'une d'elles porte sur la
+protection des données, proportionnée aux risques, ce qui passe souvent par le
+chiffrement des données sensibles au repos.
 
 En clair, pour un développeur : les identifiants, jetons, clés d'API et autres
 secrets que votre application garde sur le poste ne peuvent plus traîner en clair
 dans un `config.json` ou une clé de registre. Il faut les chiffrer.
+
+> Cette série présente des pratiques techniques qui contribuent à la conformité au
+> CRA. Leur mise en œuvre ne suffit pas, à elle seule, à démontrer la conformité
+> complète d'un produit.
 
 ## Le piège classique
 
@@ -30,10 +36,11 @@ de session de l'utilisateur courant, chiffre à votre place, et ne rend la donn�
 qu'au même utilisateur sur la même machine. Il y a deux opérations, `Protect` et
 `Unprotect`.
 
-Un paramètre optionnel revient dans les trois exemples : l'entropie. C'est un « sel »
-propre à votre application, fourni au chiffrement et réclamé à l'identique au
-déchiffrement. Il sert à cloisonner vos secrets de ceux des autres applications du
-même utilisateur.
+Un paramètre optionnel revient dans les trois exemples : l'entropie. C'est une donnée
+supplémentaire exigée à l'identique lors du déchiffrement. Une valeur publique et
+codée en dur dans le programme n'apporte qu'un cloisonnement limité entre
+applications ; pour ajouter une protection réelle, elle doit elle-même rester
+confidentielle.
 
 ### .NET (C#)
 
@@ -44,7 +51,7 @@ using System.Security.Cryptography;
 using System.Text;
 
 byte[] data    = Encoding.UTF8.GetBytes("token-super-secret");
-byte[] entropy = Encoding.UTF8.GetBytes("mon-app-v1");   // sel propre à l'app
+byte[] entropy = Encoding.UTF8.GetBytes("mon-app-v1");   // entropie : à garder confidentielle pour un vrai cloisonnement
 
 // Chiffrer, lié à l'utilisateur courant
 byte[] blob = ProtectedData.Protect(data, entropy, DataProtectionScope.CurrentUser);
@@ -63,7 +70,7 @@ Le module `win32crypt` expose directement les appels Win32.
 import win32crypt  # pip install pywin32
 
 data    = "token-super-secret".encode("utf-8")
-entropy = b"mon-app-v1"  # sel propre à l'app
+entropy = b"mon-app-v1"  # entropie : à garder confidentielle pour un vrai cloisonnement
 
 # Chiffrer : CryptProtectData(data, description, entropy, reserved, prompt, flags)
 blob = win32crypt.CryptProtectData(data, None, entropy, None, None, 0)
@@ -83,7 +90,7 @@ use windows_dpapi::{encrypt_data, decrypt_data, Scope};
 
 fn main() -> anyhow::Result<()> {
     let secret  = b"token-super-secret";
-    let entropy = b"mon-app-v1"; // sel propre à l'app
+    let entropy = b"mon-app-v1"; // entropie : à garder confidentielle pour un vrai cloisonnement
 
     // Chiffrer, lié à l'utilisateur courant
     let blob = encrypt_data(secret, Scope::User, Some(entropy))?;

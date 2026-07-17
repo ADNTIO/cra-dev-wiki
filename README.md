@@ -59,3 +59,13 @@ relectures sont les bienvenues. Deux façons de contribuer :
 
 Merci de lire d'abord le [guide de contribution](CONTRIBUTING.md) et le
 [code de conduite](CODE_OF_CONDUCT.md).
+
+## Licence
+
+Copyright © 2026 ADNT Sàrl.
+
+Contenu publié sous licence [Creative Commons Attribution - Partage dans les Mêmes
+Conditions 4.0 International (CC BY-SA 4.0)](LICENSE), une licence libre et copyleft
+reconnue comme licence libre par la Free Software Foundation. Vous pouvez partager et
+adapter le contenu, y compris à des fins commerciales, à condition de créditer ADNT
+Sàrl et de diffuser vos versions sous la même licence.

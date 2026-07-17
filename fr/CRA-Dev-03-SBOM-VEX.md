@@ -28,6 +28,10 @@ jour. Le SBOM est votre registre de flotte, la mise à jour est le remplacement 
 pièce, et le tenir à jour permet de déclencher le rappel en heures plutôt qu'en
 semaines.
 
+> Cette série présente des pratiques techniques qui contribuent à la conformité au
+> CRA. Leur mise en œuvre ne suffit pas, à elle seule, à démontrer la conformité
+> complète d'un produit.
+
 ## Le piège classique
 
 Deux erreurs reviennent souvent.
@@ -48,7 +52,7 @@ générateur, et [`cdxgen`][cdxgen] couvre la plupart des langages d'un seul out
 
 ```bash
 # Multi-langage, détecte automatiquement l'écosystème
-npx @cyclonedx/cdxgen@latest -o bom.json
+npx @cyclonedx/cdxgen@11.7.0 -o bom.json
 
 # Ou par écosystème :
 cyclonedx-py environment      # Python
@@ -56,9 +60,12 @@ cargo cyclonedx               # Rust
 dotnet CycloneDX ./MyApp.sln  # .NET
 ```
 
-L'important est de l'intégrer à la CI pour qu'il reste vivant. Exemple avec GitHub
-Actions, en publiant le SBOM vers un serveur [Dependency-Track][dtrack] qui suit les
-vulnérabilités dans le temps :
+Épinglez toujours la version de l'outil, jamais `@latest` dans un pipeline : c'est
+ce qui rend le SBOM reproductible et empêche une mise à jour amont de changer le
+comportement du pipeline sans revue. Laissez ensuite Renovate ou Dependabot proposer
+les montées de version. Il reste à intégrer la génération à la CI pour qu'elle reste
+vivante. Exemple avec GitHub Actions, en publiant le SBOM vers un serveur
+[Dependency-Track][dtrack] qui suit les vulnérabilités dans le temps :
 
 ```yaml
 # .github/workflows/sbom.yml
@@ -70,7 +77,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Générer le SBOM CycloneDX
-        run: npx @cyclonedx/cdxgen@latest -o bom.json
+        run: npx @cyclonedx/cdxgen@11.7.0 -o bom.json
       - name: Publier vers Dependency-Track
         run: |
           curl -sf -X POST "$DTRACK_URL/api/v1/bom" \

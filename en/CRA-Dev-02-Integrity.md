@@ -16,6 +16,9 @@ downloads must be verifiable before being used. A config file, a message between
 services, an update: if someone changed it along the way, you need to be able to
 detect it.
 
+> This series presents technical practices that contribute to CRA compliance. On
+> their own, they are not enough to demonstrate a product's full compliance.
+
 ## The classic trap
 
 A common reflex: "I store a SHA-256 hash next to the file and compare them." That
@@ -23,9 +26,10 @@ catches accidental corruption, not deliberate tampering. An attacker who modifie
 the file simply recomputes the hash and replaces the old one. A hash alone proves
 nothing about the origin of the data.
 
-A second, subtler trap: comparing two digests with `==`. The comparison stops at the
-first differing byte, which leaks, through response time, how many bytes are
-correct. That is exploitable. An integrity check is always compared in constant time.
+A second, subtler trap: comparing two digests with `==`. An ordinary comparison stops
+at the first differing byte and can leak, through response time, how many bytes are
+correct. Always use the verification primitives provided by your library, which avoid
+this class of problem.
 
 So you need a secret in the loop. Two tools, depending on the case.
 

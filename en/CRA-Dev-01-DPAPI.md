@@ -7,13 +7,18 @@
 
 ## What the CRA requires
 
-From 11 December 2027, the Cyber Resilience Act
-([Regulation (EU) 2024/2847][eu-cra]) applies to any software sold in the EU. One of
-its rules: sensitive data at rest must be encrypted.
+From 11 December 2027, most products with digital elements placed on the European
+Union market will have to meet the requirements of the Cyber Resilience Act
+([Regulation (EU) 2024/2847][eu-cra]). One of them concerns protecting data in a way
+that is proportionate to the risks, which often means encrypting sensitive data at
+rest.
 
 In plain terms, for a developer: the credentials, tokens, API keys and other secrets
 your application keeps on the machine can no longer sit in plaintext in a
 `config.json` or a registry key. They have to be encrypted.
+
+> This series presents technical practices that contribute to CRA compliance. On
+> their own, they are not enough to demonstrate a product's full compliance.
 
 ## The classic trap
 
@@ -29,10 +34,10 @@ principle: you manage no key at all. The system derives a key from the current
 user's logon secret, encrypts on your behalf, and only returns the data to the same
 user on the same machine. There are two operations, `Protect` and `Unprotect`.
 
-One optional parameter shows up in all three examples: entropy. It's a "salt"
-specific to your application, supplied at encryption time and required identically at
-decryption time. It isolates your secrets from those of the same user's other
-applications.
+One optional parameter shows up in all three examples: entropy. It's an extra piece
+of data required identically at decryption time. A public value hard-coded in the
+program only provides limited isolation between applications; to add real protection,
+it must itself stay confidential.
 
 ### .NET (C#)
 
@@ -43,7 +48,7 @@ using System.Security.Cryptography;
 using System.Text;
 
 byte[] data    = Encoding.UTF8.GetBytes("super-secret-token");
-byte[] entropy = Encoding.UTF8.GetBytes("my-app-v1");   // app-specific salt
+byte[] entropy = Encoding.UTF8.GetBytes("my-app-v1");   // entropy: keep it secret for real isolation
 
 // Encrypt, bound to the current user
 byte[] blob = ProtectedData.Protect(data, entropy, DataProtectionScope.CurrentUser);
@@ -62,7 +67,7 @@ The `win32crypt` module exposes the Win32 calls directly.
 import win32crypt  # pip install pywin32
 
 data    = "super-secret-token".encode("utf-8")
-entropy = b"my-app-v1"  # app-specific salt
+entropy = b"my-app-v1"  # entropy: keep it secret for real isolation
 
 # Encrypt: CryptProtectData(data, description, entropy, reserved, prompt, flags)
 blob = win32crypt.CryptProtectData(data, None, entropy, None, None, 0)
@@ -82,7 +87,7 @@ use windows_dpapi::{encrypt_data, decrypt_data, Scope};
 
 fn main() -> anyhow::Result<()> {
     let secret  = b"super-secret-token";
-    let entropy = b"my-app-v1"; // app-specific salt
+    let entropy = b"my-app-v1"; // entropy: keep it secret for real isolation
 
     // Encrypt, bound to the current user
     let blob = encrypt_data(secret, Scope::User, Some(entropy))?;

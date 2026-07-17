@@ -19,6 +19,9 @@ from a booby-trapped copy.
 In episode 2 we signed data. Here we sign the executable itself, with the native
 Windows mechanism: **Authenticode**.
 
+> This series presents technical practices that contribute to CRA compliance. On
+> their own, they are not enough to demonstrate a product's full compliance.
+
 ## The classic trap
 
 Three mistakes, all common.
@@ -45,8 +48,12 @@ option.
 
 ```powershell
 # Sign with SHA-256 digest and RFC 3161 timestamp (essential)
-signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 MyApp.exe
+signtool sign /a /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 MyApp.exe
 ```
+
+The `/a` option lets signtool automatically select the best certificate in the store.
+In CI, you instead identify the certificate by its thumbprint, or go through a key
+storage provider (KSP) or a tool connected to an HSM.
 
 Verification confirms the signature and the chain of trust.
 

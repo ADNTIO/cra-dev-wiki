@@ -25,6 +25,9 @@ when a flaw hits one of them, it is on you to know which products embed it and t
 ship the update. The SBOM is your fleet registry, the update is the replacement
 part, and keeping it current lets you trigger the recall in hours rather than weeks.
 
+> This series presents technical practices that contribute to CRA compliance. On
+> their own, they are not enough to demonstrate a product's full compliance.
+
 ## The classic trap
 
 Two mistakes come up often.
@@ -45,7 +48,7 @@ generator, and [`cdxgen`][cdxgen] covers most languages with a single tool.
 
 ```bash
 # Multi-language, auto-detects the ecosystem
-npx @cyclonedx/cdxgen@latest -o bom.json
+npx @cyclonedx/cdxgen@11.7.0 -o bom.json
 
 # Or per ecosystem:
 cyclonedx-py environment      # Python
@@ -53,7 +56,10 @@ cargo cyclonedx               # Rust
 dotnet CycloneDX ./MyApp.sln  # .NET
 ```
 
-What matters is wiring it into CI so it stays alive. Example with GitHub Actions,
+Always pin the tool version, never `@latest` in a pipeline: that is what makes the
+SBOM reproducible and stops an upstream update from changing the pipeline's behaviour
+without review. Then let Renovate or Dependabot propose the upgrades. What remains is
+wiring the generation into CI so it stays alive. Example with GitHub Actions,
 publishing the SBOM to a [Dependency-Track][dtrack] server that tracks
 vulnerabilities over time:
 
@@ -67,7 +73,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Generate the CycloneDX SBOM
-        run: npx @cyclonedx/cdxgen@latest -o bom.json
+        run: npx @cyclonedx/cdxgen@11.7.0 -o bom.json
       - name: Publish to Dependency-Track
         run: |
           curl -sf -X POST "$DTRACK_URL/api/v1/bom" \
