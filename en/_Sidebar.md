@@ -5,6 +5,7 @@
 **Episodes**
 - [01. DPAPI (Windows)](CRA-Dev-01-DPAPI.md)
 - [02. Integrity, sign and verify](CRA-Dev-02-Integrity.md)
+- [03. SBOM and VEX](CRA-Dev-03-SBOM-VEX.md)
 
 **Resources**
 - [DPAPI, in-depth article](resources/DPAPI-Deep-dive.md)

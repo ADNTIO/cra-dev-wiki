@@ -17,6 +17,7 @@ it does not.
 | --- | --- | --- | --- | --- |
 | 01 | [Never store a secret in plaintext again: Windows DPAPI](CRA-Dev-01-DPAPI.md) | Confidentiality, encryption at rest | Part I, point 2, (e) | Windows |
 | 02 | [Trust, but verify: sign your data](CRA-Dev-02-Integrity.md) | Data integrity | Part I, point 2, (f) | Cross-platform |
+| 03 | [You can't fix what you don't know you're running: SBOM and VEX](CRA-Dev-03-SBOM-VEX.md) | Vulnerability handling, SBOM | Part II, point 1 | CI, cross-platform |
 
 The list will grow with each episode.
 

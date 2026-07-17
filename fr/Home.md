@@ -17,6 +17,7 @@ protège et ce qu'elle ne protège pas.
 | --- | --- | --- | --- | --- |
 | 01 | [Ne stockez plus jamais un secret en clair : la DPAPI de Windows](CRA-Dev-01-DPAPI.md) | Confidentialité, chiffrement au repos | Partie I, point 2, e) | Windows |
 | 02 | [Faites confiance, mais vérifiez : signer vos données](CRA-Dev-02-Integrite.md) | Intégrité des données | Partie I, point 2, f) | Multiplateforme |
+| 03 | [Vous ne pouvez pas corriger ce que vous ignorez : SBOM et VEX](CRA-Dev-03-SBOM-VEX.md) | Gestion des vulnérabilités, SBOM | Partie II, point 1 | CI, multiplateforme |
 
 La liste s'enrichira au fil des épisodes.
 
