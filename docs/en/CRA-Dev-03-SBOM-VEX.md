@@ -1,9 +1,7 @@
-**CRA & Dev #3**
-
 # You can't fix what you don't know you're running: SBOM and VEX
 
-> ["CRA & Dev" series](Home.md) · Reading time: about 7 min · CI, cross-platform ·
-> Tools: cdxgen, CycloneDX, Dependency-Track · [Français](../fr/CRA-Dev-03-SBOM-VEX.md)
+> **CRA & Dev #3** · ["CRA & Dev" series](index.md) · Reading time: about 7 min · CI, cross-platform ·
+> Tools: cdxgen, CycloneDX, Dependency-Track
 
 ## What the CRA requires
 
@@ -145,7 +143,7 @@ vulnerability handling from paperwork to practice.
 
 ---
 
-*Previous episode: [Trust, but verify, sign your data](CRA-Dev-02-Integrity.md).*
+*Previous episode: [Trust, but verify, sign your data](CRA-Dev-02-Integrite.md).*
 
 [cdxgen]: https://github.com/CycloneDX/cdxgen
 [dtrack]: https://dependencytrack.org/

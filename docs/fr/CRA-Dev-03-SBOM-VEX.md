@@ -1,9 +1,7 @@
-**CRA & Dev #3**
-
 # Vous ne pouvez pas corriger ce que vous ignorez : SBOM et VEX
 
-> [Série « CRA & Dev »](Home.md) · Lecture : environ 7 min · CI, multiplateforme ·
-> Outils : cdxgen, CycloneDX, Dependency-Track · [English](../en/CRA-Dev-03-SBOM-VEX.md)
+> **CRA & Dev #3** · [Série « CRA & Dev »](index.md) · Lecture : environ 7 min · CI, multiplateforme ·
+> Outils : cdxgen, CycloneDX, Dependency-Track
 
 ## Ce que demande le CRA
 

@@ -1,9 +1,7 @@
-**CRA & Dev #2**
-
 # Trust, but verify: sign your data to prove nobody tampered with it
 
-> ["CRA & Dev" series](Home.md) · Reading time: about 6 min · Cross-platform ·
-> Examples: Rust, Python, .NET · [Français](../fr/CRA-Dev-02-Integrite.md)
+> **CRA & Dev #2** · ["CRA & Dev" series](index.md) · Reading time: about 6 min · Cross-platform ·
+> Examples: Rust, Python, .NET
 
 ## What the CRA requires
 

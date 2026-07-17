@@ -1,9 +1,7 @@
-**CRA & Dev #1**
-
 # Ne stockez plus jamais un secret en clair : la DPAPI de Windows
 
-> [Série « CRA & Dev »](Home.md) · Lecture : environ 5 min · Windows · Exemples :
-> Rust, Python, .NET · [English](../en/CRA-Dev-01-DPAPI.md)
+> **CRA & Dev #1** · [Série « CRA & Dev »](index.md) · Lecture : environ 5 min · Windows · Exemples :
+> Rust, Python, .NET
 
 ## Ce que demande le CRA
 

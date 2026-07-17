@@ -1,9 +1,7 @@
-**CRA & Dev #2**
-
 # Faites confiance, mais vérifiez : signer vos données pour prouver qu'on n'y a pas touché
 
-> [Série « CRA & Dev »](Home.md) · Lecture : environ 6 min · Multiplateforme ·
-> Exemples : Rust, Python, .NET · [English](../en/CRA-Dev-02-Integrity.md)
+> **CRA & Dev #2** · [Série « CRA & Dev »](index.md) · Lecture : environ 6 min · Multiplateforme ·
+> Exemples : Rust, Python, .NET
 
 ## Ce que demande le CRA
 

@@ -1,9 +1,7 @@
-**CRA & Dev #1**
-
 # Never store a secret in plaintext again: Windows DPAPI
 
-> ["CRA & Dev" series](Home.md) · Reading time: about 5 min · Windows · Examples:
-> Rust, Python, .NET · [Français](../fr/CRA-Dev-01-DPAPI.md)
+> **CRA & Dev #1** · ["CRA & Dev" series](index.md) · Reading time: about 5 min · Windows · Examples:
+> Rust, Python, .NET
 
 ## What the CRA requires
 
@@ -129,7 +127,7 @@ threat model.
 *Next in the "CRA & Dev" series: coming soon.*
 
 *To go deeper (MasterKey, DPAPI-NG, macOS/Linux comparison, full history), see the
-in-depth article (currently French, [English translation pending](resources/DPAPI-Deep-dive.md)).*
+in-depth article (currently French, [English translation pending](ressources/DPAPI-Article-de-fond.md)).*
 
 [eu-cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=en
 [ms-protecteddata]: https://learn.microsoft.com/en-us/dotnet/standard/security/how-to-use-data-protection

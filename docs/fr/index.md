@@ -4,7 +4,6 @@ Des articles courts, lisibles en quelques minutes, avec une technique de
 développement à chaque fois, pour aider les développeurs à sécuriser leur logiciel
 et à se rapprocher des exigences du Cyber Resilience Act (Règlement (UE) 2024/2847).
 
-> Cette page en anglais : [Home](../en/Home.md).
 
 Pour qui : des développeurs, sans prérequis en cryptographie. Chaque épisode part
 d'un besoin concret, donne une technique applicable avec du code (Rust, Python,
@@ -26,7 +25,7 @@ Les références renvoient à l'Annexe I du [Règlement (UE) 2024/2847][cra]. Sa
 liste les exigences de cybersécurité des produits (points a à m) ; sa partie II
 couvre la gestion des vulnérabilités.
 
-Les [articles de fond](ressources/), versions longues et sourcées, sont dans le
-dossier `ressources/`.
+Article de fond, version longue et sourcée pour approfondir :
+[la DPAPI en détail](ressources/DPAPI-Article-de-fond.md).
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr

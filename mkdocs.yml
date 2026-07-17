@@ -1,0 +1,74 @@
+site_name: CRA & Dev
+site_description: >-
+  Des articles courts, une technique de développement par épisode, pour aider les
+  développeurs à se rapprocher des exigences du Cyber Resilience Act.
+site_url: https://adntio.github.io/cra-dev-wiki/
+site_author: ADNT Sàrl
+copyright: Copyright © 2026 ADNT Sàrl · CC BY-SA 4.0
+
+repo_url: https://github.com/ADNTIO/cra-dev-wiki
+repo_name: ADNTIO/cra-dev-wiki
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: fr
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Passer au mode sombre
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Passer au mode clair
+  features:
+    - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - content.code.copy
+    - content.action.edit
+    - search.suggest
+    - search.highlight
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.details
+
+plugins:
+  - search
+  - i18n:
+      docs_structure: folder
+      languages:
+        - locale: fr
+          default: true
+          name: Français
+          build: true
+        - locale: en
+          name: English
+          build: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ADNTIO
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/111904110

@@ -1,71 +1,77 @@
-# ADNT, wiki « CRA & Dev »
+# CRA & Dev
 
-Wiki de la série « CRA & Dev » : des articles courts, une technique de développement
-à chaque fois, pour aider les développeurs à sécuriser leur logiciel et à se
-rapprocher des exigences du Cyber Resilience Act (Règlement (UE) 2024/2847).
+*[Version française](README.fr.md)*
 
-## Langues / Languages
+The "CRA & Dev" series: short articles, one development technique per episode, to help
+developers secure their software and move toward the requirements of the European
+**Cyber Resilience Act** (Regulation (EU) 2024/2847).
 
-| Langue | Accueil |
-| --- | --- |
-| Français | [Accueil](fr/Home.md) |
-| English | [Home](en/Home.md) |
+This is not another legal explainer of the CRA. Each episode translates a requirement
+of Annex I into a concrete engineering practice, with runnable code (Rust, Python,
+.NET and more), no cryptography background required, and a threat model at the end
+(what the technique protects, and what it does not).
 
-Le français est la langue source, l'anglais en est la traduction. Les articles de
-fond longs (versions détaillées et sourcées) sont pour l'instant disponibles en
-français, avec une traduction anglaise progressive.
+## Published site
 
-## Organisation du dépôt
+The wiki is published with **MkDocs Material** and deployed to GitHub Pages:
 
-Ce dépôt est structuré comme un wiki GitHub, avec un dossier par langue :
+- https://adntio.github.io/cra-dev-wiki/
+
+The site is bilingual (French default, English under `/en/`), with full-text search
+and a language switcher.
+
+## Episodes
+
+| # | Title | CRA requirement | Annex I | Platform |
+| --- | --- | --- | --- | --- |
+| 01 | Never store a secret in plaintext again: Windows DPAPI | Confidentiality, encryption at rest | Part I, 2 (e) | Windows |
+| 02 | Trust, but verify: sign your data | Data integrity | Part I, 2 (f) | Cross-platform |
+| 03 | You can't fix what you don't know you're running: SBOM and VEX | Vulnerability handling | Part II, 1 | CI |
+| 04 | An unsigned .exe is a parcel with no sender: sign your binaries | Integrity and secure updates | Part I, 2 (c) and (f) | Windows |
+
+## Repository layout
 
 ```
-.
-├── README.md              (vous êtes ici, sélecteur de langue)
-├── fr/                    (wiki français, langue source)
-│   ├── Home.md            (page d'accueil)
-│   ├── _Sidebar.md        (navigation latérale)
-│   ├── _Footer.md         (pied de page)
-│   ├── CRA-Dev-01-DPAPI.md
-│   └── ressources/        (articles de fond, versions longues)
-└── en/                    (English wiki, translation)
-    ├── Home.md
-    ├── _Sidebar.md
-    ├── _Footer.md
-    ├── CRA-Dev-01-DPAPI.md
-    └── resources/
+mkdocs.yml               MkDocs Material + i18n configuration
+requirements-docs.txt    Pinned build dependencies
+docs/
+  fr/                    French content (default language)
+    index.md
+    CRA-Dev-0X-*.md
+    ressources/          in-depth articles
+  en/                    English content (same paths as fr/)
+.github/workflows/docs.yml   Build and deploy to GitHub Pages
 ```
 
-Les fichiers `Home.md`, `_Sidebar.md` et `_Footer.md` suivent les conventions du
-wiki GitHub. Si le contenu est publié dans un vrai wiki (dépôt `.wiki.git`), GitHub
-utilise le `_Sidebar.md` ou `_Footer.md` le plus proche dans l'arborescence, ce qui
-permet une navigation propre par langue.
+The French and English versions of a page share the **same path** under `docs/fr/`
+and `docs/en/`; this is what lets the i18n plugin pair them and offer the language
+switch.
 
-## À qui s'adresse cette série
+## Build locally
 
-Aux développeurs, sans prérequis en cryptographie. Chaque épisode part d'un besoin
-concret, donne une technique directement applicable avec du code (Rust, Python,
-.NET), et introduit au passage les notions de crypto utiles. Voir la page d'accueil
-de chaque langue pour le détail.
+This project uses [uv](https://docs.astral.sh/uv/).
 
-## Contribuer
+```bash
+uv venv
+uv pip install -r requirements-docs.txt
+uv run mkdocs serve      # live preview on http://127.0.0.1:8000
+uv run mkdocs build --strict
+```
 
-Une erreur, une imprécision, un lien mort, une amélioration ou une traduction ? Les
-relectures sont les bienvenues. Deux façons de contribuer :
+## Deployment
 
-- Signaler : ouvrez une [issue](../../issues) sur GitHub, aucune connaissance de Git
-  requise.
-- Corriger : proposez une [Pull Request](../../pulls).
+Pushing to `main` triggers `.github/workflows/docs.yml`, which builds the site and
+deploys it to GitHub Pages. It requires **Settings > Pages > Source: GitHub Actions**
+to be enabled once on the repository.
 
-Merci de lire d'abord le [guide de contribution](CONTRIBUTING.md) et le
-[code de conduite](CODE_OF_CONDUCT.md).
+## Contributing
 
-## Licence
+Spotted an error, a dead link, or want to add a translation? See
+[CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md). Open
+an [issue](../../issues) or a [Pull Request](../../pulls).
 
-Copyright © 2026 ADNT Sàrl.
+## License
 
-Contenu publié sous licence [Creative Commons Attribution - Partage dans les Mêmes
-Conditions 4.0 International (CC BY-SA 4.0)](LICENSE), une licence libre et copyleft
-reconnue comme licence libre par la Free Software Foundation. Vous pouvez partager et
-adapter le contenu, y compris à des fins commerciales, à condition de créditer ADNT
-Sàrl et de diffuser vos versions sous la même licence.
+Copyright © 2026 ADNT Sàrl. Content licensed under
+[CC BY-SA 4.0](LICENSE), a free copyleft license recognised as free by the Free
+Software Foundation.

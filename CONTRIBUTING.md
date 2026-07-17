@@ -17,7 +17,7 @@ Deux façons de contribuer, au choix.
 1. Ouvrir une issue, la voie la plus simple, sans aucune connaissance de Git. Allez
    dans l'onglet Issues du dépôt GitHub, puis New issue, et décrivez le problème. Si
    possible, précisez :
-   - le fichier concerné, par exemple `fr/CRA-Dev-01-DPAPI.md` ;
+   - le fichier concerné, par exemple `docs/fr/CRA-Dev-01-DPAPI.md` ;
    - la nature de l'erreur : technique, orthographe, lien, traduction ;
    - la correction proposée, si vous l'avez.
 
@@ -44,8 +44,8 @@ Deux façons de contribuer, au choix.
 
 - Un sujet égale une contribution. Évitez les PR fourre-tout.
 - Messages de commit courts et explicites.
-- Respectez la structure par langue (`fr/`, `en/`) et le nommage des pages wiki
-  (`CRA-Dev-0X-Sujet.md`).
+- Respectez la structure par langue (`docs/fr/`, `docs/en/`) et le nommage des pages
+  (`CRA-Dev-0X-Sujet.md`). Une page et sa traduction partagent le même chemin.
 
 En participant, vous acceptez le [Code de conduite](CODE_OF_CONDUCT.md).
 
@@ -64,7 +64,7 @@ Two ways to contribute.
 1. Open an issue, the easiest way, with no Git knowledge required. Go to the
    repository's Issues tab, then New issue, and describe the problem. If possible,
    include:
-   - the file involved, for example `en/CRA-Dev-01-DPAPI.md`;
+   - the file involved, for example `docs/en/CRA-Dev-01-DPAPI.md`;
    - the type of error: technical, spelling, link, translation;
    - your suggested fix, if you have one.
 
@@ -89,7 +89,7 @@ Two ways to contribute.
 
 - One topic per contribution. Avoid catch-all PRs.
 - Short, explicit commit messages.
-- Respect the per-language structure (`fr/`, `en/`) and the wiki page naming
-  convention (`CRA-Dev-0X-Topic.md`).
+- Respect the per-language structure (`docs/fr/`, `docs/en/`) and the page naming
+  convention (`CRA-Dev-0X-Topic.md`). A page and its translation share the same path.
 
 By participating, you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).

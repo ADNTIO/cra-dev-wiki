@@ -1,9 +1,7 @@
-**CRA & Dev #4**
-
 # Un .exe non signé, c'est un colis sans expéditeur : signez vos binaires
 
-> [Série « CRA & Dev »](Home.md) · Lecture : environ 6 min · Windows ·
-> Outils : signtool, PowerShell, Azure Trusted Signing · [English](../en/CRA-Dev-04-Authenticode.md)
+> **CRA & Dev #4** · [Série « CRA & Dev »](index.md) · Lecture : environ 6 min · Windows ·
+> Outils : signtool, PowerShell, Azure Trusted Signing
 
 ## Ce que demande le CRA
 

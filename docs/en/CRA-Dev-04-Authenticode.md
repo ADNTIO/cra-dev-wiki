@@ -1,9 +1,7 @@
-**CRA & Dev #4**
-
 # An unsigned .exe is a parcel with no sender: sign your binaries
 
-> ["CRA & Dev" series](Home.md) · Reading time: about 6 min · Windows ·
-> Tools: signtool, PowerShell, Azure Trusted Signing · [Français](../fr/CRA-Dev-04-Authenticode.md)
+> **CRA & Dev #4** · ["CRA & Dev" series](index.md) · Reading time: about 6 min · Windows ·
+> Tools: signtool, PowerShell, Azure Trusted Signing
 
 ## What the CRA requires
 
