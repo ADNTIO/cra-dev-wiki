@@ -13,11 +13,18 @@ it does not.
 
 ## Episodes
 
-| # | Title | CRA requirement | Platform |
-| --- | --- | --- | --- |
-| 01 | [Never store a secret in plaintext again: Windows DPAPI](CRA-Dev-01-DPAPI.md) | Encryption of data at rest | Windows |
+| # | Title | CRA requirement | Annex I ref. | Platform |
+| --- | --- | --- | --- | --- |
+| 01 | [Never store a secret in plaintext again: Windows DPAPI](CRA-Dev-01-DPAPI.md) | Confidentiality, encryption at rest | Part I, point 2, (e) | Windows |
+| 02 | [Trust, but verify: sign your data](CRA-Dev-02-Integrity.md) | Data integrity | Part I, point 2, (f) | Cross-platform |
 
 The list will grow with each episode.
 
+The references point to Annex I of [Regulation (EU) 2024/2847][cra]. Its Part I lists
+the product cybersecurity requirements (points a to m); its Part II covers
+vulnerability handling.
+
 The [in-depth articles](resources/), long and sourced versions, are in the
 `resources/` folder.
+
+[cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=en
