@@ -18,10 +18,6 @@ distingue votre installeur de sa version piégée.
 Signer une donnée est une chose ; ici, on signe l'exécutable lui-même, avec le
 mécanisme natif de Windows : **Authenticode**.
 
-> Cette série présente des pratiques techniques qui contribuent à la conformité au
-> CRA. Leur mise en œuvre ne suffit pas, à elle seule, à démontrer la conformité
-> complète d'un produit.
-
 ## Le piège classique
 
 Trois erreurs, toutes fréquentes.
