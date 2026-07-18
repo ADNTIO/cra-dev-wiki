@@ -26,10 +26,6 @@ jour. Le SBOM est votre registre de flotte, la mise à jour est le remplacement 
 pièce, et le tenir à jour permet de déclencher le rappel en heures plutôt qu'en
 semaines.
 
-> Cette série présente des pratiques techniques qui contribuent à la conformité au
-> CRA. Leur mise en œuvre ne suffit pas, à elle seule, à démontrer la conformité
-> complète d'un produit.
-
 ## Le piège classique
 
 Deux erreurs reviennent souvent.
