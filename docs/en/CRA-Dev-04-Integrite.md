@@ -14,9 +14,6 @@ downloads must be verifiable before being used. A config file, a message between
 services, an update: if someone changed it along the way, you need to be able to
 detect it.
 
-> This series presents technical practices that contribute to CRA compliance. On
-> their own, they are not enough to demonstrate a product's full compliance.
-
 ## The classic trap
 
 A common reflex: "I store a SHA-256 hash next to the file and compare them." That
