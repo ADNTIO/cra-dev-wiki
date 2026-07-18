@@ -15,10 +15,6 @@ télécharge doit pouvoir être vérifiée avant d'être utilisée. Un fichier d
 un message entre deux services, une mise à jour : si quelqu'un l'a modifié en
 chemin, vous devez pouvoir le détecter.
 
-> Cette série présente des pratiques techniques qui contribuent à la conformité au
-> CRA. Leur mise en œuvre ne suffit pas, à elle seule, à démontrer la conformité
-> complète d'un produit.
-
 ## Le piège classique
 
 Réflexe fréquent : « je stocke un hash SHA-256 à côté du fichier, et je compare ».
