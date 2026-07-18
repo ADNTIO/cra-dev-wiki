@@ -23,9 +23,6 @@ when a flaw hits one of them, it is on you to know which products embed it and t
 ship the update. The SBOM is your fleet registry, the update is the replacement
 part, and keeping it current lets you trigger the recall in hours rather than weeks.
 
-> This series presents technical practices that contribute to CRA compliance. On
-> their own, they are not enough to demonstrate a product's full compliance.
-
 ## The classic trap
 
 Two mistakes come up often.
