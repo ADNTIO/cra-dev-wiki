@@ -15,8 +15,6 @@ In plain terms, for a developer: the credentials, tokens, API keys and other sec
 your application keeps on the machine can no longer sit in plaintext in a
 `config.json` or a registry key. They have to be encrypted.
 
-> This series presents technical practices that contribute to CRA compliance. On
-> their own, they are not enough to demonstrate a product's full compliance.
 
 ## The classic trap
 
