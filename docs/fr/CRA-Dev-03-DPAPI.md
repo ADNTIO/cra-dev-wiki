@@ -15,10 +15,6 @@ En clair, pour un développeur : les identifiants, jetons, clés d'API et autres
 secrets que votre application garde sur le poste ne peuvent plus traîner en clair
 dans un `config.json` ou une clé de registre. Il faut les chiffrer.
 
-> Cette série présente des pratiques techniques qui contribuent à la conformité au
-> CRA. Leur mise en œuvre ne suffit pas, à elle seule, à démontrer la conformité
-> complète d'un produit.
-
 ## Le piège classique
 
 Chiffrer, tout le monde sait faire. La vraie question arrive juste après : où
