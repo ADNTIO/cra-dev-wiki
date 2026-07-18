@@ -17,9 +17,6 @@ from a booby-trapped copy.
 Signing data is one thing; here we sign the executable itself, with the native
 Windows mechanism: **Authenticode**.
 
-> This series presents technical practices that contribute to CRA compliance. On
-> their own, they are not enough to demonstrate a product's full compliance.
-
 ## The classic trap
 
 Three mistakes, all common.
