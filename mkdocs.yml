@@ -19,9 +19,11 @@ nav:
       - "Faites confiance, mais vérifiez": fr/CRA-Dev-04-Integrite.md
   - Ressources:
       - "DPAPI en détail": fr/ressources/DPAPI-Article-de-fond.md
+  - "Aide professionnelle": fr/aide-professionnelle.md
 
 theme:
   name: material
+  custom_dir: overrides
   language: fr
   icon:
     repo: fontawesome/brands/github
@@ -84,6 +86,7 @@ plugins:
             "Corriger ce qu'on ignore": "Fix what you don't know"
             "Un colis sans expéditeur": "A parcel with no sender"
             "DPAPI en détail": "DPAPI in detail"
+            "Aide professionnelle": "Professional help"
 
 extra:
   social:

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{#- Pied d'article : attribution ADNT + lien vers l'auto-diagnostic CRA.
+    S'applique à toutes les pages de contenu ; discret (small), dans la langue
+    de la page. -#}
+{% block content %}
+{{ super() }}
+<hr>
+<p>
+  <small>
+    {% if config.theme.language == "en" %}
+    Written by <a href="https://adnt.io/">ADNT Sàrl</a> — embedded engineering, CI/CD and software quality.
+    Wondering where your product stands against the CRA?
+    <a href="https://adnt.io/cra-quick-audit/?lang=en">Run the free self-assessment</a>.
+    {% else %}
+    Rédigé par <a href="https://adnt.io/">ADNT Sàrl</a> — ingénierie embarquée, CI/CD et qualité logicielle.
+    Envie de savoir où en est votre produit face au CRA ?
+    <a href="https://adnt.io/cra-quick-audit/?lang=fr">Lancez l'auto-diagnostic gratuit</a>.
+    {% endif %}
+  </small>
+</p>
+{% endblock %}
