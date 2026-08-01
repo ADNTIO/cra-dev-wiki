@@ -24,10 +24,10 @@ and a language switcher.
 
 | # | Title | CRA requirement | Annex I | Platform |
 | --- | --- | --- | --- | --- |
-| 01 | Never store a secret in plaintext again: Windows DPAPI | Confidentiality, encryption at rest | Part I, 2 (e) | Windows |
-| 02 | Trust, but verify: sign your data | Data integrity | Part I, 2 (f) | Cross-platform |
-| 03 | You can't fix what you don't know you're running: SBOM and VEX | Vulnerability handling | Part II, 1 | CI |
-| 04 | An unsigned .exe is a parcel with no sender: sign your binaries | Integrity and secure updates | Part I, 2 (c) and (f) | Windows |
+| 01 | [You can't fix what you don't know you're running: SBOM and VEX](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-01-SBOM-VEX/) | Vulnerability handling | Part II, 1 | CI |
+| 02 | [An unsigned .exe is a parcel with no sender: sign your binaries](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-02-Authenticode/) | Integrity and secure updates | Part I, 2 (c) and (f) | Windows |
+| 03 | [Never store a secret in plaintext again: Windows DPAPI](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-03-DPAPI/) | Confidentiality, encryption at rest | Part I, 2 (e) | Windows |
+| 04 | [Trust, but verify: sign your data](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-04-Integrite/) | Data integrity | Part I, 2 (f) | Cross-platform |
 
 ## Repository layout
 

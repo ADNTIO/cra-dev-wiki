@@ -24,10 +24,10 @@ plein texte et sélecteur de langue.
 
 | # | Titre | Exigence CRA | Annexe I | Plateforme |
 | --- | --- | --- | --- | --- |
-| 01 | Ne stockez plus jamais un secret en clair : la DPAPI de Windows | Confidentialité, chiffrement au repos | Partie I, 2 e) | Windows |
-| 02 | Faites confiance, mais vérifiez : signer vos données | Intégrité des données | Partie I, 2 f) | Multiplateforme |
-| 03 | Vous ne pouvez pas corriger ce que vous ignorez : SBOM et VEX | Gestion des vulnérabilités | Partie II, 1 | CI |
-| 04 | Un .exe non signé, c'est un colis sans expéditeur : signez vos binaires | Intégrité et mise à jour sécurisée | Partie I, 2 c) et f) | Windows |
+| 01 | [Vous ne pouvez pas corriger ce que vous ignorez : SBOM et VEX](https://adntio.github.io/cra-dev-wiki/CRA-Dev-01-SBOM-VEX/) | Gestion des vulnérabilités | Partie II, 1 | CI |
+| 02 | [Un .exe non signé, c'est un colis sans expéditeur : signez vos binaires](https://adntio.github.io/cra-dev-wiki/CRA-Dev-02-Authenticode/) | Intégrité et mise à jour sécurisée | Partie I, 2 c) et f) | Windows |
+| 03 | [Ne stockez plus jamais un secret en clair : la DPAPI de Windows](https://adntio.github.io/cra-dev-wiki/CRA-Dev-03-DPAPI/) | Confidentialité, chiffrement au repos | Partie I, 2 e) | Windows |
+| 04 | [Faites confiance, mais vérifiez : signer vos données](https://adntio.github.io/cra-dev-wiki/CRA-Dev-04-Integrite/) | Intégrité des données | Partie I, 2 f) | Multiplateforme |
 
 ## Organisation du dépôt
 

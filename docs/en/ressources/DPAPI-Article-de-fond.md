@@ -1,3 +1,8 @@
+---
+description: >-
+  Overview of the CRA & Dev in-depth article on Windows DPAPI (internals, scopes, limits). The full article is currently in French — English translation pending; episode 3 covers the essentials in English.
+---
+
 # DPAPI, in-depth article
 
 > English translation pending. This long-form, fully sourced article is currently

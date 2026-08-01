@@ -1,3 +1,8 @@
+---
+description: >-
+  Sign your Windows binaries with Authenticode — signtool, PowerShell, Azure Trusted Signing: the integrity and secure-update requirements of the CRA (Annex I, 2(c) and (f)).
+---
+
 # An unsigned .exe is a parcel with no sender: sign your binaries
 
 > **CRA & Dev #2** · ["CRA & Dev" series](index.md) · Reading time: about 6 min · Windows ·

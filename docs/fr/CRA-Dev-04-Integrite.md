@@ -1,3 +1,8 @@
+---
+description: >-
+  Prouver qu'une donnée n'a pas été altérée : HMAC et signatures Ed25519, exemples en Rust, Python et .NET — l'exigence d'intégrité des données du CRA (Annexe I, 2 f).
+---
+
 # Faites confiance, mais vérifiez : signer vos données pour prouver qu'on n'y a pas touché
 
 > **CRA & Dev #4** · [Série « CRA & Dev »](index.md) · Lecture : environ 6 min · Multiplateforme ·

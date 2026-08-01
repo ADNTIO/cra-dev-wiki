@@ -1,3 +1,8 @@
+---
+description: >-
+  Signer ses binaires Windows avec Authenticode — signtool, PowerShell, Azure Trusted Signing : l'intégrité et les mises à jour sécurisées exigées par le CRA (Annexe I, 2 c et f).
+---
+
 # Un .exe non signé, c'est un colis sans expéditeur : signez vos binaires
 
 > **CRA & Dev #2** · [Série « CRA & Dev »](index.md) · Lecture : environ 6 min · Windows ·
