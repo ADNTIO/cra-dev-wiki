@@ -1,3 +1,8 @@
+---
+description: >-
+  Article de fond sur la DPAPI de Windows : fonctionnement interne, portées et limites — le complément détaillé de l'épisode 3 de la série CRA & Dev.
+---
+
 # La DPAPI de Windows : comprendre la brique de chiffrement oubliée du système
 
 ## Introduction

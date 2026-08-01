@@ -1,3 +1,8 @@
+---
+description: >-
+  Ne plus stocker un secret en clair : chiffrer au repos avec la DPAPI de Windows, exemples en C#/.NET, Python et Rust — l'exigence de confidentialité du CRA (Annexe I, 2 e).
+---
+
 # Ne stockez plus jamais un secret en clair : la DPAPI de Windows
 
 > **CRA & Dev #3** · [Série « CRA & Dev »](index.md) · Lecture : environ 5 min · Windows · Exemples :

@@ -1,3 +1,8 @@
+---
+description: >-
+  Prove data hasn't been tampered with: HMAC and Ed25519 signatures, with examples in Rust, Python and .NET — the data-integrity requirement of the CRA (Annex I, 2(f)).
+---
+
 # Trust, but verify: sign your data to prove nobody tampered with it
 
 > **CRA & Dev #4** · ["CRA & Dev" series](index.md) · Reading time: about 6 min · Cross-platform ·

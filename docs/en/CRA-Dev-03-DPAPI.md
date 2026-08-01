@@ -1,3 +1,8 @@
+---
+description: >-
+  Stop storing secrets in plaintext: encrypt at rest with Windows DPAPI, with examples in C#/.NET, Python and Rust — the confidentiality requirement of the CRA (Annex I, 2(e)).
+---
+
 # Never store a secret in plaintext again: Windows DPAPI
 
 > **CRA & Dev #3** · ["CRA & Dev" series](index.md) · Reading time: about 5 min · Windows · Examples:

@@ -1,3 +1,8 @@
+---
+description: >-
+  Générer un SBOM CycloneDX avec cdxgen en CI et trier les vulnérabilités par VEX dans Dependency-Track : la gestion des vulnérabilités exigée par le CRA (Annexe I, partie II), en pratique.
+---
+
 # Vous ne pouvez pas corriger ce que vous ignorez : SBOM et VEX
 
 > **CRA & Dev #1** · [Série « CRA & Dev »](index.md) · Lecture : environ 7 min · CI, multiplateforme ·

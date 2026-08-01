@@ -1,3 +1,8 @@
+---
+description: >-
+  Série CRA & Dev : le Cyber Resilience Act (règlement (UE) 2024/2847) traduit en gestes d'ingénierie — SBOM et VEX, signature de binaires, secrets chiffrés, intégrité des données — avec du code exécutable en Rust, Python et .NET.
+---
+
 # Série « CRA & Dev »
 
 Des articles courts, lisibles en quelques minutes, avec une technique de

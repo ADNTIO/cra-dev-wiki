@@ -1,3 +1,8 @@
+---
+description: >-
+  The CRA & Dev series: the Cyber Resilience Act (Regulation (EU) 2024/2847) turned into engineering practice — SBOM and VEX, binary signing, encrypted secrets, data integrity — with runnable code in Rust, Python and .NET.
+---
+
 # "CRA & Dev" series
 
 Short articles, readable in a few minutes, with one development technique each time,
