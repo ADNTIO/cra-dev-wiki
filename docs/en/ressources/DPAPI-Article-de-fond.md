@@ -1,6 +1,6 @@
 ---
 description: >-
-  A deep dive into Windows DPAPI: how it works internally, scopes and limits — the detailed companion to episode 3 of the CRA & Dev series.
+  Overview of the CRA & Dev in-depth article on Windows DPAPI (internals, scopes, limits). The full article is currently in French — English translation pending; episode 3 covers the essentials in English.
 ---
 
 # DPAPI, in-depth article
