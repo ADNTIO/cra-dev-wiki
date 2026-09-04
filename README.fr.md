@@ -39,6 +39,7 @@ docs/
   fr/                    Contenu français (langue par défaut)
     index.md
     CRA-Dev-0X-*.md
+    guides/              conventions à appliquer
     ressources/          articles de fond
   en/                    Contenu anglais (mêmes chemins que fr/)
 .github/workflows/docs.yml   Build et déploiement vers GitHub Pages

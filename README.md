@@ -40,6 +40,7 @@ docs/
   fr/                    French content (default language)
     index.md
     CRA-Dev-0X-*.md
+    guides/              conventions to apply
     ressources/          in-depth articles
   en/                    English content (same paths as fr/)
 .github/workflows/docs.yml   Build and deploy to GitHub Pages

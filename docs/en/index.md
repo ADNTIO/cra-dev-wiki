@@ -32,6 +32,8 @@ The references point to Annex I of [Regulation (EU) 2024/2847][cra]. Its Part I 
 the product cybersecurity requirements (points a to m); its Part II covers
 vulnerability handling.
 
+Guide: the [versioning conventions](guides/Version.md) to apply.
+
 In-depth article, a long and sourced version for going deeper:
 [DPAPI in detail](ressources/DPAPI-Article-de-fond.md).
 
