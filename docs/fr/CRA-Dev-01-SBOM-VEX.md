@@ -1,12 +1,12 @@
 ---
 description: >-
-  Générer un SBOM CycloneDX avec cdxgen en CI et trier les vulnérabilités par VEX dans Dependency-Track : la gestion des vulnérabilités exigée par le CRA (Annexe I, partie II), en pratique.
+  Générer un SBOM CycloneDX avec cdxgen en CI et trier les vulnérabilités avec VEX : la gestion des vulnérabilités exigée par le CRA (Annexe I, partie II), en pratique.
 ---
 
 # Vous ne pouvez pas corriger ce que vous ignorez : SBOM et VEX
 
-> **CRA & Dev #1** · [Série « CRA & Dev »](index.md) · Lecture : environ 7 min · CI, multiplateforme ·
-> Outils : cdxgen, CycloneDX, Dependency-Track
+> **CRA & Dev #1** · [Série « CRA & Dev »](index.md) · Lecture : environ 5 min · CI, multiplateforme ·
+> Outils : cdxgen, CycloneDX
 
 ## Ce que demande le CRA
 
@@ -63,8 +63,7 @@ dotnet CycloneDX ./MyApp.sln  # .NET
 ce qui rend le SBOM reproductible et empêche une mise à jour amont de changer le
 comportement du pipeline sans revue. Laissez ensuite Renovate ou Dependabot proposer
 les montées de version. Il reste à intégrer la génération à la CI pour qu'elle reste
-vivante. Exemple avec GitHub Actions, en publiant le SBOM vers un serveur
-[Dependency-Track][dtrack] qui suit les vulnérabilités dans le temps :
+vivante. Exemple avec GitHub Actions :
 
 ```yaml
 # .github/workflows/sbom.yml
@@ -77,20 +76,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Générer le SBOM CycloneDX
         run: npx @cyclonedx/cdxgen@11.7.0 -o bom.json
-      - name: Publier vers Dependency-Track
-        run: |
-          curl -sf -X POST "$DTRACK_URL/api/v1/bom" \
-            -H "X-Api-Key: $DTRACK_API_KEY" \
-            -F "project=$DTRACK_PROJECT" \
-            -F "bom=@bom.json"
-        env:
-          DTRACK_URL: ${{ secrets.DTRACK_URL }}
-          DTRACK_API_KEY: ${{ secrets.DTRACK_API_KEY }}
-          DTRACK_PROJECT: ${{ vars.DTRACK_PROJECT_UUID }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: bom.json
 ```
 
-À chaque push, la liste des composants est à jour et confrontée aux bases de
-vulnérabilités.
+À chaque push, la liste des composants est à jour et attachée au build. Ce qu'on en
+fait ensuite, contrôler avant livraison et surveiller les versions déjà publiées,
+fait l'objet de l'[épisode 5](CRA-Dev-05-SBOM-DTRACK.md).
 
 ## La technique 2 : trier le bruit avec VEX
 
@@ -153,6 +147,5 @@ font passer la gestion des vulnérabilités du déclaratif au concret.
 binaires](CRA-Dev-02-Authenticode.md).*
 
 [cdxgen]: https://github.com/CycloneDX/cdxgen
-[dtrack]: https://dependencytrack.org/
 [cyclonedx-vex]: https://cyclonedx.org/use-cases/vulnerability-exploitability/
 [openvex]: https://github.com/openvex/spec

@@ -28,6 +28,7 @@ plein texte et sélecteur de langue.
 | 02 | [Un .exe non signé, c'est un colis sans expéditeur : signez vos binaires](https://adntio.github.io/cra-dev-wiki/CRA-Dev-02-Authenticode/) | Intégrité et mise à jour sécurisée | Partie I, 2 c) et f) | Windows |
 | 03 | [Ne stockez plus jamais un secret en clair : la DPAPI de Windows](https://adntio.github.io/cra-dev-wiki/CRA-Dev-03-DPAPI/) | Confidentialité, chiffrement au repos | Partie I, 2 e) | Windows |
 | 04 | [Faites confiance, mais vérifiez : signer vos données](https://adntio.github.io/cra-dev-wiki/CRA-Dev-04-Integrite/) | Intégrité des données | Partie I, 2 f) | Multiplateforme |
+| 05 | [Générer un SBOM ne suffit pas : surveillez-le avec Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Gestion des vulnérabilités, surveillance continue | Partie II, point 1 | CI, multiplateforme |
 
 ## Organisation du dépôt
 
