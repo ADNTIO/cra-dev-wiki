@@ -28,6 +28,8 @@ and a language switcher.
 | 02 | [An unsigned .exe is a parcel with no sender: sign your binaries](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-02-Authenticode/) | Integrity and secure updates | Part I, 2 (c) and (f) | Windows |
 | 03 | [Never store a secret in plaintext again: Windows DPAPI](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-03-DPAPI/) | Confidentiality, encryption at rest | Part I, 2 (e) | Windows |
 | 04 | [Trust, but verify: sign your data](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-04-Integrite/) | Data integrity | Part I, 2 (f) | Cross-platform |
+| 05 | [Generating an SBOM is not enough: monitor it with Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Vulnerability handling, continuous monitoring | Part II, point 1 | CI, cross-platform |
+
 
 ## Repository layout
 

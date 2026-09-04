@@ -1,7 +1,7 @@
 ---
 description: >-
-  Gate a release on your SBOM with Grype, attach an immutable SBOM to every release
-  and monitor the versions still supported with Dependency-Track.
+  Gate a release on your SBOM with Grype, then monitor the versions still supported
+  with Dependency-Track.
 ---
 
 # Generating an SBOM is not enough: monitor it with Dependency-Track
@@ -19,13 +19,22 @@ Answering it means checking at two distinct moments: during development, for the
 flaws already known when the build runs, and after the product reaches the market,
 for those discovered later in components already shipped.
 
-```text
-      development phase              release         after going to market
- ─────────────────────────────────────► v1.2.0 ─────────────────────────────────►
-  build → SBOM → scan on every                   the product stops moving,
-  commit: the CVEs known today                   the CVEs keep coming
-
-             Grype                                     Dependency-Track
+```mermaid
+flowchart LR
+  subgraph DEV["Development phase"]
+    direction TB
+    A["build → SBOM → scan<br/>on every commit"]
+    A2(["Grype<br/><i>the CVEs known today</i>"])
+    A --> A2
+  end
+  R(["Release<br/><b>v1.2.0</b>"])
+  subgraph POST["After going to market"]
+    direction TB
+    B["the product stops moving,<br/>the CVEs keep coming"]
+    B2(["Dependency-Track<br/><i>periodic re-evaluation</i>"])
+    B --> B2
+  end
+  DEV ==> R ==> POST
 ```
 
 The CRA requires handling vulnerabilities throughout the support period, but it
@@ -48,24 +57,23 @@ between a shipped version, its artifact and its exact composition is then lost.
 
 ## The technique: check now, monitor afterwards
 
-```text
-commit → build → SBOM → Grype → security policy
-                                      ↓
-                            release tag? ── no ──→ end
-                                     yes
-                                      ↓
-                        publish to Dependency-Track
-                                      ↓
-                    monitoring of supported versions
+```mermaid
+flowchart TD
+  C(["commit"]) --> BU["build"] --> S["SBOM"] --> G["Grype"]
+  G --> P{"Security policy<br/>satisfied?"}
+  P -- no --> F(["CI fails"])
+  P -- yes --> T{"Release tag?"}
+  T -- no --> E(["end"])
+  T -- yes --> D["Publish to<br/>Dependency-Track"]
+  D --> M(["Monitoring of<br/>supported versions"])
 ```
 
 Every commit is checked, but only versions actually shipped enter the portfolio for
 good. That keeps it from filling up with branches and throwaway builds.
 
-### 1. Gate the release with Grype
+### 1. Set Grype's failure threshold
 
-Grype consumes a CycloneDX SBOM directly, and can fail the CI from a given severity
-level:
+Grype consumes the CycloneDX SBOM from the build directly, with no conversion:
 
 ```bash
 grype sbom:bom.json --fail-on high
@@ -79,11 +87,10 @@ A scan is only worth the SBOM feeding it. Check at minimum that every component
 carries a name, a version and a Package URL (`purl`): without a `purl`, matching
 against vulnerability databases becomes guesswork.
 
-### 2. One immutable SBOM per release
+### 2. Publish to Dependency-Track
 
-A published version must stay tied to the artifact and the SBOM produced by the same
-pipeline. In GitHub Actions, the repository name and the tag are enough as
-identifiers:
+The API takes the project name and version, and can create the project on first
+upload. In GitHub Actions, the repository name and the tag are enough as identifiers:
 
 ```yaml
 env:
@@ -91,21 +98,7 @@ env:
   PROJECT_VERSION: ${{ github.ref_name }}
 ```
 
-The portfolio then keeps a distinct composition per version:
-
-```text
-crispy-bootloader-rp2040-rs
-├── v1.0.0
-├── v1.1.0
-└── v1.2.0
-```
-
-Don't prune the old ones automatically: keep those still deployed or supported.
-
-### 3. Publish to Dependency-Track
-
-The API takes the project name and version, and can create the project on first
-upload:
+The upload is then a single request:
 
 ```bash
 curl --fail-with-body --request POST "$DTRACK_URL/api/v1/bom" \
@@ -125,7 +118,7 @@ re-evaluates the components in its portfolio. A published version can therefore 
 a new alert without being rebuilt. The frequency depends on your instance, see its
 [recurring tasks][dtrack-tasks].
 
-### 4. Protect the API key
+### 3. Protect the API key
 
 The key is a secret, and belongs in the CI secret manager:
 
@@ -159,9 +152,8 @@ conclusion is documented in VEX, as covered in
 ## Takeaway
 
 An archived SBOM is a compliance record, a published and re-evaluated SBOM is an
-operational tool. Check every build against an explicit policy, attach a distinct
-SBOM to every shipped version, and keep watching the ones still deployed. This chain
-improves visibility, it does not make a product safe: it sees neither flaws in your
+operational tool. Check every build against an explicit policy, and keep watching
+the versions still deployed. This chain improves visibility, it does not make a product safe: it sees neither flaws in your
 own code, nor misconfigurations, nor exposed secrets. And an alert with no owner and
 no triage deadline is still noise.
 

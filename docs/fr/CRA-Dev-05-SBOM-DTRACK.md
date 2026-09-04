@@ -1,7 +1,7 @@
 ---
 description: >-
-  Contrôler un SBOM avant livraison avec Grype, attacher un SBOM immuable à chaque
-  release et surveiller les versions encore supportées avec Dependency-Track.
+  Contrôler un SBOM avant livraison avec Grype, puis surveiller les versions encore
+  supportées avec Dependency-Track.
 ---
 
 # Générer un SBOM ne suffit pas : surveillez-le avec Dependency-Track
@@ -19,13 +19,22 @@ Y répondre demande de contrôler à deux moments distincts : pendant le dévelo
 pour les vulnérabilités déjà connues au moment du build, et après la mise sur le
 marché, pour celles découvertes plus tard dans des composants déjà livrés.
 
-```text
-    phase de développement           release        après la mise sur le marché
- ─────────────────────────────────────► v1.2.0 ─────────────────────────────────►
-  build → SBOM → scan à chaque                   le produit ne bouge plus,
-  commit : les CVE déjà connues                  les CVE continuent d'arriver
-
-             Grype                                     Dependency-Track
+```mermaid
+flowchart LR
+  subgraph DEV["Phase de développement"]
+    direction TB
+    A["build → SBOM → scan<br/>à chaque commit"]
+    A2(["Grype<br/><i>les CVE déjà connues</i>"])
+    A --> A2
+  end
+  R(["Release<br/><b>v1.2.0</b>"])
+  subgraph POST["Après la mise sur le marché"]
+    direction TB
+    B["le produit ne bouge plus,<br/>les CVE continuent d'arriver"]
+    B2(["Dependency-Track<br/><i>réévaluation périodique</i>"])
+    B --> B2
+  end
+  DEV ==> R ==> POST
 ```
 
 Le CRA impose de traiter les vulnérabilités pendant toute la période de support, mais
@@ -49,25 +58,24 @@ lien entre une version livrée, son artefact et sa composition exacte.
 
 ## La technique : contrôler maintenant, surveiller ensuite
 
-```text
-commit → build → SBOM → Grype → politique de sécurité
-                                      ↓
-                          tag de release ? ── non ──→ fin
-                                     oui
-                                      ↓
-                       publication vers Dependency-Track
-                                      ↓
-                     surveillance des versions supportées
+```mermaid
+flowchart TD
+  C(["commit"]) --> BU["build"] --> S["SBOM"] --> G["Grype"]
+  G --> P{"Politique de<br/>sécurité tenue ?"}
+  P -- non --> F(["CI en échec"])
+  P -- oui --> T{"Tag de release ?"}
+  T -- non --> E(["fin"])
+  T -- oui --> D["Publication vers<br/>Dependency-Track"]
+  D --> M(["Surveillance des<br/>versions supportées"])
 ```
 
 Chaque commit est contrôlé, mais seules les versions réellement livrées entrent
 durablement dans le portfolio. Cela évite de le remplir de branches et de builds
 temporaires.
 
-### 1. Bloquer avant la livraison avec Grype
+### 1. Fixer le seuil d'échec de Grype
 
-Grype consomme directement un SBOM CycloneDX, et peut faire échouer la CI à partir
-d'un niveau de sévérité :
+Grype consomme directement le SBOM CycloneDX produit au build, sans conversion :
 
 ```bash
 grype sbom:bom.json --fail-on high
@@ -81,11 +89,10 @@ Un scan ne vaut que par la qualité du SBOM qui l'alimente. Vérifiez au minimum
 chaque composant porte un nom, une version et un identifiant Package URL (`purl`) :
 sans `purl`, la corrélation avec les bases de vulnérabilités devient approximative.
 
-### 2. Un SBOM immuable par release
+### 2. Publier vers Dependency-Track
 
-Une version publiée doit rester reliée à l'artefact et au SBOM produits par le même
-pipeline. Dans GitHub Actions, le nom du dépôt et le tag suffisent comme
-identifiants :
+L'API accepte le nom et la version du projet, et peut le créer au premier envoi. Dans
+GitHub Actions, le nom du dépôt et le tag suffisent comme identifiants :
 
 ```yaml
 env:
@@ -93,21 +100,7 @@ env:
   PROJECT_VERSION: ${{ github.ref_name }}
 ```
 
-Le portfolio conserve alors une composition distincte par version :
-
-```text
-crispy-bootloader-rp2040-rs
-├── v1.0.0
-├── v1.1.0
-└── v1.2.0
-```
-
-Ne supprimez pas automatiquement les anciennes : gardez celles qui sont encore
-déployées ou supportées.
-
-### 3. Publier vers Dependency-Track
-
-L'API accepte le nom et la version du projet, et peut le créer au premier envoi :
+L'envoi se fait alors en une seule requête :
 
 ```bash
 curl --fail-with-body --request POST "$DTRACK_URL/api/v1/bom" \
@@ -127,7 +120,7 @@ C'est ici que se joue la surveillance après mise sur le marché :
 Une version publiée peut donc produire une nouvelle alerte sans être reconstruite. La
 fréquence dépend de votre instance, voir ses [tâches récurrentes][dtrack-tasks].
 
-### 4. Protéger la clé API
+### 3. Protéger la clé API
 
 La clé est un secret, et doit vivre dans le gestionnaire de secrets de la CI :
 
@@ -161,9 +154,8 @@ dans l'[épisode 1](CRA-Dev-01-SBOM-VEX.md).
 ## À retenir
 
 Un SBOM archivé est une pièce de conformité, un SBOM publié et réévalué est un outil
-d'exploitation. Contrôlez chaque build avec une politique explicite, attachez un SBOM
-distinct à chaque version livrée, et gardez sous surveillance celles qui sont encore
-déployées. Cette chaîne améliore la visibilité, elle ne rend pas un produit sûr : elle
+d'exploitation. Contrôlez chaque build avec une politique explicite, et gardez sous
+surveillance les versions encore déployées. Cette chaîne améliore la visibilité, elle ne rend pas un produit sûr : elle
 ne voit ni les failles du code propriétaire, ni les erreurs de configuration, ni les
 secrets exposés. Et une alerte sans responsable ni délai de triage reste du bruit.
 
