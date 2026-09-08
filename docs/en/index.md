@@ -23,6 +23,8 @@ it does not.
 | 02 | [An unsigned .exe is a parcel with no sender: sign your binaries](CRA-Dev-02-Authenticode.md) | Integrity and secure updates | Part I, point 2, (c) and (f) | Windows |
 | 03 | [Never store a secret in plaintext again: Windows DPAPI](CRA-Dev-03-DPAPI.md) | Confidentiality, encryption at rest | Part I, point 2, (e) | Windows |
 | 04 | [Trust, but verify: sign your data](CRA-Dev-04-Integrite.md) | Data integrity | Part I, point 2, (f) | Cross-platform |
+| 05 | [Generating an SBOM is not enough: monitor it with Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Vulnerability handling, continuous monitoring | Part II, point 1 | CI, cross-platform |
+
 
 The list will grow with each episode.
 

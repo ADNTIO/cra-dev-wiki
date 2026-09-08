@@ -1,12 +1,12 @@
 ---
 description: >-
-  Generate a CycloneDX SBOM with cdxgen in CI and triage vulnerabilities with VEX in Dependency-Track: the vulnerability-handling requirement of the CRA (Annex I, Part II), in practice.
+  Generate a CycloneDX SBOM with cdxgen in CI and triage vulnerabilities with VEX: the vulnerability-handling requirement of the CRA (Annex I, Part II), in practice.
 ---
 
 # You can't fix what you don't know you're running: SBOM and VEX
 
-> **CRA & Dev #1** · ["CRA & Dev" series](index.md) · Reading time: about 7 min · CI, cross-platform ·
-> Tools: cdxgen, CycloneDX, Dependency-Track
+> **CRA & Dev #1** · ["CRA & Dev" series](index.md) · Reading time: about 5 min · CI, cross-platform ·
+> Tools: cdxgen, CycloneDX
 
 ## What the CRA requires
 
@@ -59,9 +59,7 @@ dotnet CycloneDX ./MyApp.sln  # .NET
 Always pin the tool version, never `@latest` in a pipeline: that is what makes the
 SBOM reproducible and stops an upstream update from changing the pipeline's behaviour
 without review. Then let Renovate or Dependabot propose the upgrades. What remains is
-wiring the generation into CI so it stays alive. Example with GitHub Actions,
-publishing the SBOM to a [Dependency-Track][dtrack] server that tracks
-vulnerabilities over time:
+wiring the generation into CI so it stays alive. Example with GitHub Actions:
 
 ```yaml
 # .github/workflows/sbom.yml
@@ -74,20 +72,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Generate the CycloneDX SBOM
         run: npx @cyclonedx/cdxgen@11.7.0 -o bom.json
-      - name: Publish to Dependency-Track
-        run: |
-          curl -sf -X POST "$DTRACK_URL/api/v1/bom" \
-            -H "X-Api-Key: $DTRACK_API_KEY" \
-            -F "project=$DTRACK_PROJECT" \
-            -F "bom=@bom.json"
-        env:
-          DTRACK_URL: ${{ secrets.DTRACK_URL }}
-          DTRACK_API_KEY: ${{ secrets.DTRACK_API_KEY }}
-          DTRACK_PROJECT: ${{ vars.DTRACK_PROJECT_UUID }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: bom.json
 ```
 
-On every push, the component list is up to date and checked against vulnerability
-databases.
+On every push, the component list is up to date and attached to the build. What you
+then do with it, gating a release and monitoring versions already shipped, is the
+subject of [episode 5](CRA-Dev-05-SBOM-DTRACK.md).
 
 ## Technique 2: cut the noise with VEX
 
@@ -148,6 +141,5 @@ vulnerability handling from paperwork to practice.
 *Next episode: [An unsigned .exe is a parcel with no sender, sign your binaries](CRA-Dev-02-Authenticode.md).*
 
 [cdxgen]: https://github.com/CycloneDX/cdxgen
-[dtrack]: https://dependencytrack.org/
 [cyclonedx-vex]: https://cyclonedx.org/use-cases/vulnerability-exploitability/
 [openvex]: https://github.com/openvex/spec
