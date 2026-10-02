@@ -198,6 +198,15 @@ I: Image 0 in slot 1 erased due to downgrade prevention
 I: Image index: 0, Swap type: revert
 ```
 
+Une deuxième carte peut aussi jouer l'émetteur, en LoRa point à point : sur notre
+banc, l'image de 200 ko est passée en 33 minutes, 7 fragments perdus en route ont été
+reconstruits, puis MCUboot a vérifié la signature et démarré la nouvelle version.
+
+![Deux cartes Heltec ESP32 avec radio SX1276 : à gauche, le logo affiché au démarrage ; à droite, le test radio ping-pong et la puissance reçue dans chaque sens.](images/banc-heltec.jpg)
+
+*Le banc : deux cartes Heltec (ESP32, SX1276). À droite, le test radio dans les deux
+sens : −124 dBm à l'aller, −88 dBm au retour.*
+
 ## Trois choses à savoir
 
 1. Comptez votre temps d'antenne avant d'écrire du code. La taille de l'image fixe
