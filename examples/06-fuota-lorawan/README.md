@@ -102,43 +102,67 @@ and reject an older version.
 | `bench.conf`, `bench.py` | Test bench on a board |
 | `xtal-26mhz.overlay` | For boards with a 26 MHz crystal |
 
+### Prerequisites
+
+Tested on Ubuntu with Zephyr 4.4.2 and Zephyr SDK 1.0.1. Allow about 5 minutes for
+the workspace, 2 to 3 minutes per firmware build, 35 minutes for an update over LoRa.
+
+```bash
+sudo apt install cmake ninja-build device-tree-compiler git wget xz-utils
+sudo usermod -aG dialout $USER   # serial port access; log out and back in
+```
+
+Zephyr SDK, minimal archive plus the ESP32 toolchain only:
+
+```bash
+cd ~ && B=https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v1.0.1
+wget $B/zephyr-sdk-1.0.1_linux-x86_64_minimal.tar.xz \
+     $B/toolchain_gnu_linux-x86_64_xtensa-espressif_esp32_zephyr-elf.tar.xz $B/sha256.sum
+grep -E "minimal|xtensa-espressif_esp32_zephyr" sha256.sum | sha256sum -c -
+tar xf zephyr-sdk-1.0.1_linux-x86_64_minimal.tar.xz
+mkdir -p zephyr-sdk-1.0.1/gnu
+tar xf toolchain_gnu_linux-x86_64_xtensa-espressif_esp32_zephyr-elf.tar.xz -C zephyr-sdk-1.0.1/gnu
+export ZEPHYR_SDK_INSTALL_DIR=~/zephyr-sdk-1.0.1   # no need to run setup.sh
+```
+
 ### Set up a Zephyr workspace
 
-Tested with Zephyr 4.4.2 and Zephyr SDK 1.0.1 (`xtensa-espressif_esp32_zephyr-elf`
-toolchain). The workspace lives outside this repository; limited to the modules
-needed, it takes about 1.8 GB, SDK included.
-
-The Python tooling (west, the Zephyr and MCUboot dependencies, esptool, Pillow) is
-declared in the `firmware` group of this example's `pyproject.toml`: no venv to
-activate, everything goes through `uv run`.
+The workspace lives outside this repository; limited to the modules needed, it takes
+under 1 GB. The Python tooling (west, the Zephyr and MCUboot dependencies, esptool,
+Pillow) is declared in the `firmware` group of this example's `pyproject.toml`: no
+venv to activate, everything goes through `uv run`.
 
 ```bash
 EX=/path/to/cra-dev-wiki/examples/06-fuota-lorawan
-export ZEPHYR_SDK_INSTALL_DIR=/path/to/zephyr-sdk-1.0.1
+alias zw="uv run --project $EX --group firmware"
 
 mkdir ~/zephyr-fuota && cd ~/zephyr-fuota
-uv run --project $EX --group firmware west init \
-  -m https://github.com/zephyrproject-rtos/zephyr --mr v4.4.2 --clone-opt=--depth=1 .
-uv run --project $EX --group firmware west config manifest.project-filter -- \
-  '-.*,+mcuboot,+loramac-node,+hal_espressif,+mbedtls,+zcbor,+cmsis_6'
-uv run --project $EX --group firmware west update --narrow -o=--depth=1
+zw west init -m https://github.com/zephyrproject-rtos/zephyr --mr v4.4.2 --clone-opt=--depth=1 .
+zw west config manifest.project-filter -- '-.*,+mcuboot,+loramac-node,+hal_espressif,+mbedtls,+zcbor,+cmsis_6'
+zw west update --narrow -o=--depth=1
 ```
 
 ### Build and flash
+
+The commands below include the overlay for a 26 MHz crystal, which the reference
+boards have (`esptool flash-id` shows "Crystal frequency: 26MHz"). With a 40 MHz
+crystal, drop the `*_EXTRA_DTC_OVERLAY_FILE` options. Note the syntax: with
+`--sysbuild`, options aimed at the application or the bootloader are prefixed with
+`firmware_` or `mcuboot_`.
 
 From the workspace:
 
 ```bash
 APP=$EX/firmware
-alias zw="uv run --project $EX --group firmware"
+XTAL="-Dfirmware_EXTRA_DTC_OVERLAY_FILE=$APP/xtal-26mhz.overlay -Dmcuboot_EXTRA_DTC_OVERLAY_FILE=$APP/xtal-26mhz.overlay"
 
-# Once: the signing key, outside any repository
-zw imgtool keygen -k ~/keys/fuota.pem -t ecdsa-p256
+# Once: the signing key, outside any repository, readable by you only
+mkdir -p ~/keys && zw imgtool keygen -k ~/keys/fuota.pem -t ecdsa-p256 && chmod 600 ~/keys/fuota.pem
 
-zw west build -b heltec_wifi_lora32_v2/esp32/procpu --sysbuild -s $APP -- \
-  -DSB_CONFIG_BOOT_SIGNATURE_KEY_FILE='"'$HOME'/keys/fuota.pem"' \
+zw west build -b heltec_wifi_lora32_v2/esp32/procpu --sysbuild -s $APP -d build/lorawan -- \
+  -DSB_CONFIG_BOOT_SIGNATURE_KEY_FILE='"'$HOME'/keys/fuota.pem"' $XTAL \
   -Dfirmware_EXTRA_CONF_FILE=$HOME/keys/lorawan.conf
-zw west flash --esp-device /dev/ttyUSB0
+zw west flash -d build/lorawan --esp-device /dev/ttyUSB0
 ```
 
 `lorawan.conf` holds your credentials, also outside the repository:
@@ -149,17 +173,31 @@ CONFIG_APP_LORAWAN_JOIN_EUI="..."
 CONFIG_APP_LORAWAN_APP_KEY="..."
 ```
 
-The image to hand to the FUOTA server is `build/firmware/zephyr/zephyr.signed.bin`.
-The server must send 48-byte fragments, with at most 10% redundancy, for an image of
-at most 384 KB: these are the values set in `prj.conf`, and they decide how much RAM
-the decoder reserves.
-
-If `esptool flash-id` shows "Crystal frequency: 26MHz", add
-`-Dfirmware_EXTRA_DTC_OVERLAY_FILE=$APP/xtal-26mhz.overlay` and
-`-Dmcuboot_EXTRA_DTC_OVERLAY_FILE=$APP/xtal-26mhz.overlay`.
-
 Without `SB_CONFIG_BOOT_SIGNATURE_KEY_FILE`, the build succeeds without a warning and
 signs with MCUboot's public example key (`root-ec-p256.pem`). Checked.
+
+To read a board's console (Ctrl-] to quit):
+
+```bash
+zw python -m serial.tools.miniterm /dev/ttyUSB0 115200
+```
+
+### Testing with a real LoRaWAN network
+
+Not done for this example, which was tested without a gateway. What it takes: a
+LoRaWAN gateway, a network server with FUOTA support, the device registered with its
+DevEUI, JoinEUI and AppKey, and a FUOTA deployment pushing
+`build/lorawan/firmware/zephyr/zephyr.signed.bin` (with a higher version than the
+one running) to a class C multicast group.
+
+[ChirpStack v4][chirpstack-fuota] has FUOTA deployments built in; The Things Stack
+[documents its FUOTA support][tts-fuota] as early adoption. On the server side, use
+the values the firmware is sized for in `prj.conf`: 48-byte fragments, at most 10%
+redundancy, an image of at most 384 KB. ChirpStack also asks for a Gen App Key in
+LoRaWAN 1.0.x: this firmware passes the same key as AppKey and NwkKey, and
+LoRaMac-node derives the multicast root key from it, so set the Gen App Key to the
+AppKey (our reading of the source, not tested).
+
 
 ### The screen
 
@@ -237,23 +275,50 @@ carries the fragments, uses SF7 at 250 kHz; the uplink, which only carries the
 acknowledgements, uses SF10 at 125 kHz. Both are at 869.525 MHz, 14 dBm, and the PC
 keeps to the 10% duty cycle of that sub-band.
 
+First check the radio link in both directions. From the workspace (no sysbuild here,
+so the overlay option has no prefix):
+
 ```bash
-# Board being updated (MCUboot + point-to-point firmware)
+R=$EX/radio-test; X=-DEXTRA_DTC_OVERLAY_FILE=$APP/xtal-26mhz.overlay
+zw west build -b heltec_wifi_lora32_v2/esp32/procpu -s $R -d build/ping -- $X
+zw west build -b heltec_wifi_lora32_v2/esp32/procpu -s $R -d build/pong -- $X -DEXTRA_CONF_FILE=$R/pong.conf
+zw west flash -d build/ping --esp-device /dev/ttyUSB0
+zw west flash -d build/pong --esp-device /dev/ttyUSB1
+```
+
+Each screen then shows the pings and pongs with the received power; the ping board
+shows `out/back dBm` for both directions.
+
+Then the update itself, from the workspace:
+
+```bash
+K=-DSB_CONFIG_BOOT_SIGNATURE_KEY_FILE='"'$HOME'/keys/fuota.pem"'
+
+# Version 1.0.0 for the board being updated, then a 1.1.0 image to send
 zw west build -b heltec_wifi_lora32_v2/esp32/procpu --sysbuild -s $APP -d build/p2p -- \
-  -DSB_CONFIG_BOOT_SIGNATURE_KEY_FILE='"'$HOME'/keys/fuota.pem"' \
-  -Dfirmware_EXTRA_CONF_FILE=$APP/p2p.conf
-zw west flash -d build/p2p --esp-device /dev/ttyUSB0
+  $K $XTAL -Dfirmware_EXTRA_CONF_FILE=$APP/p2p.conf
+sed -i 's/^VERSION_MINOR = .*/VERSION_MINOR = 1/' $APP/VERSION
+zw west build -b heltec_wifi_lora32_v2/esp32/procpu --sysbuild -s $APP -d build/p2p-v2 -- \
+  $K $XTAL -Dfirmware_EXTRA_CONF_FILE=$APP/p2p.conf
+sed -i 's/^VERSION_MINOR = .*/VERSION_MINOR = 0/' $APP/VERSION
 
 # Sender board
-zw west build -b heltec_wifi_lora32_v2/esp32/procpu -s $EX/radio-modem -d build/modem
+zw west build -b heltec_wifi_lora32_v2/esp32/procpu -s $EX/radio-modem -d build/modem -- $X
+
+zw west flash -d build/p2p --esp-device /dev/ttyUSB0
 zw west flash -d build/modem --esp-device /dev/ttyUSB1
 
-# Broadcast a new signed image (from the example folder)
-uv run --group firmware python firmware/tools/p2p_send.py build/p2p-v2/firmware/zephyr/zephyr.signed.bin \
+# Broadcast (about 35 minutes)
+zw python $EX/firmware/tools/p2p_send.py build/p2p-v2/firmware/zephyr/zephyr.signed.bin \
   --modem /dev/ttyUSB1 --device /dev/ttyUSB0
 ```
 
-Add the `xtal-26mhz.overlay` overlay to both boards if their crystal runs at 26 MHz.
+The new image must have a higher version than the running one: MCUboot's downgrade
+prevention erases anything else.
+
+If the transfer is cut (USB link lost, Ctrl-C), `p2p_send.py` can resume it as long
+as the board being updated has not rebooted: pass the session number it printed and
+the next fragment, for example `--session 20 --start 151`.
 
 Result on two Heltec boards side by side, from version 1.0.0 to 1.1.0:
 
@@ -279,13 +344,21 @@ Three things learned along the way:
 
 - The link was very asymmetric: at 14 dBm, one board heard the other at −82 dBm,
   but was heard at −126 dBm, at the edge of reception in SF7. Hence the uplink in
-  SF10. Check both directions with `radio-test/` first.
+  SF10. A second tester measured the same gap with the same pair of boards.
 - On these boards, the ESP32 is revision 1: without MCUboot, Zephyr's simple boot
   refuses it, hence `CONFIG_ESP32_USE_UNSUPPORTED_REVISION` in `radio-modem/` and
   `radio-test/`.
 - Zephyr's UART console does not take lines longer than 255 characters, and opening
   the serial port resets the modem board: `p2p_send.py` splits the frames and waits
   for `READY`.
+
+### Troubleshooting
+
+- `Could not open port ... the port is busy`: usually a permission problem, not a
+  busy port. Check that you are in the `dialout` group (`id`), after logging back in.
+- `device not accepting address, error -71` in `dmesg`: a faulty cable or USB port.
+- `FileNotFoundError` on `imgtool keygen`: the key folder does not exist yet.
+
 
 ### What was checked, and what was not
 
@@ -297,6 +370,9 @@ having been tried on that board.
 Checked over the radio, between two boards: a full update, from the reception of the
 TS004 fragments to the confirmed boot of the new image (see above).
 
+A second tester rebuilt everything from these instructions on a fresh machine and got
+the same 7 out of 7 on the test bench.
+
 Not checked: everything specific to LoRaWAN. Neither the join, nor clock
 synchronisation, nor multicast setup, nor a FUOTA session run by a network server
 were exercised; that needs a gateway and a FUOTA server. Triggering the watchdog on
@@ -304,3 +380,5 @@ a hang was not provoked either.
 
 [loramac-node]: https://github.com/Lora-net/LoRaMac-node
 [fuota-paper]: https://arxiv.org/abs/2002.08735
+[chirpstack-fuota]: https://www.chirpstack.io/docs/chirpstack/use/fuota.html
+[tts-fuota]: https://www.thethingsindustries.com/docs/concepts/features/lorawan/fuota/

@@ -125,7 +125,7 @@ CONFIG_REBOOT=y
 ```
 
 The application code starts the services, reacts when the image is complete, and
-decides whether a new image deserves to be kept (excerpt from
+decides whether a new image deserves to be kept (simplified excerpt from
 `firmware/src/main.c`).
 
 ```c
@@ -139,27 +139,23 @@ static void fuota_finished(void)
 int main(void)
 {
 	bool confirmed = boot_is_img_confirmed();
-	bool joined;
 
 	/* ... lorawan_start() ... */
-	joined = join() == 0;
+	bool joined = join() == 0;
+	bool services = joined && start_services(); /* TS003, TS004; TS005 starts on its own */
 
 	/* The health check. A test image that fails it reboots without
 	 * confirming itself: MCUboot puts the old one back. */
 	if (!confirmed) {
-		if (!joined) {
+		if (!services) {
 			sys_reboot(SYS_REBOOT_COLD);
 		}
 		boot_write_img_confirmed();
 	}
 
-	lorawan_clock_sync_run();                   /* TS003 */
-	lorawan_frag_transport_run(fuota_finished); /* TS004 */
-	/* TS005 starts on its own, in the background */
-
-	/* ... regular uplinks: in class A, they are what opens the receive
-	 * windows the server needs. Then, once image_received is given:
-	 * sys_reboot(SYS_REBOOT_COLD) ... */
+	/* ... main loop: regular uplinks (in class A, they are what opens the
+	 * receive windows the server needs), new join attempts when the network
+	 * is missing, and a reboot as soon as image_received is given ... */
 }
 ```
 
@@ -171,8 +167,8 @@ before swapping it with the old one. A forged, truncated or badly rebuilt image 
 Zephyr [requests the upgrade in test mode][zephyr-frag-flash] (`BOOT_UPGRADE_TEST`).
 The new image boots once. If it does not call `boot_write_img_confirmed()`, MCUboot [puts the old one
 back][mcuboot-design] at the next reset. Hence the point of confirming late, after a real health check,
-here the successful join, and of letting a watchdog trigger the reset if the firmware
-hangs before that. A join is enough for a demo, not for a product: confirm the image
+here a successful join and running FUOTA services, and of letting a watchdog trigger the reset if the firmware
+hangs before that. That is enough for a demo, not for a product: confirm the image
 at the end of an explicit policy (watchdog fed, configuration and storage migration
 done, critical peripherals initialised, possibly a first application exchange with
 the backend).

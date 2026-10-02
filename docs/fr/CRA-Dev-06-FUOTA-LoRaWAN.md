@@ -129,7 +129,7 @@ CONFIG_REBOOT=y
 ```
 
 Le code applicatif lance les services, réagit quand l'image est complète, et décide
-si une nouvelle image mérite d'être gardée (extrait de `firmware/src/main.c`).
+si une nouvelle image mérite d'être gardée (extrait simplifié de `firmware/src/main.c`).
 
 ```c
 /* Appelé quand l'image est reconstruite dans le slot secondaire.
@@ -142,27 +142,24 @@ static void fuota_finished(void)
 int main(void)
 {
 	bool confirmed = boot_is_img_confirmed();
-	bool joined;
 
 	/* ... lorawan_start() ... */
-	joined = join() == 0;
+	bool joined = join() == 0;
+	bool services = joined && start_services(); /* TS003, TS004 ; TS005 démarre seul */
 
 	/* Le test de bon fonctionnement. Une image à l'essai qui le rate
 	 * redémarre sans se confirmer : MCUboot remet l'ancienne. */
 	if (!confirmed) {
-		if (!joined) {
+		if (!services) {
 			sys_reboot(SYS_REBOOT_COLD);
 		}
 		boot_write_img_confirmed();
 	}
 
-	lorawan_clock_sync_run();                   /* TS003 */
-	lorawan_frag_transport_run(fuota_finished); /* TS004 */
-	/* TS005 démarre seul, en arrière-plan */
-
-	/* ... uplinks réguliers : en classe A, ce sont eux qui ouvrent les
-	 * fenêtres de réception dont le serveur a besoin. Puis, quand
-	 * image_received est donné : sys_reboot(SYS_REBOOT_COLD) ... */
+	/* ... boucle principale : uplinks réguliers (en classe A, ce sont eux qui
+	 * ouvrent les fenêtres de réception dont le serveur a besoin), nouvelles
+	 * tentatives de join si le réseau manque, et redémarrage dès que
+	 * image_received est donné ... */
 }
 ```
 
@@ -174,8 +171,8 @@ avant de l'échanger avec l'ancienne. Une image forgée, tronquée ou mal recons
 Zephyr [demande la mise à jour en mode test][zephyr-frag-flash]
 (`BOOT_UPGRADE_TEST`). La nouvelle image démarre une fois. Si elle n'appelle pas `boot_write_img_confirmed()`, MCUboot [remet
 l'ancienne][mcuboot-design] au reset suivant. D'où l'intérêt de confirmer tard, après un vrai test de
-bon fonctionnement, ici le join réussi, et de laisser un watchdog provoquer le reset
-si le firmware se bloque avant. Le join suffit pour la démonstration, pas pour un
+bon fonctionnement, ici le join réussi et les services FUOTA démarrés, et de laisser un watchdog provoquer le reset
+si le firmware se bloque avant. Cela suffit pour la démonstration, pas pour un
 produit : confirmez l'image au terme d'une politique explicite (chien de garde
 nourri, migration de la configuration et du stockage réussie, périphériques critiques
 initialisés, voire un premier échange applicatif avec le backend).

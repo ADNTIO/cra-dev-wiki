@@ -161,6 +161,9 @@ no triage deadline is still noise.
 
 *Previous episode: [Trust, but verify](CRA-Dev-04-Integrite.md).*
 
+*Next episode: [A thousand fragments, one signature, updating firmware over
+LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
+
 [grype]: https://oss.anchore.com/docs/reference/grype/configuration/
 [dtrack]: https://dependencytrack.org/
 [dtrack-ci]: https://docs.dependencytrack.org/usage/cicd/
