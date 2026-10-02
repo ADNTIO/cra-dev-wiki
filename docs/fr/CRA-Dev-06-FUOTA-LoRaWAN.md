@@ -10,11 +10,11 @@ description: >-
 
 ## Ce que demande le CRA
 
-Un produit doit pouvoir être corrigé après sa mise sur le marché. Le [Cyber
-Resilience Act][cra] demande que les vulnérabilités puissent être traitées par des mises à
-jour de sécurité, automatiques lorsque c'est applicable (Annexe I, partie I,
-point 2, c), et que le fabricant dispose de mécanismes pour distribuer ces mises à
-jour de manière sécurisée (partie II, point 7), sans retard (point 8).
+Un produit doit pouvoir être corrigé après sa mise sur le marché. Le [Cyber Resilience
+Act][cra] demande que les vulnérabilités puissent être traitées par des mises à jour
+de sécurité, automatiques lorsque c'est applicable (Annexe I, partie I, point 2, c),
+et que le fabricant dispose de mécanismes pour distribuer ces mises à jour de manière
+sécurisée (partie II, point 7), sans retard (point 8).
 
 Sur un serveur, c'est un téléchargement HTTPS. Sur un capteur LoRaWAN posé en haut
 d'un mât pour dix ans, alimenté par une pile, c'est un autre métier. Le réseau
@@ -26,17 +26,17 @@ Update Over The Air*), et elle ne dispense pas de signer ce qu'on envoie.
 
 Trois erreurs, toutes fréquentes.
 
-Croire que le chiffrement LoRaWAN authentifie le firmware. Pour mettre à jour un
-parc, on diffuse les fragments en multicast, chiffrés avec une clé de groupe. Cette
-clé est par construction identique dans tous les appareils du groupe. Si un
-attaquant extrait les clés de session multicast d'un seul appareil, il peut fabriquer
-des fragments que tous les autres accepteront. La [spécification de
-fragmentation][ts004] le dit elle-même (section 4) : sauf élément sécurisé dans tous
-les appareils du groupe, ces clés ne peuvent pas être considérées comme sûres, une étape supplémentaire
-d'intégrité et d'authentification du fichier est nécessaire, et pour un firmware la
-solution recommandée est une signature à clé publique. C'est exactement le critère
-de l'[épisode 4](CRA-Dev-04-Integrite.md) : quand celui qui vérifie ne doit pas
-pouvoir forger, un secret partagé ne suffit plus.
+Croire que le chiffrement LoRaWAN authentifie le firmware. Pour mettre à jour un parc,
+on diffuse les fragments en multicast, chiffrés avec une clé de groupe. Cette clé est
+par construction identique dans tous les appareils du groupe. Si un attaquant extrait
+les clés de session multicast d'un seul appareil, il peut fabriquer des fragments que
+tous les autres accepteront. La [spécification de fragmentation][ts004] le dit
+elle-même (section 4) : sauf élément sécurisé dans tous les appareils du groupe, ces
+clés ne peuvent pas être considérées comme sûres, une étape supplémentaire d'intégrité
+et d'authentification du fichier est nécessaire, et pour un firmware la solution
+recommandée est une signature à clé publique. C'est exactement le critère de
+l'[épisode 4](CRA-Dev-04-Integrite.md) : quand celui qui vérifie ne doit pas pouvoir
+forger, un secret partagé ne suffit plus.
 
 Envoyer l'image complète sans compter. Une [étude de l'University College
 Cork][fuota-paper] fait le calcul pour une image de 50 ko à DR2 (SF10), soit
@@ -67,11 +67,11 @@ son port.
 | Configuration du multicast | [TS005][ts005] | 200 | Remettre à chaque appareil la clé du groupe et l'heure de la session (classe B ou C) |
 | Transport fragmenté | [TS004][ts004] | 201 | Découper l'image en fragments, avec des fragments redondants |
 
-Une session se déroule ainsi (figure 3 de l'[étude citée][fuota-paper]). Le serveur configure chaque appareil en unicast
-(groupe multicast, session de fragmentation, heure de début). À l'heure dite, tous
-passent en classe C et écoutent en continu. Le serveur diffuse les fragments une
-seule fois pour tout le groupe. Les appareils reconstruisent l'image, puis
-reviennent en classe A.
+Une session se déroule ainsi (figure 3 de l'[étude citée][fuota-paper]). Le serveur
+configure chaque appareil en unicast (groupe multicast, session de fragmentation,
+heure de début). À l'heure dite, tous passent en classe C et écoutent en continu. Le
+serveur diffuse les fragments une seule fois pour tout le groupe. Les appareils
+reconstruisent l'image, puis reviennent en classe A.
 
 La redondance évite les retransmissions. Les fragments supplémentaires sont des
 combinaisons des fragments d'origine : selon la spécification, 10 % de redondance
@@ -163,24 +163,27 @@ int main(void)
 }
 ```
 
-Au redémarrage, MCUboot [vérifie la signature][mcuboot-design] de l'image reçue
-avant de l'échanger avec l'ancienne. Une image forgée, tronquée ou mal reconstruite ne démarre jamais.
+Au redémarrage, MCUboot [vérifie la signature][mcuboot-design] de l'image reçue avant
+de l'échanger avec l'ancienne. Une image forgée, tronquée ou mal reconstruite ne
+démarre jamais.
 
 ### 4. Confirmer, ou revenir en arrière
 
-Zephyr [demande la mise à jour en mode test][zephyr-frag-flash]
-(`BOOT_UPGRADE_TEST`). La nouvelle image démarre une fois. Si elle n'appelle pas `boot_write_img_confirmed()`, MCUboot [remet
-l'ancienne][mcuboot-design] au reset suivant. D'où l'intérêt de confirmer tard, après un vrai test de
-bon fonctionnement, ici le join réussi et les services FUOTA démarrés, et de laisser un watchdog provoquer le reset
-si le firmware se bloque avant. Cela suffit pour la démonstration, pas pour un
-produit : confirmez l'image au terme d'une politique explicite (chien de garde
+Zephyr [demande la mise à jour en mode test][zephyr-frag-flash] (`BOOT_UPGRADE_TEST`).
+La nouvelle image démarre une fois. Si elle n'appelle pas
+`boot_write_img_confirmed()`, MCUboot [remet l'ancienne][mcuboot-design] au reset
+suivant. D'où l'intérêt de confirmer tard, après un vrai test de bon fonctionnement,
+ici le join réussi et les services FUOTA démarrés, et de laisser un watchdog provoquer
+le reset si le firmware se bloque avant. Cela suffit pour la démonstration, pas pour
+un produit : confirmez l'image au terme d'une politique explicite (chien de garde
 nourri, migration de la configuration et du stockage réussie, périphériques critiques
 initialisés, voire un premier échange applicatif avec le backend).
 
-Reste le retour arrière malveillant : rejouer une ancienne image, correctement
-signée, mais vulnérable. MCUboot [décrit deux protections][mcuboot-design]. La première compare
-les numéros de version (`CONFIG_MCUBOOT_DOWNGRADE_PREVENTION`). Sa documentation la
-réserve à la stratégie par écrasement. La seconde s'appuie sur un compteur de sécurité stocké dans le matériel
+Reste le retour arrière malveillant : rejouer une ancienne image, correctement signée,
+mais vulnérable. MCUboot [décrit deux protections][mcuboot-design]. La première
+compare les numéros de version (`CONFIG_MCUBOOT_DOWNGRADE_PREVENTION`). Sa
+documentation la réserve à la stratégie par écrasement. La seconde s'appuie sur un
+compteur de sécurité stocké dans le matériel
 (`CONFIG_MCUBOOT_HW_DOWNGRADE_PREVENTION`) et refuse toute image dont le compteur est
 inférieur. Une valeur égale passe : il faut donc incrémenter le compteur à chaque
 correctif de sécurité.
@@ -214,40 +217,40 @@ sens : −124 dBm à l'aller, −88 dBm au retour.*
 
 ## Trois choses à savoir
 
-1. Comptez votre temps d'antenne avant d'écrire du code. La taille de l'image fixe
-   la durée et la consommation. Dans l'étude citée, une mise à jour à DR0 (SF12)
-   prend près de 30 fois plus longtemps qu'à DR5 (SF7), mais DR5 n'atteint que 45 %
-   des appareils du déploiement simulé. Les leviers sont connus : une image petite,
-   une mise à jour différentielle plutôt que complète ([recommandation de The Things
+1. Comptez votre temps d'antenne avant d'écrire du code. La taille de l'image fixe la
+   durée et la consommation. Dans l'étude citée, une mise à jour à DR0 (SF12) prend
+   près de 30 fois plus longtemps qu'à DR5 (SF7), mais DR5 n'atteint que 45 % des
+   appareils du déploiement simulé. Les leviers sont connus : une image petite, une
+   mise à jour différentielle plutôt que complète ([recommandation de The Things
    Stack][tti-fuota]), une taille de fragment calée sur le débit le plus bas du
    groupe. Avec un delta, la signature doit porter sur l'image reconstruite, pas sur
-   le patch. Comptez aussi la RAM : le décodeur de Zephyr réserve sa mémoire
-   [selon la taille d'image, la taille de fragment et la redondance][zephyr-frag-kconfig].
-   Avec les valeurs par défaut, il réclamait plus de 5 Mo sur notre ESP32, qui en
-   offre 192 Ko.
+   le patch. Comptez aussi la RAM : le décodeur de Zephyr réserve sa mémoire [selon la
+   taille d'image, la taille de fragment et la redondance][zephyr-frag-kconfig]. Avec
+   les valeurs par défaut, il réclamait plus de 5 Mo sur notre ESP32, qui en offre 192
+   Ko.
 2. Remplacez la clé par défaut. Sans `SB_CONFIG_BOOT_SIGNATURE_KEY_FILE`, le build
    utilise la clé d'exemple livrée dans le dépôt public de MCUboot, dont la
-   [documentation][mcuboot-zephyr] rappelle que la clé privée est accessible à tous. Et comme pour Authenticode
-   ([épisode 2](CRA-Dev-02-Authenticode.md)), la vôtre ne vit ni dans le dépôt ni
-   en clair dans la CI : pour un produit, elle reste hors ligne ou dans un HSM, et
-   seule la clé publique sert à compiler le bootloader ([modèle de garde][mcuboot-zephyr]
-   de MCUboot). Sa fuite est le pire scénario de cette architecture : quiconque la
-   détient signe des images que tout le parc démarrera. Le port Zephyr accepte
-   plusieurs clés de vérification, ce qui permet de basculer sur une clé de secours ;
-   mais tant que l'ancienne reste dans le bootloader, une image signée avec elle passe
-   encore. Prévoyez donc avant la mise en production comment vous la retirerez.
-   Vérifiez aussi les réglages par défaut de votre carte : pour
-   la Heltec de l'exemple, Zephyr [désactive la signature][heltec-sysbuild], et
-   MCUboot sur ESP32 [ne vérifie pas le slot primaire et écrase sans retour
-   arrière][mcuboot-esp32].
+   [documentation][mcuboot-zephyr] rappelle que la clé privée est accessible à tous.
+   Et comme pour Authenticode ([épisode 2](CRA-Dev-02-Authenticode.md)), la vôtre ne
+   vit ni dans le dépôt ni en clair dans la CI : pour un produit, elle reste hors
+   ligne ou dans un HSM, et seule la clé publique sert à compiler le bootloader
+   ([modèle de garde][mcuboot-zephyr] de MCUboot). Sa fuite est le pire scénario de
+   cette architecture : quiconque la détient signe des images que tout le parc
+   démarrera. Le port Zephyr accepte plusieurs clés de vérification, ce qui permet de
+   basculer sur une clé de secours ; mais tant que l'ancienne reste dans le
+   bootloader, une image signée avec elle passe encore. Prévoyez donc avant la mise en
+   production comment vous la retirerez. Vérifiez aussi les réglages par défaut de
+   votre carte : pour la Heltec de l'exemple, Zephyr [désactive la
+   signature][heltec-sysbuild], et MCUboot sur ESP32 [ne vérifie pas le slot primaire
+   et écrase sans retour arrière][mcuboot-esp32].
 3. La signature ne protège pas tout. Un appareil compromis du groupe peut toujours
    lire le firmware diffusé et injecter des fragments pour faire échouer la session,
-   puisqu'il détient les clés du groupe ([TS004][ts004], section 4).
-   Il ne peut pas faire démarrer son propre code. Si le firmware est confidentiel,
-   MCUboot sait aussi gérer des [images chiffrées][mcuboot-enc]. Et le code qui reçoit les
-   fragments est lui-même une surface d'attaque : la [CVE-2026-13480][cve] est une
-   lecture hors limites dans le décodeur TS004 de Zephyr, corrigée en 4.4.2. Suivre
-   les vulnérabilités de sa pile radio relève de l'[épisode 1](CRA-Dev-01-SBOM-VEX.md).
+   puisqu'il détient les clés du groupe ([TS004][ts004], section 4). Il ne peut pas
+   faire démarrer son propre code. Si le firmware est confidentiel, MCUboot sait aussi
+   gérer des [images chiffrées][mcuboot-enc]. Et le code qui reçoit les fragments est
+   lui-même une surface d'attaque : la [CVE-2026-13480][cve] est une lecture hors
+   limites dans le décodeur TS004 de Zephyr, corrigée en 4.4.2. Suivre les
+   vulnérabilités de sa pile radio relève de l'[épisode 1](CRA-Dev-01-SBOM-VEX.md).
 
 ## À retenir
 
@@ -266,7 +269,7 @@ Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md).*
 
 *Code d'accompagnement, dans [`examples/06-fuota-lorawan`][example] : une session
 FUOTA simulée de bout en bout avec ses tests, et le firmware Zephyr complet, avec
-son banc d'essai sur carte Heltec ESP32.*
+son banc d'essai sur carte Heltec ESP32. Le README de l'exemple est en anglais.*
 
 *Pour aller plus loin : l'[architecture de mise à jour de firmware pour l'IoT][rfc9019]
 de l'IETF (RFC 9019), la [version 2.0.0 de TS004][ts004-v2] publiée en 2022 (l'exemple

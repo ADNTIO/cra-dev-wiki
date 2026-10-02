@@ -11,9 +11,9 @@ description: >-
 ## What the CRA requires
 
 A product must be fixable after it is placed on the market. The [Cyber Resilience
-Act][cra] requires that vulnerabilities can be addressed through security updates, automatic
-where applicable (Annex I, Part I, point 2, c), and that the manufacturer has
-mechanisms to distribute those updates securely (Part II, point 7), without delay
+Act][cra] requires that vulnerabilities can be addressed through security updates,
+automatic where applicable (Annex I, Part I, point 2, c), and that the manufacturer
+has mechanisms to distribute those updates securely (Part II, point 7), without delay
 (point 8).
 
 On a server, that is an HTTPS download. On a LoRaWAN sensor sitting on top of a pole
@@ -64,10 +64,11 @@ its own port.
 | Multicast setup | [TS005][ts005] | 200 | Hand each device the group key and the session time (class B or C) |
 | Fragmented transport | [TS004][ts004] | 201 | Split the image into fragments, plus redundant fragments |
 
-A session goes like this (figure 3 of the [study cited above][fuota-paper]). The server configures each device over unicast (multicast
-group, fragmentation session, start time). At the agreed time, all of them switch to
-class C and listen continuously. The server broadcasts the fragments once for the
-whole group. The devices rebuild the image, then return to class A.
+A session goes like this (figure 3 of the [study cited above][fuota-paper]). The
+server configures each device over unicast (multicast group, fragmentation session,
+start time). At the agreed time, all of them switch to class C and listen
+continuously. The server broadcasts the fragments once for the whole group. The
+devices rebuild the image, then return to class A.
 
 Redundancy avoids retransmissions. The extra fragments are combinations of the
 original ones: according to the specification, 10% redundancy lets a device lose
@@ -160,18 +161,19 @@ int main(void)
 ```
 
 On reboot, MCUboot [verifies the signature][mcuboot-design] of the received image
-before swapping it with the old one. A forged, truncated or badly rebuilt image never boots.
+before swapping it with the old one. A forged, truncated or badly rebuilt image never
+boots.
 
 ### 4. Confirm, or roll back
 
 Zephyr [requests the upgrade in test mode][zephyr-frag-flash] (`BOOT_UPGRADE_TEST`).
-The new image boots once. If it does not call `boot_write_img_confirmed()`, MCUboot [puts the old one
-back][mcuboot-design] at the next reset. Hence the point of confirming late, after a real health check,
-here a successful join and running FUOTA services, and of letting a watchdog trigger the reset if the firmware
-hangs before that. That is enough for a demo, not for a product: confirm the image
-at the end of an explicit policy (watchdog fed, configuration and storage migration
-done, critical peripherals initialised, possibly a first application exchange with
-the backend).
+The new image boots once. If it does not call `boot_write_img_confirmed()`, MCUboot
+[puts the old one back][mcuboot-design] at the next reset. Hence the point of
+confirming late, after a real health check, here a successful join and running FUOTA
+services, and of letting a watchdog trigger the reset if the firmware hangs before
+that. That is enough for a demo, not for a product: confirm the image at the end of an
+explicit policy (watchdog fed, configuration and storage migration done, critical
+peripherals initialised, possibly a first application exchange with the backend).
 
 That leaves the malicious rollback: replaying an old image, correctly signed, but
 vulnerable. MCUboot [describes two protections][mcuboot-design]. The first compares
@@ -220,35 +222,35 @@ directions: −124 dBm one way, −88 dBm the other.*
    on our ESP32, which offers 192 KB.
 2. Replace the default key. Without `SB_CONFIG_BOOT_SIGNATURE_KEY_FILE`, the build
    uses the example key shipped in the public MCUboot repository, whose
-   [documentation][mcuboot-zephyr] stresses that the private key is available to all. And as with Authenticode
-   ([episode 2](CRA-Dev-02-Authenticode.md)), yours lives neither in the repository
-   nor in plaintext in CI: for a product, it stays offline or in an HSM, and only the
-   public key is used to build the bootloader (MCUboot's [custody
-   model][mcuboot-zephyr]). Its leak is the worst case of this architecture: whoever
-   holds it signs images the whole fleet will boot. The Zephyr port accepts several
-   verification keys, which lets you switch to a backup key; but as long as the old
-   one stays in the bootloader, an image signed with it still passes. So decide
-   before production how you will withdraw it. Check your board's defaults too: for the example's Heltec
-   board, Zephyr [disables the signature][heltec-sysbuild], and MCUboot on ESP32
-   [does not validate the primary slot and overwrites without
+   [documentation][mcuboot-zephyr] stresses that the private key is available to all.
+   And as with Authenticode ([episode 2](CRA-Dev-02-Authenticode.md)), yours lives
+   neither in the repository nor in plaintext in CI: for a product, it stays offline
+   or in an HSM, and only the public key is used to build the bootloader (MCUboot's
+   [custody model][mcuboot-zephyr]). Its leak is the worst case of this architecture:
+   whoever holds it signs images the whole fleet will boot. The Zephyr port accepts
+   several verification keys, which lets you switch to a backup key; but as long as
+   the old one stays in the bootloader, an image signed with it still passes. So
+   decide before production how you will withdraw it. Check your board's defaults too:
+   for the example's Heltec board, Zephyr [disables the signature][heltec-sysbuild],
+   and MCUboot on ESP32 [does not validate the primary slot and overwrites without
    rollback][mcuboot-esp32].
 3. The signature does not protect everything. A compromised device of the group can
    still read the broadcast firmware and inject fragments to make the session fail,
-   since it holds the group keys ([TS004][ts004], section 4).
-   It cannot get its own code to boot. If the firmware is confidential, MCUboot can
-   also handle [encrypted images][mcuboot-enc]. And the code that receives the fragments is itself
-   an attack surface: [CVE-2026-13480][cve] is an out-of-bounds read in Zephyr's
-   TS004 decoder, fixed in 4.4.2. Tracking the vulnerabilities of your radio stack is
-   the subject of [episode 1](CRA-Dev-01-SBOM-VEX.md).
+   since it holds the group keys ([TS004][ts004], section 4). It cannot get its own
+   code to boot. If the firmware is confidential, MCUboot can also handle [encrypted
+   images][mcuboot-enc]. And the code that receives the fragments is itself an attack
+   surface: [CVE-2026-13480][cve] is an out-of-bounds read in Zephyr's TS004 decoder,
+   fixed in 4.4.2. Tracking the vulnerabilities of your radio stack is the subject of
+   [episode 1](CRA-Dev-01-SBOM-VEX.md).
 
 ## Takeaway
 
 On LoRaWAN, updating is a matter of radio budget and trust. The FUOTA specifications
-provide the building blocks for the first: clock, multicast, redundant fragments;
-data rate, image size, coverage and RAM remain engineering choices. They leave the
-second to the manufacturer. Sign the image, have the bootloader verify it, confirm it only once it
-has proven itself, and forbid going back to a vulnerable version. That is what turns
-a channel of a few bytes into a secure update mechanism in the CRA's sense.
+provide the building blocks for the first: clock, multicast, redundant fragments; data
+rate, image size, coverage and RAM remain engineering choices. They leave the second
+to the manufacturer. Sign the image, have the bootloader verify it, confirm it only
+once it has proven itself, and forbid going back to a vulnerable version. That is what
+turns a channel of a few bytes into a secure update mechanism in the CRA's sense.
 
 ---
 
