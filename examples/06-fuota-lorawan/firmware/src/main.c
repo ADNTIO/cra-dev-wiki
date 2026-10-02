@@ -28,8 +28,8 @@ LOG_MODULE_REGISTER(fuota, LOG_LEVEL_INF);
 #define JOIN_RETRY_MIN_S 60
 #define JOIN_RETRY_MAX_S 3600
 
-/* Before rebooting a confirmed image on a radio failure: avoids a reboot loop */
-#define RADIO_FAILURE_WAIT_S 600
+/* Before rebooting a confirmed image after a failure: avoids a reboot loop */
+#define FAILURE_WAIT_S 600
 
 /* Ports of the FUOTA services (LoRa Alliance specifications) */
 #define PORT_MULTICAST_SETUP 200 /* TS005 */
@@ -103,12 +103,12 @@ static FUNC_NORETURN void reboot(const char *reason)
 /* A test image reboots at once, so MCUboot rolls it back. A confirmed image has no
  * older image to go back to: it waits before retrying, rather than reboot-looping.
  */
-static FUNC_NORETURN void radio_failure(bool confirmed, const char *reason)
+static FUNC_NORETURN void fail(bool confirmed, const char *screen, const char *reason)
 {
 	LOG_ERR("%s", reason);
-	screen_step("Radio error");
+	screen_step("%s", screen);
 	if (confirmed) {
-		wait(RADIO_FAILURE_WAIT_S);
+		wait(FAILURE_WAIT_S);
 	}
 	reboot(reason);
 }
@@ -243,7 +243,7 @@ static FUNC_NORETURN void run_p2p(bool confirmed)
 	if (p2p_fuota_run(watchdog_feed) == 0) {
 		reboot("new image received, MCUboot will verify it");
 	}
-	radio_failure(confirmed, "LoRa radio error");
+	fail(confirmed, "Radio error", "LoRa radio error");
 }
 
 int main(void)
@@ -259,7 +259,7 @@ int main(void)
 	watchdog_start();
 
 	if (!device_is_ready(lora)) {
-		radio_failure(confirmed, "LoRa radio unavailable");
+		fail(confirmed, "Radio error", "LoRa radio unavailable");
 	}
 
 	if (IS_ENABLED(CONFIG_APP_TRANSPORT_P2P)) {
@@ -267,7 +267,7 @@ int main(void)
 	}
 
 	if (lorawan_start() < 0) {
-		radio_failure(confirmed, "LoRaWAN stack unavailable");
+		fail(confirmed, "Radio error", "LoRaWAN stack unavailable");
 	}
 	lorawan_register_downlink_callback(&downlink_cb);
 	LOG_INF("LoRa radio ready");
@@ -294,6 +294,11 @@ int main(void)
 		confirm();
 	}
 
+	/* Joined but unable to receive updates: retry from a clean boot, later */
+	if (joined && !services) {
+		fail(true, "FUOTA error", "FUOTA services not started");
+	}
+
 	next_join = k_uptime_get() + join_retry_s * MSEC_PER_SEC;
 	next_uplink = k_uptime_get();
 
@@ -316,6 +321,9 @@ int main(void)
 			joined = join() == 0;
 			if (joined) {
 				services = start_services();
+				if (!services) {
+					fail(true, "FUOTA error", "FUOTA services not started");
+				}
 			} else {
 				join_retry_s = MIN(join_retry_s * 2, JOIN_RETRY_MAX_S);
 				next_join = k_uptime_get() + join_retry_s * MSEC_PER_SEC;
