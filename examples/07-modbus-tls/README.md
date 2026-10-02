@@ -3,7 +3,8 @@
 Companion code for episode 7 of the "CRA & Dev" series,
 [Modbus never asks who is there](../../docs/en/CRA-Dev-07-Modbus-TLS.md).
 
-Two simulated PLCs run on your machine, no hardware needed:
+Two simulated PLCs, driving the spindle of a machine tool, run on your machine; no
+hardware needed:
 
 - a legacy PLC speaking plain Modbus/TCP, which accepts any command from anyone;
 - a PLC speaking only Modbus/TCP Security ("mbaps"): mutual TLS, a role carried by
@@ -21,23 +22,23 @@ uv run pytest                 # the tests
 Output:
 
 ```
-1. Legacy PLC, plain Modbus/TCP: anyone on the network sets the setpoint to 99.9 °C
+1. Legacy PLC, plain Modbus/TCP: anyone on the network sets the spindle to 60000 rpm
    write: accepted
-   setpoint now: 99.9 °C
+   spindle speed now: 60000 rpm
 2. Secure PLC, Modbus/TCP Security only. Client without a certificate
    write: rejected, the PLC closed the TLS session
 3. Client with an Engineer role, signed by its own CA
    write: rejected, the PLC closed the TLS session
 4. Operator (HMI): may read, may not write
-   read:  21.5 °C
-   plc log: DENIED write single register from 127.0.0.1:42800 (role Operator)
+   read:  12000 rpm
+   plc log: DENIED write single register from 127.0.0.1:36604 (role Operator)
    write: refused, Modbus exception 1 (Illegal function)
 5. Certificate from our CA, but without a role
-   plc log: DENIED read holding registers from 127.0.0.1:42812 (role none)
+   plc log: DENIED read holding registers from 127.0.0.1:36610 (role none)
    read:  refused, Modbus exception 1 (Illegal function)
 6. Engineer (maintenance laptop): may write
    write: accepted
-   setpoint now: 23.0 °C
+   spindle speed now: 15000 rpm
 7. Modbus requests refused and logged by the PLC: 2
    (rejected TLS sessions never reach Modbus: log them in the TLS layer)
 ```

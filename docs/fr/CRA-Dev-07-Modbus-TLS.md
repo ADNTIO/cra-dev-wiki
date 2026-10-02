@@ -96,23 +96,28 @@ functions = [1, 2, 3, 4]               # lectures seulement
 functions = [1, 2, 3, 4, 5, 6, 15, 16] # lectures et écritures
 ```
 
-La [démonstration][example] fait tourner deux automates simulés sur votre machine :
-l'un en Modbus/TCP classique, l'autre en Modbus/TCP Security seulement. Elle se lance
+La [démonstration][example] fait tourner deux automates simulés sur votre machine,
+qui pilotent la broche d'une machine-outil : l'un en Modbus/TCP classique, l'autre
+en Modbus/TCP Security seulement. Le premier cas rejoue sur une broche le geste de
+FrostyGoop sur les régulateurs de chauffage : un client quelconque du réseau réécrit
+la consigne, ici de 12 000 à 60 000 tr/min, et l'automate l'applique. Elle se lance
 avec `uv run python -m mbsec.demo` ; extrait de la sortie :
 
 ```
-1. Legacy PLC, plain Modbus/TCP: anyone on the network sets the setpoint to 99.9 °C
+1. Legacy PLC, plain Modbus/TCP: anyone on the network sets the spindle to 60000 rpm
    write: accepted
+   spindle speed now: 60000 rpm
 2. Secure PLC, Modbus/TCP Security only. Client without a certificate
    write: rejected, the PLC closed the TLS session
 3. Client with an Engineer role, signed by its own CA
    write: rejected, the PLC closed the TLS session
 4. Operator (HMI): may read, may not write
-   read:  21.5 °C
-   plc log: DENIED write single register from 127.0.0.1:42800 (role Operator)
+   read:  12000 rpm
+   plc log: DENIED write single register from 127.0.0.1:36604 (role Operator)
    write: refused, Modbus exception 1 (Illegal function)
 6. Engineer (maintenance laptop): may write
    write: accepted
+   spindle speed now: 15000 rpm
 ```
 
 Le troisième cas compte : n'importe qui peut fabriquer un certificat portant le rôle

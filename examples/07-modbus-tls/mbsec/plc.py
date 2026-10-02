@@ -1,6 +1,6 @@
 """A simulated PLC, served over plain Modbus/TCP and over Modbus/TCP Security.
 
-Holding register 0 is a temperature setpoint, in tenths of a degree.
+Holding register 0 is the spindle speed setpoint of a machine tool, in rpm.
 
 The secure server follows MB-TCP-Security-v36: TLS 1.2 or newer (R-01, R-34),
 mutual authentication with a fatal alert when the client sends no certificate
@@ -25,13 +25,13 @@ from mbsec.pki import Identity
 
 log = logging.getLogger("plc")
 
-SETPOINT = 0  # holding register address
-INITIAL_SETPOINT = 215  # 21.5 °C
+SPINDLE_SPEED = 0  # holding register address
+INITIAL_SPEED = 12000  # rpm
 
 
 def make_context() -> ModbusServerContext:
     # pymodbus data blocks start at 1: block address 1 is Modbus address 0
-    device = ModbusDeviceContext(hr=ModbusSequentialDataBlock(1, [INITIAL_SETPOINT] * 10))
+    device = ModbusDeviceContext(hr=ModbusSequentialDataBlock(1, [INITIAL_SPEED] * 10))
     return ModbusServerContext(devices=device, single=True)
 
 

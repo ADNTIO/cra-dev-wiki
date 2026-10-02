@@ -94,23 +94,28 @@ functions = [1, 2, 3, 4]               # reads only
 functions = [1, 2, 3, 4, 5, 6, 15, 16] # reads and writes
 ```
 
-The [demo][example] runs two simulated PLCs on your machine: one speaking plain
-Modbus/TCP, the other only Modbus/TCP Security. Run it with
+The [demo][example] runs two simulated PLCs on your machine, driving the spindle of a
+machine tool: one speaking plain Modbus/TCP, the other only Modbus/TCP Security. The
+first case replays on a spindle what FrostyGoop did to heating controllers: any
+client on the network rewrites the setpoint, here from 12,000 to 60,000 rpm, and the
+PLC applies it. Run it with
 `uv run python -m mbsec.demo`; an excerpt of the output:
 
 ```
-1. Legacy PLC, plain Modbus/TCP: anyone on the network sets the setpoint to 99.9 °C
+1. Legacy PLC, plain Modbus/TCP: anyone on the network sets the spindle to 60000 rpm
    write: accepted
+   spindle speed now: 60000 rpm
 2. Secure PLC, Modbus/TCP Security only. Client without a certificate
    write: rejected, the PLC closed the TLS session
 3. Client with an Engineer role, signed by its own CA
    write: rejected, the PLC closed the TLS session
 4. Operator (HMI): may read, may not write
-   read:  21.5 °C
-   plc log: DENIED write single register from 127.0.0.1:42800 (role Operator)
+   read:  12000 rpm
+   plc log: DENIED write single register from 127.0.0.1:36604 (role Operator)
    write: refused, Modbus exception 1 (Illegal function)
 6. Engineer (maintenance laptop): may write
    write: accepted
+   spindle speed now: 15000 rpm
 ```
 
 The third case matters: anyone can mint a certificate carrying the `Engineer` role.

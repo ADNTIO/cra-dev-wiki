@@ -15,7 +15,7 @@ from pymodbus.exceptions import ModbusException
 
 from mbsec.authz import Rules
 from mbsec.pki import make_pki
-from mbsec.plc import SETPOINT, AuthorisingTlsServer, client_tls_context, make_context, plain_server, server_tls_context
+from mbsec.plc import SPINDLE_SPEED, AuthorisingTlsServer, client_tls_context, make_context, plain_server, server_tls_context
 
 PLAIN_PORT, SECURE_PORT = 5020, 8020
 RULES = Path(__file__).resolve().parent.parent / "rules.toml"
@@ -26,12 +26,12 @@ RULES = Path(__file__).resolve().parent.parent / "rules.toml"
 REJECTED = "rejected, the PLC closed the TLS session"
 
 
-async def write_setpoint(client, value: int) -> str:
-    """Writes the setpoint; returns what happened, in a few words."""
+async def write_speed(client, value: int) -> str:
+    """Writes the spindle speed setpoint; returns what happened, in a few words."""
     try:
         if not await client.connect():
             return REJECTED
-        reply = await client.write_register(SETPOINT, value)
+        reply = await client.write_register(SPINDLE_SPEED, value)
     except ModbusException:
         return REJECTED
     finally:
@@ -41,18 +41,18 @@ async def write_setpoint(client, value: int) -> str:
     return "accepted"
 
 
-async def read_setpoint(client) -> str:
+async def read_speed(client) -> str:
     try:
         if not await client.connect():
             return REJECTED
-        reply = await client.read_holding_registers(SETPOINT)
+        reply = await client.read_holding_registers(SPINDLE_SPEED)
     except ModbusException:
         return REJECTED
     finally:
         client.close()
     if reply.isError():
         return f"refused, Modbus exception {reply.exception_code} (Illegal function)"
-    return f"{reply.registers[0] / 10:.1f} °C"
+    return f"{reply.registers[0]} rpm"
 
 
 def tls_client(identity, ca, port: int = SECURE_PORT):
@@ -73,28 +73,28 @@ async def main() -> None:
         await plain.serve_forever(background=True)
         await secure.serve_forever(background=True)
         try:
-            print("1. Legacy PLC, plain Modbus/TCP: anyone on the network sets the setpoint to 99.9 °C")
+            print("1. Legacy PLC, plain Modbus/TCP: anyone on the network sets the spindle to 60000 rpm")
             attacker = AsyncModbusTcpClient("127.0.0.1", port=PLAIN_PORT, retries=0, timeout=2)
-            print(f"   write: {await write_setpoint(attacker, 999)}")
+            print(f"   write: {await write_speed(attacker, 60000)}")
             check = AsyncModbusTcpClient("127.0.0.1", port=PLAIN_PORT, retries=0, timeout=2)
-            print(f"   setpoint now: {await read_setpoint(check)}")
+            print(f"   spindle speed now: {await read_speed(check)}")
 
             print("2. Secure PLC, Modbus/TCP Security only. Client without a certificate")
-            print(f"   write: {await write_setpoint(tls_client(None, pki['ca']), 999)}")
+            print(f"   write: {await write_speed(tls_client(None, pki['ca']), 60000)}")
 
             print("3. Client with an Engineer role, signed by its own CA")
-            print(f"   write: {await write_setpoint(tls_client(pki['rogue'], pki['ca']), 999)}")
+            print(f"   write: {await write_speed(tls_client(pki['rogue'], pki['ca']), 60000)}")
 
             print("4. Operator (HMI): may read, may not write")
-            print(f"   read:  {await read_setpoint(tls_client(pki['operator'], pki['ca']))}")
-            print(f"   write: {await write_setpoint(tls_client(pki['operator'], pki['ca']), 999)}")
+            print(f"   read:  {await read_speed(tls_client(pki['operator'], pki['ca']))}")
+            print(f"   write: {await write_speed(tls_client(pki['operator'], pki['ca']), 60000)}")
 
             print("5. Certificate from our CA, but without a role")
-            print(f"   read:  {await read_setpoint(tls_client(pki['no-role'], pki['ca']))}")
+            print(f"   read:  {await read_speed(tls_client(pki['no-role'], pki['ca']))}")
 
             print("6. Engineer (maintenance laptop): may write")
-            print(f"   write: {await write_setpoint(tls_client(pki['engineer'], pki['ca']), 230)}")
-            print(f"   setpoint now: {await read_setpoint(tls_client(pki['operator'], pki['ca']))}")
+            print(f"   write: {await write_speed(tls_client(pki['engineer'], pki['ca']), 15000)}")
+            print(f"   spindle speed now: {await read_speed(tls_client(pki['operator'], pki['ca']))}")
 
             print(f"7. Modbus requests refused and logged by the PLC: {len(secure.denials)}")
             print("   (rejected TLS sessions never reach Modbus: log them in the TLS layer)")

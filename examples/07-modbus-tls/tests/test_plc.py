@@ -9,7 +9,7 @@ import pytest
 from pymodbus.client import AsyncModbusTcpClient, AsyncModbusTlsClient
 
 from mbsec.authz import Rules
-from mbsec.demo import RULES, read_setpoint, tls_client, write_setpoint
+from mbsec.demo import RULES, read_speed, tls_client, write_speed
 from mbsec.pki import make_pki
 from mbsec.plc import AuthorisingTlsServer, make_context, plain_server, server_tls_context
 
@@ -48,24 +48,24 @@ def test_plain_modbus_accepts_anyone():
         await server.serve_forever(background=True)
         try:
             client = lambda: AsyncModbusTcpClient("127.0.0.1", port=port, retries=0, timeout=2)
-            assert await write_setpoint(client(), 999) == "accepted"
-            return await read_setpoint(client())
+            assert await write_speed(client(), 60000) == "accepted"
+            return await read_speed(client())
         finally:
             await server.shutdown()
 
-    assert asyncio.run(main()) == "99.9 °C"
+    assert asyncio.run(main()) == "60000 rpm"
 
 
 def test_client_without_certificate_is_rejected(pki):
     async def scenario(port, server):
-        return await write_setpoint(tls_client(None, pki["ca"], port), 999)
+        return await write_speed(tls_client(None, pki["ca"], port), 60000)
 
     assert run(pki, scenario).startswith("rejected")
 
 
 def test_certificate_from_another_ca_is_rejected(pki):
     async def scenario(port, server):
-        return await write_setpoint(tls_client(pki["rogue"], pki["ca"], port), 999)
+        return await write_speed(tls_client(pki["rogue"], pki["ca"], port), 60000)
 
     assert run(pki, scenario).startswith("rejected")
 
@@ -83,34 +83,34 @@ def test_tls_older_than_1_2_is_rejected(pki):
         except (ValueError, ssl.SSLError):
             pytest.skip("this OpenSSL build cannot even offer TLS 1.1")
         client = AsyncModbusTlsClient("127.0.0.1", port=port, sslctx=ctx, retries=0, timeout=2)
-        return await write_setpoint(client, 999)
+        return await write_speed(client, 60000)
 
     assert run(pki, scenario).startswith("rejected")
 
 
 def test_operator_reads_but_cannot_write(pki):
     async def scenario(port, server):
-        read = await read_setpoint(tls_client(pki["operator"], pki["ca"], port))
-        write = await write_setpoint(tls_client(pki["operator"], pki["ca"], port), 999)
+        read = await read_speed(tls_client(pki["operator"], pki["ca"], port))
+        write = await write_speed(tls_client(pki["operator"], pki["ca"], port), 60000)
         return read, write, server.denials
 
     read, write, denials = run(pki, scenario)
-    assert read == "21.5 °C"
+    assert read == "12000 rpm"
     assert "exception 1" in write  # R-31: Illegal function
     assert [(d.role, d.function_code) for d in denials] == [("Operator", 6)]
 
 
 def test_certificate_without_role_gets_nothing(pki):
     async def scenario(port, server):
-        return await read_setpoint(tls_client(pki["no-role"], pki["ca"], port))
+        return await read_speed(tls_client(pki["no-role"], pki["ca"], port))
 
     assert "exception 1" in run(pki, scenario)
 
 
 def test_engineer_can_write(pki):
     async def scenario(port, server):
-        write = await write_setpoint(tls_client(pki["engineer"], pki["ca"], port), 230)
-        read = await read_setpoint(tls_client(pki["operator"], pki["ca"], port))
+        write = await write_speed(tls_client(pki["engineer"], pki["ca"], port), 15000)
+        read = await read_speed(tls_client(pki["operator"], pki["ca"], port))
         return write, read
 
-    assert run(pki, scenario) == ("accepted", "23.0 °C")
+    assert run(pki, scenario) == ("accepted", "15000 rpm")
