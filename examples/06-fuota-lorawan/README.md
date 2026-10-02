@@ -118,7 +118,7 @@ Zephyr SDK, minimal archive plus the ESP32 toolchain only:
 cd ~ && B=https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v1.0.1
 wget $B/zephyr-sdk-1.0.1_linux-x86_64_minimal.tar.xz \
      $B/toolchain_gnu_linux-x86_64_xtensa-espressif_esp32_zephyr-elf.tar.xz $B/sha256.sum
-grep -E "minimal|xtensa-espressif_esp32_zephyr" sha256.sum | sha256sum -c -
+sha256sum -c --ignore-missing sha256.sum   # checks only the two files downloaded
 tar xf zephyr-sdk-1.0.1_linux-x86_64_minimal.tar.xz
 mkdir -p zephyr-sdk-1.0.1/gnu
 tar xf toolchain_gnu_linux-x86_64_xtensa-espressif_esp32_zephyr-elf.tar.xz -C zephyr-sdk-1.0.1/gnu
@@ -316,9 +316,14 @@ zw python $EX/firmware/tools/p2p_send.py build/p2p-v2/firmware/zephyr/zephyr.sig
 The new image must have a higher version than the running one: MCUboot's downgrade
 prevention erases anything else.
 
-If the transfer is cut (USB link lost, Ctrl-C), `p2p_send.py` can resume it as long
-as the board being updated has not rebooted: pass the session number it printed and
-the next fragment, for example `--session 20 --start 151`.
+If the transfer is cut (USB link lost, Ctrl-C), `p2p_send.py` prints how to resume
+it, for example `--session 20 --start 151`. This works as long as the board being
+updated has not rebooted. Two things to know:
+
+- The session number must be exact. A different one announces a new session, and
+  the board erases its secondary slot: everything received so far is lost.
+- Starting a few fragments before the printed index is harmless: the board counts
+  each original fragment once, and rewrites the same bytes.
 
 Result on two Heltec boards side by side, from version 1.0.0 to 1.1.0:
 
@@ -358,6 +363,9 @@ Three things learned along the way:
   busy port. Check that you are in the `dialout` group (`id`), after logging back in.
 - `device not accepting address, error -71` in `dmesg`: a faulty cable or USB port.
 - `FileNotFoundError` on `imgtool keygen`: the key folder does not exist yet.
+- `device reports readiness to read but returned no data` right after an update:
+  `p2p_send.py` still holds the board's port for `--wait-reboot` seconds (60 by
+  default) to show its reboot. Wait, or pass `--wait-reboot 0`.
 
 
 ### What was checked, and what was not

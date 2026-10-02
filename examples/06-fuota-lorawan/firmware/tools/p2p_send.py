@@ -133,6 +133,23 @@ def follow_device(port: str, stop: threading.Event) -> None:
 
 
 def main() -> None:
+    progress = {"session": None, "index": None}
+    try:
+        run(progress)
+    except (KeyboardInterrupt, serial.SerialException, OSError, TimeoutError) as exc:
+        reason = "interrupted" if isinstance(exc, KeyboardInterrupt) else f"serial link lost ({exc})"
+        print(f"\nTransfer {reason}.", file=sys.stderr)
+        if progress["index"]:
+            # Re-sending fragments the device already has is harmless: it counts
+            # each original fragment once.
+            print(f"To resume, as long as the device has not rebooted: "
+                  f"--session {progress['session']} --start {progress['index']}", file=sys.stderr)
+        else:
+            print("No fragment sent yet: run the same command again.", file=sys.stderr)
+        sys.exit(1)
+
+
+def run(progress: dict) -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("image", type=Path, help="signed image (zephyr.signed.bin)")
     parser.add_argument("--modem", required=True, help="serial port of the modem board")
@@ -153,6 +170,7 @@ def main() -> None:
     if args.limit:
         fragments = fragments[: args.limit]
     session = args.session or random.randint(1, 255)
+    progress["session"] = session
     print(f"Image {args.image.name}: {len(data)} bytes, {session_info.nb_frag} fragments "
           f"+ {len(fragments) - min(len(fragments), session_info.nb_frag)} redundant, session {session}")
 
@@ -187,6 +205,7 @@ def main() -> None:
     done = None
     index = args.start - 1
     for index, fragment in enumerate(fragments[args.start - 1 :], start=args.start):
+        progress["index"] = index
         airtime = modem.send(b"AD" + bytes([FRAG, session]) + struct.pack("<H", index) + fragment)
         modem.listen(airtime * (1 / DUTY_CYCLE - 1))
         done = modem.take(DONE, session)
