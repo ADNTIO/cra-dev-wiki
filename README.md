@@ -29,6 +29,7 @@ and a language switcher.
 | 03 | [Never store a secret in plaintext again: Windows DPAPI](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-03-DPAPI/) | Confidentiality, encryption at rest | Part I, 2 (e) | Windows |
 | 04 | [Trust, but verify: sign your data](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-04-Integrite/) | Data integrity | Part I, 2 (f) | Cross-platform |
 | 05 | [Generating an SBOM is not enough: monitor it with Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Vulnerability handling, continuous monitoring | Part II, point 1 | CI, cross-platform |
+| 06 | [A thousand fragments, one signature: updating firmware over LoRaWAN](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-06-FUOTA-LoRaWAN/) | Security updates, secure distribution | Part I, 2 (c); Part II, 7 | Embedded, LoRaWAN |
 
 
 ## Repository layout
@@ -42,6 +43,8 @@ docs/
     CRA-Dev-0X-*.md
     ressources/          in-depth articles
   en/                    English content (same paths as fr/)
+examples/
+  0X-topic/              Companion code for an episode, with its tests
 .github/workflows/docs.yml   Build and deploy to GitHub Pages
 ```
 
