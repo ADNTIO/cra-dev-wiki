@@ -69,6 +69,9 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.details
 
+extra_css:
+  - stylesheets/extra.css
+
 plugins:
   - search
   - i18n:
