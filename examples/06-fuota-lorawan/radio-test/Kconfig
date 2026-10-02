@@ -1,0 +1,34 @@
+mainmenu "Test radio LoRa point à point"
+
+choice APP_ROLE
+	prompt "Rôle de la carte"
+	default APP_ROLE_PING
+
+config APP_ROLE_PING
+	bool "Ping : émet, puis attend la réponse"
+
+config APP_ROLE_PONG
+	bool "Pong : écoute, et répond à chaque ping"
+
+endchoice
+
+config APP_FREQUENCY
+	int "Fréquence, en Hz"
+	default 869525000
+	help
+	  869,525 MHz : sous-bande g3 de l'EU868 (869,4 - 869,65 MHz), 10 % de
+	  temps d'émission autorisé.
+
+config APP_TX_POWER
+	int "Puissance d'émission, en dBm"
+	range 2 14
+	default 14
+	help
+	  14 dBm reste très en dessous des 27 dBm permis dans cette sous-bande. Sur
+	  notre banc, 2 dBm ne suffisait pas dans un des deux sens.
+
+config APP_PING_PERIOD
+	int "Période des pings, en secondes"
+	default 10
+
+source "Kconfig.zephyr"

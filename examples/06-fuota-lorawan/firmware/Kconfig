@@ -1,0 +1,54 @@
+mainmenu "Exemple FUOTA LoRaWAN"
+
+choice APP_TRANSPORT
+	prompt "Transport des mises à jour"
+	default APP_TRANSPORT_LORAWAN
+
+config APP_TRANSPORT_LORAWAN
+	bool "LoRaWAN : join OTAA et services FUOTA (TS003, TS004, TS005)"
+
+config APP_TRANSPORT_P2P
+	bool "LoRa point à point, depuis une autre carte, sans réseau LoRaWAN"
+	help
+	  Pour un banc sans passerelle : une deuxième carte diffuse l'image en
+	  fragments TS004 (voir radio-modem/ et tools/p2p_send.py). Le décodeur,
+	  l'écriture en flash et MCUboot sont les mêmes qu'en LoRaWAN.
+
+endchoice
+
+config APP_LORAWAN_DEV_EUI
+	string "DevEUI (16 caractères hexadécimaux)"
+	default "0000000000000000"
+
+config APP_LORAWAN_JOIN_EUI
+	string "JoinEUI (16 caractères hexadécimaux)"
+	default "0000000000000000"
+
+config APP_LORAWAN_APP_KEY
+	string "AppKey (32 caractères hexadécimaux)"
+	default "00000000000000000000000000000000"
+	help
+	  Ne mettez jamais une vraie clé dans prj.conf : passez-la par un fichier
+	  hors dépôt, avec -DEXTRA_CONF_FILE.
+
+config APP_JOIN_ATTEMPTS
+	int "Tentatives de join avant d'abandonner"
+	range 0 20
+	default 3
+	help
+	  À 0, l'appareil n'émet rien : utile sur un banc sans antenne.
+
+config APP_UPLINK_PERIOD
+	int "Période des uplinks, en secondes"
+	default 180
+
+config APP_SELFTEST_REQUIRES_JOIN
+	bool "Ne confirmer une nouvelle image qu'après un join réussi"
+	default y
+	help
+	  Critère de bon fonctionnement d'une image démarrée à l'essai. Si le join
+	  échoue, l'appareil redémarre et MCUboot restaure l'image précédente.
+	  À désactiver uniquement sur un banc sans passerelle LoRaWAN : le critère
+	  devient alors « la radio répond ».
+
+source "Kconfig.zephyr"

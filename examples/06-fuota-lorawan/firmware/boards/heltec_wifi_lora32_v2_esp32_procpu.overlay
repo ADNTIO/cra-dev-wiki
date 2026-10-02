@@ -1,0 +1,25 @@
+/* Écran OLED 128 x 64 (SSD1306) de la carte Heltec, sur le bus I2C interne.
+ * L'alimentation (Vext) et la broche de reset sont gérées par board_init.c.
+ */
+
+/ {
+	chosen {
+		zephyr,display = &oled;
+	};
+};
+
+&i2c0 {
+	oled: ssd1306@3c {
+		compatible = "solomon,ssd1306";
+		reg = <0x3c>;
+		width = <128>;
+		height = <64>;
+		segment-offset = <0>;
+		page-offset = <0>;
+		display-offset = <0>;
+		multiplex-ratio = <63>;
+		segment-remap;
+		com-invdir;
+		prechargep = <0x22>;
+	};
+};
