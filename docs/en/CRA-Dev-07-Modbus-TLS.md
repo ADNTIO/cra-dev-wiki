@@ -98,7 +98,7 @@ The [demo][example] runs two simulated PLCs on your machine, driving the spindle
 machine tool: one speaking plain Modbus/TCP, the other only Modbus/TCP Security. The
 first case replays on a spindle what FrostyGoop did to heating controllers: any
 client on the network rewrites the setpoint, here from 12,000 to 60,000 rpm, and the
-PLC applies it. Run it with
+PLC applies it. Run the demo with
 `uv run python -m mbsec.demo`; an excerpt of the output:
 
 ```
