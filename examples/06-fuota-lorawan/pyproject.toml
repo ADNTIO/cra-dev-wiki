@@ -1,0 +1,39 @@
+[project]
+name = "fuota-lorawan-example"
+version = "0.1.0"
+description = "CRA & Dev #6 : une session FUOTA LoRaWAN simulée, de la signature à la vérification"
+requires-python = ">=3.10"
+dependencies = [
+    "imgtool>=2.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+# Outillage du firmware : west et les dépendances Python de Zephyr 4.4.2
+# (scripts/requirements-base.txt), esptool, et Pillow pour le logo.
+firmware = [
+    "west>=1.2",
+    "pyelftools>=0.29",
+    "PyYAML>=6.0",
+    "pykwalify",
+    "jsonschema",
+    "canopen",
+    "packaging",
+    "patool>=2.0.0",
+    "psutil>=5.6.6",
+    "pylink-square",
+    "pyserial",
+    "requests>=2.32.4",
+    "semver",
+    "tqdm>=4.67.1",
+    "anytree",
+    "intelhex",
+    "esptool>=4.8",
+    "pillow>=10",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
