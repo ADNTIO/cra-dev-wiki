@@ -1,6 +1,6 @@
 ---
 description: >-
-  The CRA & Dev series: the Cyber Resilience Act (Regulation (EU) 2024/2847) turned into engineering practice — SBOM and VEX, binary signing, encrypted secrets, data integrity — with runnable code in Rust, Python and .NET.
+  The CRA & Dev series: the Cyber Resilience Act (Regulation (EU) 2024/2847) turned into engineering practice — SBOM and VEX, binary signing, encrypted secrets, data integrity, firmware updates over LoRaWAN — with runnable code in Rust, Python, .NET and C.
 ---
 
 # "CRA & Dev" series
@@ -12,7 +12,7 @@ Cyber Resilience Act (Regulation (EU) 2024/2847).
 
 Who it's for: developers, with no cryptography background required. Each episode
 starts from a concrete need, gives an applicable technique with code (Rust, Python,
-.NET), and ends with the threat model, meaning what the technique protects and what
+.NET, C), and ends with the threat model, meaning what the technique protects and what
 it does not.
 
 ## Episodes
@@ -24,6 +24,7 @@ it does not.
 | 03 | [Never store a secret in plaintext again: Windows DPAPI](CRA-Dev-03-DPAPI.md) | Confidentiality, encryption at rest | Part I, point 2, (e) | Windows |
 | 04 | [Trust, but verify: sign your data](CRA-Dev-04-Integrite.md) | Data integrity | Part I, point 2, (f) | Cross-platform |
 | 05 | [Generating an SBOM is not enough: monitor it with Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Vulnerability handling, continuous monitoring | Part II, point 1 | CI, cross-platform |
+| 06 | [A thousand fragments, one signature: updating firmware over LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md) | Security updates, secure distribution | Part I, point 2, (c); Part II, point 7 | Embedded, LoRaWAN |
 
 
 The list will grow with each episode.

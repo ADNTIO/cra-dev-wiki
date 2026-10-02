@@ -1,0 +1,11 @@
+/* Some older Heltec and TTGO boards have a 26 MHz crystal instead of 40 MHz
+ * (esptool shows it: "Crystal frequency: 26MHz"). Apply to both the firmware and
+ * MCUboot.
+ */
+&cpu0 {
+	xtal-freq = <DT_FREQ_M(26)>;
+};
+
+&cpu1 {
+	xtal-freq = <DT_FREQ_M(26)>;
+};

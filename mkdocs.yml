@@ -18,6 +18,7 @@ nav:
       - "Ne stockez plus un secret en clair": fr/CRA-Dev-03-DPAPI.md
       - "Faites confiance, mais vérifiez": fr/CRA-Dev-04-Integrite.md
       - "Générer un SBOM ne suffit pas": fr/CRA-Dev-05-SBOM-DTRACK.md
+      - "Mille fragments, une signature": fr/CRA-Dev-06-FUOTA-LoRaWAN.md
   - Ressources:
       - "DPAPI en détail": fr/ressources/DPAPI-Article-de-fond.md
 
@@ -86,6 +87,7 @@ plugins:
             Ressources: Resources
             "Ne stockez plus un secret en clair": "Never store a secret in plaintext"
             "Faites confiance, mais vérifiez": "Trust, but verify"
+            "Mille fragments, une signature": "A thousand fragments, one signature"
             "Corriger ce qu'on ignore": "Fix what you don't know"
             "Un colis sans expéditeur": "A parcel with no sender"
             "Générer un SBOM ne suffit pas": "Generating an SBOM is not enough"

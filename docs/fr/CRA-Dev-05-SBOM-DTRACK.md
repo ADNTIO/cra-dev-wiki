@@ -163,6 +163,9 @@ secrets exposés. Et une alerte sans responsable ni délai de triage reste du br
 
 *Épisode précédent : [Faites confiance, mais vérifiez](CRA-Dev-04-Integrite.md).*
 
+*Épisode suivant : [Mille fragments, une seule signature, mettre à jour un firmware
+par LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
+
 [grype]: https://oss.anchore.com/docs/reference/grype/configuration/
 [dtrack]: https://dependencytrack.org/
 [dtrack-ci]: https://docs.dependencytrack.org/usage/cicd/

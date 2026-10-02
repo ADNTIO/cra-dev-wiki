@@ -1,0 +1,34 @@
+mainmenu "Point-to-point LoRa radio test"
+
+choice APP_ROLE
+	prompt "Board role"
+	default APP_ROLE_PING
+
+config APP_ROLE_PING
+	bool "Ping: transmits, then waits for the answer"
+
+config APP_ROLE_PONG
+	bool "Pong: listens, and answers every ping"
+
+endchoice
+
+config APP_FREQUENCY
+	int "Frequency, in Hz"
+	default 869525000
+	help
+	  869.525 MHz: g3 sub-band of EU868 (869.4 - 869.65 MHz), 10% duty cycle
+	  allowed.
+
+config APP_TX_POWER
+	int "Transmit power, in dBm"
+	range 2 14
+	default 14
+	help
+	  14 dBm stays well below the 27 dBm allowed in this sub-band. On our
+	  bench, 2 dBm was not enough in one of the two directions.
+
+config APP_PING_PERIOD
+	int "Ping period, in seconds"
+	default 10
+
+source "Kconfig.zephyr"
