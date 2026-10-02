@@ -100,8 +100,8 @@ La [démonstration][example] fait tourner deux automates simulés sur votre mach
 qui pilotent la broche d'une machine-outil : l'un en Modbus/TCP classique, l'autre
 en Modbus/TCP Security seulement. Le premier cas rejoue sur une broche le geste de
 FrostyGoop sur les régulateurs de chauffage : un client quelconque du réseau réécrit
-la consigne, ici de 12 000 à 60 000 tr/min, et l'automate l'applique. Elle se lance
-avec `uv run python -m mbsec.demo` ; extrait de la sortie :
+la consigne, ici de 12 000 à 60 000 tr/min, et l'automate l'applique. La démonstration
+se lance avec `uv run python -m mbsec.demo` ; extrait de la sortie :
 
 ```
 1. Legacy PLC, plain Modbus/TCP: anyone on the network sets the spindle to 60000 rpm
