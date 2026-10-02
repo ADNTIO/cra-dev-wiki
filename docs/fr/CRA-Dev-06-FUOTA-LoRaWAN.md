@@ -28,10 +28,11 @@ Trois erreurs, toutes fréquentes.
 
 Croire que le chiffrement LoRaWAN authentifie le firmware. Pour mettre à jour un
 parc, on diffuse les fragments en multicast, chiffrés avec une clé de groupe. Cette
-clé est par construction identique dans tous les appareils du groupe. Il suffit d'en
-ouvrir un pour l'extraire, puis de fabriquer des fragments que tous les autres
-accepteront. La [spécification de fragmentation][ts004] le dit elle-même (section
-4) : ces clés ne peuvent pas être considérées comme sûres, une étape supplémentaire
+clé est par construction identique dans tous les appareils du groupe. Si un
+attaquant extrait les clés de session multicast d'un seul appareil, il peut fabriquer
+des fragments que tous les autres accepteront. La [spécification de
+fragmentation][ts004] le dit elle-même (section 4) : sauf élément sécurisé dans tous
+les appareils du groupe, ces clés ne peuvent pas être considérées comme sûres, une étape supplémentaire
 d'intégrité et d'authentification du fichier est nécessaire, et pour un firmware la
 solution recommandée est une signature à clé publique. C'est exactement le critère
 de l'[épisode 4](CRA-Dev-04-Integrite.md) : quand celui qui vérifie ne doit pas
@@ -174,17 +175,24 @@ Zephyr [demande la mise à jour en mode test][zephyr-frag-flash]
 (`BOOT_UPGRADE_TEST`). La nouvelle image démarre une fois. Si elle n'appelle pas `boot_write_img_confirmed()`, MCUboot [remet
 l'ancienne][mcuboot-design] au reset suivant. D'où l'intérêt de confirmer tard, après un vrai test de
 bon fonctionnement, ici le join réussi, et de laisser un watchdog provoquer le reset
-si le firmware se bloque avant.
+si le firmware se bloque avant. Le join suffit pour la démonstration, pas pour un
+produit : confirmez l'image au terme d'une politique explicite (chien de garde
+nourri, migration de la configuration et du stockage réussie, périphériques critiques
+initialisés, voire un premier échange applicatif avec le backend).
 
 Reste le retour arrière malveillant : rejouer une ancienne image, correctement
 signée, mais vulnérable. MCUboot [décrit deux protections][mcuboot-design]. La première compare
 les numéros de version (`CONFIG_MCUBOOT_DOWNGRADE_PREVENTION`). Sa documentation la
-réserve à la stratégie par écrasement ; avec le MCUboot livré par Zephyr 4.4.2, nous
-l'avons pourtant vue fonctionner aussi avec l'échange des slots. Vérifiez sur votre
-version. La seconde s'appuie sur un compteur de sécurité stocké dans le matériel
+réserve à la stratégie par écrasement. La seconde s'appuie sur un compteur de sécurité stocké dans le matériel
 (`CONFIG_MCUBOOT_HW_DOWNGRADE_PREVENTION`) et refuse toute image dont le compteur est
 inférieur. Une valeur égale passe : il faut donc incrémenter le compteur à chaque
 correctif de sécurité.
+
+!!! warning "Observation de banc, pas une garantie"
+    Avec le MCUboot livré par Zephyr 4.4.2, nous avons vu la protection par numéro de
+    version refuser une ancienne image aussi en mode échange de slots. C'est un
+    comportement observé, pas une propriété de sécurité documentée : ne vous appuyez
+    pas dessus, et vérifiez sur votre version.
 
 Le [banc d'essai][example] de l'exemple dépose dans le slot secondaire d'une vraie
 carte une image forgée, une image altérée d'un bit, une ancienne version et une mise
@@ -224,7 +232,14 @@ sens : −124 dBm à l'aller, −88 dBm au retour.*
    utilise la clé d'exemple livrée dans le dépôt public de MCUboot, dont la
    [documentation][mcuboot-zephyr] rappelle que la clé privée est accessible à tous. Et comme pour Authenticode
    ([épisode 2](CRA-Dev-02-Authenticode.md)), la vôtre ne vit ni dans le dépôt ni
-   en clair dans la CI. Vérifiez aussi les réglages par défaut de votre carte : pour
+   en clair dans la CI : pour un produit, elle reste hors ligne ou dans un HSM, et
+   seule la clé publique sert à compiler le bootloader ([modèle de garde][mcuboot-zephyr]
+   de MCUboot). Sa fuite est le pire scénario de cette architecture : quiconque la
+   détient signe des images que tout le parc démarrera. Le port Zephyr accepte
+   plusieurs clés de vérification, ce qui permet de basculer sur une clé de secours ;
+   mais tant que l'ancienne reste dans le bootloader, une image signée avec elle passe
+   encore. Prévoyez donc avant la mise en production comment vous la retirerez.
+   Vérifiez aussi les réglages par défaut de votre carte : pour
    la Heltec de l'exemple, Zephyr [désactive la signature][heltec-sysbuild], et
    MCUboot sur ESP32 [ne vérifie pas le slot primaire et écrase sans retour
    arrière][mcuboot-esp32].
@@ -240,8 +255,9 @@ sens : −124 dBm à l'aller, −88 dBm au retour.*
 ## À retenir
 
 Sur LoRaWAN, la mise à jour est une affaire de budget radio et de confiance. Les
-spécifications FUOTA règlent le premier point : horloge, multicast, fragments
-redondants. Elles laissent le second au fabricant. Signez l'image, faites-la
+spécifications FUOTA fournissent les briques du premier : horloge, multicast,
+fragments redondants ; le débit, la taille d'image, la couverture et la RAM restent
+des choix d'ingénierie. Elles laissent le second au fabricant. Signez l'image, faites-la
 vérifier par le bootloader, confirmez-la seulement quand elle a fait ses preuves, et
 interdisez le retour à une version vulnérable. C'est ce qui transforme un canal de
 quelques octets en mécanisme de mise à jour sécurisé au sens du CRA.

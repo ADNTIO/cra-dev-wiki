@@ -28,9 +28,10 @@ Three mistakes, all common.
 
 Believing LoRaWAN encryption authenticates the firmware. To update a fleet, you
 broadcast the fragments over multicast, encrypted with a group key. By construction,
-that key is identical in every device of the group. Opening one device is enough to
-extract it, and then to craft fragments every other device will accept. The
-[fragmentation specification][ts004] says so itself (section 4): those keys cannot be
+that key is identical in every device of the group. If an attacker extracts the
+multicast session keys from a single device, they can craft fragments every other
+device will accept. The [fragmentation specification][ts004] says so itself (section
+4): unless every device of the group uses a secure element, those keys cannot be
 considered safe, an additional file integrity and authentication step is needed, and
 for firmware the recommended solution is a public-key signature. This is exactly the
 criterion from [episode 4](CRA-Dev-04-Integrite.md): when whoever verifies must not
@@ -171,16 +172,23 @@ Zephyr [requests the upgrade in test mode][zephyr-frag-flash] (`BOOT_UPGRADE_TES
 The new image boots once. If it does not call `boot_write_img_confirmed()`, MCUboot [puts the old one
 back][mcuboot-design] at the next reset. Hence the point of confirming late, after a real health check,
 here the successful join, and of letting a watchdog trigger the reset if the firmware
-hangs before that.
+hangs before that. A join is enough for a demo, not for a product: confirm the image
+at the end of an explicit policy (watchdog fed, configuration and storage migration
+done, critical peripherals initialised, possibly a first application exchange with
+the backend).
 
 That leaves the malicious rollback: replaying an old image, correctly signed, but
 vulnerable. MCUboot [describes two protections][mcuboot-design]. The first compares
 version numbers (`CONFIG_MCUBOOT_DOWNGRADE_PREVENTION`). Its documentation restricts
-it to the overwrite strategy; with the MCUboot shipped by Zephyr 4.4.2, we
-nevertheless saw it work with slot swapping too. Check on your version. The second relies on
+it to the overwrite strategy. The second relies on
 a security counter stored in hardware (`CONFIG_MCUBOOT_HW_DOWNGRADE_PREVENTION`) and
 rejects any image whose counter is lower. An equal value passes: so bump the counter
 with every security fix.
+
+!!! warning "Bench observation, not a guarantee"
+    With the MCUboot shipped by Zephyr 4.4.2, we saw version-based protection reject
+    an old image in slot-swap mode too. This is observed behaviour, not a documented
+    security property: do not rely on it, and check on your version.
 
 The example's [test bench][example] drops into the secondary slot of a real board a
 forged image, an image with one flipped bit, an old version and an update unable to
@@ -219,7 +227,13 @@ directions: −124 dBm one way, −88 dBm the other.*
    uses the example key shipped in the public MCUboot repository, whose
    [documentation][mcuboot-zephyr] stresses that the private key is available to all. And as with Authenticode
    ([episode 2](CRA-Dev-02-Authenticode.md)), yours lives neither in the repository
-   nor in plaintext in CI. Check your board's defaults too: for the example's Heltec
+   nor in plaintext in CI: for a product, it stays offline or in an HSM, and only the
+   public key is used to build the bootloader (MCUboot's [custody
+   model][mcuboot-zephyr]). Its leak is the worst case of this architecture: whoever
+   holds it signs images the whole fleet will boot. The Zephyr port accepts several
+   verification keys, which lets you switch to a backup key; but as long as the old
+   one stays in the bootloader, an image signed with it still passes. So decide
+   before production how you will withdraw it. Check your board's defaults too: for the example's Heltec
    board, Zephyr [disables the signature][heltec-sysbuild], and MCUboot on ESP32
    [does not validate the primary slot and overwrites without
    rollback][mcuboot-esp32].
@@ -235,8 +249,9 @@ directions: −124 dBm one way, −88 dBm the other.*
 ## Takeaway
 
 On LoRaWAN, updating is a matter of radio budget and trust. The FUOTA specifications
-settle the first: clock, multicast, redundant fragments. They leave the second to the
-manufacturer. Sign the image, have the bootloader verify it, confirm it only once it
+provide the building blocks for the first: clock, multicast, redundant fragments;
+data rate, image size, coverage and RAM remain engineering choices. They leave the
+second to the manufacturer. Sign the image, have the bootloader verify it, confirm it only once it
 has proven itself, and forbid going back to a vulnerable version. That is what turns
 a channel of a few bytes into a secure update mechanism in the CRA's sense.
 
