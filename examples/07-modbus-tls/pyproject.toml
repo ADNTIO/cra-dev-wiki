@@ -1,0 +1,18 @@
+[project]
+name = "modbus-tls-example"
+version = "0.1.0"
+description = "CRA & Dev #7: Modbus/TCP versus Modbus/TCP Security (mutual TLS and roles)"
+requires-python = ">=3.11"
+dependencies = [
+    "pymodbus>=3.8",
+    "cryptography>=42",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
