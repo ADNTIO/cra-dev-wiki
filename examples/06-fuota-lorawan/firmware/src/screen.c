@@ -1,5 +1,5 @@
 /*
- * Écran de l'appareil, par le framebuffer texte de Zephyr (CFB).
+ * Device screen, through Zephyr's character framebuffer (CFB).
  */
 
 #include <stdarg.h>
@@ -21,8 +21,8 @@ LOG_MODULE_REGISTER(screen, LOG_LEVEL_INF);
 #include "logo.h"
 
 #define LOGO_DURATION K_SECONDS(3)
-#define LINE_LEN      13 /* 12 caractères de 10 pixels, plus le zéro final */
-#define MAX_LINES     4  /* 4 lignes de 16 pixels */
+#define LINE_LEN      13 /* 12 characters of 10 pixels, plus the trailing zero */
+#define MAX_LINES     4  /* 4 lines of 16 pixels */
 
 static const struct device *const display = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 static bool ready;
@@ -46,7 +46,7 @@ static void draw_logo(void)
 void screen_init(void)
 {
 	if (!device_is_ready(display) || cfb_framebuffer_init(display) < 0) {
-		LOG_WRN("Écran indisponible");
+		LOG_WRN("Screen unavailable");
 		return;
 	}
 	cfb_framebuffer_set_font(display, 0); /* 10 x 16 pixels */
@@ -68,7 +68,7 @@ void screen_step(const char *fmt, ...)
 	}
 	k_mutex_lock(&lock, K_FOREVER);
 
-	/* Les étapes défilent : la plus récente en bas */
+	/* Steps scroll: the most recent at the bottom */
 	if (nb_lines == MAX_LINES) {
 		memmove(lines[0], lines[1], sizeof(lines[0]) * (MAX_LINES - 1));
 		nb_lines--;

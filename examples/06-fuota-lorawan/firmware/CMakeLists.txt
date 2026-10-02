@@ -5,5 +5,5 @@ project(fuota_lorawan)
 
 target_sources(app PRIVATE src/main.c src/screen.c)
 target_sources_ifdef(CONFIG_APP_TRANSPORT_P2P app PRIVATE src/p2p.c)
-# p2p.c réutilise le décodeur TS004 et l'écriture flash du service de fragmentation
+# p2p.c reuses the TS004 decoder and the flash writes of the fragmentation service
 target_include_directories(app PRIVATE ${ZEPHYR_BASE}/subsys/lorawan/services)

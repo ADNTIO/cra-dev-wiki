@@ -1,16 +1,15 @@
-"""Diffuse une image signée par LoRa point à point, via la carte « modem ».
+"""Broadcasts a signed image over point-to-point LoRa, through the "modem" board.
 
     uv run --group firmware python firmware/tools/p2p_send.py IMAGE \\
         --modem /dev/ttyUSB1 [--device /dev/ttyUSB0] [--limit N]
 
-Le PC fragmente l'image (codage TS004, fuota/fragmentation.py) et confie chaque
-trame à la carte modem (radio-modem/), qui l'émet. Entre deux trames, le PC attend
-neuf fois la durée d'émission : 10 % de temps d'émission au plus, la limite de la
-sous-bande 869,4 - 869,65 MHz. Le protocole est décrit dans firmware/src/p2p.h.
+The PC fragments the image (TS004 coding, fuota/fragmentation.py) and hands each
+frame to the modem board (radio-modem/), which transmits it. Between two frames,
+the PC waits nine times the airtime: a 10% duty cycle at most, the limit of the
+869.4 - 869.65 MHz sub-band. The protocol is described in firmware/src/p2p.h.
 
-Avec --device, la console de la carte à mettre à jour est suivie en parallèle et
-recopiée, préfixée par « [appareil] », jusqu'à ce qu'elle redémarre sur la
-nouvelle image.
+With --device, the console of the board being updated is followed in parallel and
+copied, prefixed with "[device]", until it reboots on the new image.
 """
 
 import argparse
@@ -28,7 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from fuota.fragmentation import encode  # noqa: E402
 
 SETUP, READY, FRAG, DONE = 1, 2, 3, 4
-FRAG_SIZE = 200  # CONFIG_LORAWAN_FRAG_TRANSPORT_MAX_FRAG_SIZE de p2p.conf
+FRAG_SIZE = 200  # CONFIG_LORAWAN_FRAG_TRANSPORT_MAX_FRAG_SIZE from p2p.conf
 MAX_REDUNDANCY = 0.10  # CONFIG_LORAWAN_FRAG_TRANSPORT_MAX_REDUNDANCY
 DUTY_CYCLE = 0.10
 
@@ -53,8 +52,8 @@ class Modem:
                 yield line
 
     def write_line(self, line: str) -> None:
-        # La console du modem renvoie l'écho de chaque caractère, au même débit :
-        # envoyée d'un bloc, une longue ligne fait déborder sa FIFO de réception.
+        # The modem console echoes every character at the same rate: sent in one
+        # go, a long line overflows its receive FIFO.
         data = line.encode() + b"\n"
         for i in range(0, len(data), 32):
             self.link.write(data[i : i + 32])
@@ -66,25 +65,25 @@ class Modem:
         for reply in self._lines(timeout):
             if reply.startswith(("OK", "ERR")):
                 return reply
-        raise TimeoutError(f"pas de réponse du modem à {line[:20]!r}")
+        raise TimeoutError(f"no answer from the modem to {line[:20]!r}")
 
     def hello(self) -> None:
         self.link.reset_input_buffer()
-        # Ouvrir le port redémarre la carte : on attend son « READY »
+        # Opening the port resets the board: wait for its "READY"
         for _ in range(5):
             self.write_line("HELLO")
             if any(line == "READY" for line in self._lines(2)):
                 self._lines_flush()
                 return
-        raise TimeoutError("le modem ne répond pas (radio-modem flashé ?)")
+        raise TimeoutError("the modem does not answer (is radio-modem flashed?)")
 
     def _lines_flush(self) -> None:
         for _ in self._lines(0.5):
             pass
 
     def send(self, frame: bytes) -> float:
-        """Émet une trame ; rend la durée d'émission, en secondes."""
-        # Une ligne de console du modem ne dépasse pas 255 caractères
+        """Transmits a frame; returns the airtime, in seconds."""
+        # A modem console line is at most 255 characters long
         chunks = [frame[i : i + 100] for i in range(0, len(frame), 100)]
         for chunk in chunks[:-1]:
             reply = self.command("DATA " + chunk.hex())
@@ -100,7 +99,7 @@ class Modem:
             pass
 
     def take(self, kind: int, session: int):
-        """Retire et rend la première trame reçue du type voulu, ou None."""
+        """Removes and returns the first received frame of the given type, or None."""
         for i, (frame, rssi, snr) in enumerate(self.received):
             if frame[:2] == b"AD" and len(frame) >= 4 and frame[2] == kind and frame[3] == session:
                 del self.received[i]
@@ -118,22 +117,22 @@ def follow_device(port: str, stop: threading.Event) -> None:
             line = raw.decode("utf-8", "replace").strip()
             line = "".join(c for c in line if c.isprintable())
             if any(k in line for k in ("p2p:", "fuota:", "I: Image", "I: Starting swap", "E: ", "Swap type")):
-                print(f"[appareil] {line}", flush=True)
+                print(f"[device] {line}", flush=True)
     link.close()
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("image", type=Path, help="image signée (zephyr.signed.bin)")
-    parser.add_argument("--modem", required=True, help="port série de la carte modem")
-    parser.add_argument("--device", help="port série de la carte à mettre à jour, pour suivre sa console")
-    parser.add_argument("--redundancy", type=float, default=0.08, help="part de fragments redondants")
-    parser.add_argument("--limit", type=int, help="n'envoyer que N fragments (essai de liaison)")
-    parser.add_argument("--wait-reboot", type=float, default=60, help="secondes à suivre l'appareil après DONE")
+    parser.add_argument("image", type=Path, help="signed image (zephyr.signed.bin)")
+    parser.add_argument("--modem", required=True, help="serial port of the modem board")
+    parser.add_argument("--device", help="serial port of the board being updated, to follow its console")
+    parser.add_argument("--redundancy", type=float, default=0.08, help="share of redundant fragments")
+    parser.add_argument("--limit", type=int, help="only send N fragments (link test)")
+    parser.add_argument("--wait-reboot", type=float, default=60, help="seconds to follow the device after DONE")
     args = parser.parse_args()
 
     if args.redundancy > MAX_REDUNDANCY:
-        sys.exit(f"redondance > {MAX_REDUNDANCY:.0%} : le décodeur de l'appareil la refuserait")
+        sys.exit(f"redundancy > {MAX_REDUNDANCY:.0%}: the device decoder would reject it")
 
     data = args.image.read_bytes()
     m = math.ceil(len(data) / FRAG_SIZE)
@@ -141,8 +140,8 @@ def main() -> None:
     if args.limit:
         fragments = fragments[: args.limit]
     session = random.randint(1, 255)
-    print(f"Image {args.image.name} : {len(data)} octets, {session_info.nb_frag} fragments "
-          f"+ {len(fragments) - min(len(fragments), session_info.nb_frag)} redondants, session {session}")
+    print(f"Image {args.image.name}: {len(data)} bytes, {session_info.nb_frag} fragments "
+          f"+ {len(fragments) - min(len(fragments), session_info.nb_frag)} redundant, session {session}")
 
     stop = threading.Event()
     if args.device:
@@ -152,7 +151,7 @@ def main() -> None:
     modem.hello()
     modem.command("SHOW Session %u" % session)
 
-    # 1. Annonce de la session ; l'appareil efface son slot secondaire, puis répond
+    # 1. Session announcement; the device erases its secondary slot, then answers
     setup = b"AD" + bytes([SETUP, session]) + struct.pack("<HBB", session_info.nb_frag, FRAG_SIZE,
                                                           session_info.padding)
     for attempt in range(1, 6):
@@ -162,15 +161,15 @@ def main() -> None:
         if reply:
             payload, rssi, snr = reply
             if payload[0] != 0:
-                sys.exit(f"L'appareil refuse la session (statut {payload[0]})")
-            print(f"Appareil prêt (RSSI {rssi} dBm, SNR {snr} dB)")
+                sys.exit(f"The device rejects the session (status {payload[0]})")
+            print(f"Device ready (RSSI {rssi} dBm, SNR {snr} dB)")
             break
-        print(f"Pas de réponse à l'annonce, essai {attempt}/5")
+        print(f"No answer to the announcement, attempt {attempt}/5")
     else:
         stop.set()
-        sys.exit("L'appareil ne répond pas")
+        sys.exit("The device does not answer")
 
-    # 2. Les fragments, au rythme permis par le temps d'émission
+    # 2. The fragments, at the pace the duty cycle allows
     start = time.monotonic()
     done = None
     for index, fragment in enumerate(fragments, start=1):
@@ -180,7 +179,7 @@ def main() -> None:
         if index % 50 == 0 or index == len(fragments):
             elapsed = time.monotonic() - start
             eta = elapsed / index * (len(fragments) - index)
-            print(f"Fragment {index}/{len(fragments)}, {elapsed / 60:.1f} min, reste ~{eta / 60:.1f} min",
+            print(f"Fragment {index}/{len(fragments)}, {elapsed / 60:.1f} min, ~{eta / 60:.1f} min left",
                   flush=True)
             modem.command(f"SHOW Frag {index}")
         if done:
@@ -191,15 +190,15 @@ def main() -> None:
         done = modem.take(DONE, session)
     elapsed = time.monotonic() - start
     if not done:
-        print(f"Aucun DONE après {index} fragments ({elapsed / 60:.1f} min)")
+        print(f"No DONE after {index} fragments ({elapsed / 60:.1f} min)")
         stop.set()
         sys.exit(1)
 
     payload, rssi, snr = done
     lost, recovered = struct.unpack("<HH", payload[:4])
-    print(f"DONE reçu après {index} fragments en {elapsed / 60:.1f} min : "
-          f"{recovered} fragment(s) perdu(s) puis reconstruit(s)")
-    modem.command("SHOW Envoi OK")
+    print(f"DONE received after {index} fragments in {elapsed / 60:.1f} min: "
+          f"{recovered} fragment(s) lost then rebuilt")
+    modem.command("SHOW Sent OK")
 
     if args.device:
         time.sleep(args.wait_reboot)

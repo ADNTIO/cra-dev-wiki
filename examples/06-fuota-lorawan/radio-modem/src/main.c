@@ -1,18 +1,18 @@
 /*
- * Modem LoRa piloté par le PC, ligne par ligne, sur la console série.
+ * LoRa modem driven by the PC, line by line, over the serial console.
  *
- * La carte ne connaît rien à la mise à jour : le PC fabrique les trames
- * (tools/p2p_send.py) et la carte se contente de les émettre, puis de remonter
- * ce qu'elle entend. Mêmes paramètres radio que la carte à mettre à jour (p2p.h).
+ * The board knows nothing about the update: the PC builds the frames
+ * (tools/p2p_send.py) and the board just transmits them, then reports what it
+ * hears. Same radio parameters as the board being updated (p2p.h).
  *
- *   PC -> carte : « DATA <hex> »  ajoute des octets à la trame en cours, « OK »
- *                 « TX <hex> »    ajoute les derniers octets et émet la trame,
- *                                 répond « OK <durée en ms> »
- *                 « SHOW <texte> » affiche une ligne à l'écran, répond « OK »
- *   carte -> PC : « RX <hex> <rssi> <snr> » pour chaque trame reçue
+ *   PC -> board: "DATA <hex>"  appends bytes to the current frame, "OK"
+ *                "TX <hex>"    appends the last bytes and transmits the frame,
+ *                              answers "OK <duration in ms>"
+ *                "SHOW <text>" shows a line on the screen, answers "OK"
+ *   board -> PC: "RX <hex> <rssi> <snr>" for every received frame
  *
- * Une ligne de console ne dépasse pas 255 caractères (le pilote UART de Zephyr
- * compte sur 8 bits) : une trame de plus de 125 octets arrive en plusieurs lignes.
+ * A console line is at most 255 characters long (Zephyr's UART driver counts on
+ * 8 bits): a frame of more than 125 bytes comes in several lines.
  */
 
 #include <stdio.h>
@@ -31,7 +31,7 @@
 
 static const struct device *const lora = DEVICE_DT_GET(DT_ALIAS(lora0));
 
-/* Le modem émet sur le sens descendant et écoute le sens montant (voir p2p.h). */
+/* The modem transmits on the downlink and listens on the uplink (see p2p.h). */
 static int radio_mode(bool tx)
 {
 	struct lora_modem_config cfg = {
@@ -50,7 +50,7 @@ static int radio_mode(bool tx)
 static void received(const struct device *dev, uint8_t *data, uint16_t size, int16_t rssi,
 		     int8_t snr, void *user_data)
 {
-	/* Statique : ce rappel tourne sur une pile trop petite pour 511 octets */
+	/* Static: this callback runs on a stack too small for 511 bytes */
 	static char hex[2 * 255 + 1];
 
 	ARG_UNUSED(dev);
@@ -76,7 +76,7 @@ static int append(const char *hex)
 
 	if (len == 0 || len * 2 != strlen(hex)) {
 		frame_len = 0;
-		printk("ERR trame invalide\n");
+		printk("ERR invalid frame\n");
 		return -EINVAL;
 	}
 	frame_len += len;
@@ -94,14 +94,14 @@ static void transmit(const char *hex)
 	}
 	len = frame_len;
 	frame_len = 0;
-	lora_recv_async(lora, NULL, NULL); /* arrête l'écoute */
+	lora_recv_async(lora, NULL, NULL); /* stops listening */
 	start = k_uptime_get();
 	ret = radio_mode(true);
 	if (ret == 0) {
 		ret = lora_send(lora, frame, len);
 	}
 	if (ret < 0) {
-		printk("ERR emission %d\n", ret);
+		printk("ERR tx %d\n", ret);
 	} else {
 		printk("OK %lld\n", k_uptime_get() - start);
 	}
@@ -112,12 +112,12 @@ int main(void)
 {
 	screen_init();
 	if (!device_is_ready(lora) || listen() < 0) {
-		screen_step("Radio KO");
+		screen_step("Radio error");
 		printk("ERR radio\n");
 		return 0;
 	}
-	screen_step("Modem LoRa");
-	screen_step("Pret");
+	screen_step("LoRa modem");
+	screen_step("Ready");
 	console_getline_init();
 	printk("READY\n");
 
@@ -136,7 +136,7 @@ int main(void)
 		} else if (strcmp(line, "HELLO") == 0) {
 			printk("READY\n");
 		} else {
-			printk("ERR commande inconnue\n");
+			printk("ERR unknown command\n");
 		}
 	}
 	return 0;

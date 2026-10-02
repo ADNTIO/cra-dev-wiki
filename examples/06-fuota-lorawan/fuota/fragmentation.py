@@ -1,11 +1,11 @@
-"""Fragmentation avec redondance, selon LoRaWAN TS004 v1.0.0.
+"""Fragmentation with redundancy, as in LoRaWAN TS004 v1.0.0.
 
-L'image est découpée en M fragments de taille fixe. Le serveur envoie ces M
-fragments tels quels, puis des fragments redondants : chacun est le XOR d'un
-sous-ensemble pseudo-aléatoire des fragments d'origine. L'appareil reconstruit
-l'image dès qu'il a reçu assez de fragments, quels qu'ils soient.
+The image is split into M fixed-size fragments. The server sends these M fragments
+as they are, then redundant fragments: each one is the XOR of a pseudo-random subset
+of the original fragments. The device rebuilds the image as soon as it has received
+enough fragments, whichever they are.
 
-Référence : annexe de la spécification (fonctions matrix_line et prbs23).
+Reference: annex of the specification (matrix_line and prbs23 functions).
 """
 
 from dataclasses import dataclass
@@ -13,11 +13,11 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Session:
-    """Ce que le serveur annonce à l'appareil avant d'émettre (FragSessionSetupReq)."""
+    """What the server announces to the device before transmitting (FragSessionSetupReq)."""
 
-    nb_frag: int  # M : nombre de fragments sans redondance
-    frag_size: int  # taille d'un fragment, en octets
-    padding: int  # octets de bourrage ajoutés au dernier fragment
+    nb_frag: int  # M: number of fragments without redundancy
+    frag_size: int  # size of a fragment, in bytes
+    padding: int  # padding bytes added to the last fragment
 
 
 def _prbs23(x: int) -> int:
@@ -27,12 +27,12 @@ def _prbs23(x: int) -> int:
 
 
 def matrix_line(n: int, m: int) -> int:
-    """Ligne n (à partir de 1) de la matrice de parité, pour M = m fragments.
+    """Line n (from 1) of the parity matrix, for M = m fragments.
 
-    Le résultat est un masque : le bit i à 1 signifie que le fragment i (à partir
-    de 0) entre dans le XOR du n-ième fragment redondant.
+    The result is a mask: bit i set means that fragment i (from 0) is part of the
+    XOR of the n-th redundant fragment.
     """
-    # Les puissances de 2 sont traitées à part, elles produisent des motifs.
+    # Powers of 2 are handled separately, they produce patterns.
     pow2 = 1 if m & (m - 1) == 0 else 0
     x = 1 + 1001 * n
     line = 0
@@ -46,12 +46,12 @@ def matrix_line(n: int, m: int) -> int:
 
 
 def encode(data: bytes, frag_size: int, nb_redundant: int) -> tuple[Session, list[bytes]]:
-    """Découpe data et ajoute nb_redundant fragments de redondance.
+    """Splits data and adds nb_redundant redundancy fragments.
 
-    fragments[i] porte l'index i + 1 : TS004 numérote à partir de 1.
+    fragments[i] has index i + 1: TS004 counts from 1.
     """
     if frag_size <= 0 or not data:
-        raise ValueError("image vide ou taille de fragment invalide")
+        raise ValueError("empty image or invalid fragment size")
     padding = -len(data) % frag_size
     padded = data + bytes(padding)
     m = len(padded) // frag_size
@@ -72,33 +72,33 @@ def encode(data: bytes, frag_size: int, nb_redundant: int) -> tuple[Session, lis
 
 
 class Decoder:
-    """Reconstruit l'image à partir des fragments reçus, dans n'importe quel ordre.
+    """Rebuilds the image from the received fragments, in any order.
 
-    Chaque fragment est une équation sur GF(2) : un masque (quels fragments
-    d'origine il combine) et une valeur. On maintient un système échelonné ; quand
-    il compte M équations indépendantes, l'image est connue.
+    Each fragment is an equation over GF(2): a mask (which original fragments it
+    combines) and a value. We keep an echelon system; once it holds M independent
+    equations, the image is known.
 
-    Version pédagogique : un vrai appareil utilise un algorithme à faible empreinte
-    mémoire, mais le résultat est le même.
+    Teaching version: a real device uses a low-memory algorithm, but the result is
+    the same.
     """
 
     def __init__(self, session: Session):
         self.session = session
-        self._rows: dict[int, tuple[int, int]] = {}  # pivot -> (masque, valeur)
+        self._rows: dict[int, tuple[int, int]] = {}  # pivot -> (mask, value)
 
     @property
     def complete(self) -> bool:
         return len(self._rows) == self.session.nb_frag
 
     def push(self, index: int, fragment: bytes) -> bool:
-        """Ajoute le fragment d'index donné (à partir de 1). Renvoie complete."""
+        """Adds the fragment with the given index (from 1). Returns complete."""
         m = self.session.nb_frag
-        # Ne jamais faire confiance aux longueurs annoncées par le réseau : c'est
-        # exactement ce contrôle qui manquait dans la CVE-2026-13480.
+        # Never trust lengths announced by the network: this is exactly the check
+        # that was missing in CVE-2026-13480.
         if index < 1:
-            raise ValueError("index de fragment invalide")
+            raise ValueError("invalid fragment index")
         if len(fragment) != self.session.frag_size:
-            raise ValueError("taille de fragment inattendue")
+            raise ValueError("unexpected fragment size")
 
         mask = 1 << (index - 1) if index <= m else matrix_line(index - m, m)
         value = int.from_bytes(fragment, "big")
@@ -113,9 +113,9 @@ class Decoder:
         return self.complete
 
     def data(self) -> bytes:
-        """L'image reconstruite, sans le bourrage."""
+        """The rebuilt image, without the padding."""
         if not self.complete:
-            raise ValueError("fragments insuffisants pour reconstruire l'image")
+            raise ValueError("not enough fragments to rebuild the image")
         m, size = self.session.nb_frag, self.session.frag_size
         solved = [0] * m
         for pivot in range(m - 1, -1, -1):

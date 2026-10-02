@@ -1,6 +1,6 @@
-/* Certaines cartes Heltec et TTGO anciennes ont un quartz de 26 MHz au lieu de
- * 40 MHz (esptool l'affiche : « Crystal frequency: 26MHz »). À appliquer au
- * firmware et à MCUboot.
+/* Some older Heltec and TTGO boards have a 26 MHz crystal instead of 40 MHz
+ * (esptool shows it: "Crystal frequency: 26MHz"). Apply to both the firmware and
+ * MCUboot.
  */
 &cpu0 {
 	xtal-freq = <DT_FREQ_M(26)>;

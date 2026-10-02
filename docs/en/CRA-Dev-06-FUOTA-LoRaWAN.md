@@ -192,13 +192,12 @@ with every security fix.
 
 The example's [test bench][example] drops into the secondary slot of a real board a
 forged image, an image with one flipped bit, an old version and an update unable to
-join the network. The bootloader and firmware console answers, in that order (the
-firmware logs in French: "reboot: test image unable to join the network"):
+join the network. The bootloader and firmware console answers, in that order:
 
 ```
 E: Image in the secondary slot is not valid!
 I: Image 0 in slot 1 erased due to downgrade prevention
-<wrn> fuota: Redémarrage : image à l'essai incapable de rejoindre le réseau
+<wrn> fuota: Rebooting: test image unable to join the network
 I: Image index: 0, Swap type: revert
 ```
 

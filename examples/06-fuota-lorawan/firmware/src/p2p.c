@@ -1,5 +1,5 @@
 /*
- * Mise à jour par LoRa point à point : voir p2p.h.
+ * Update over point-to-point LoRa: see p2p.h.
  */
 
 #include <string.h>
@@ -11,7 +11,7 @@
 #include <zephyr/sys/byteorder.h>
 #include <zephyr/sys/reboot.h>
 
-/* API internes du service de fragmentation de Zephyr (subsys/lorawan/services) */
+/* Internal APIs of Zephyr's fragmentation service (subsys/lorawan/services) */
 #include "frag_decoder_lowmem.h"
 #include "frag_flash.h"
 
@@ -22,7 +22,7 @@ LOG_MODULE_REGISTER(p2p, LOG_LEVEL_INF);
 
 enum { P2P_SETUP = 1, P2P_READY = 2, P2P_FRAG = 3, P2P_DONE = 4 };
 
-#define HEADER_LEN   4 /* « AD », type, session */
+#define HEADER_LEN    4 /* "AD", type, session */
 #define PROGRESS_STEP 100
 
 static const struct device *const lora = DEVICE_DT_GET(DT_ALIAS(lora0));
@@ -36,7 +36,7 @@ static struct {
 	struct frag_decoder decoder;
 } ctx;
 
-/* L'appareil reçoit sur le sens descendant et répond sur le sens montant. */
+/* The device receives on the downlink and answers on the uplink. */
 static int radio_mode(bool tx)
 {
 	struct lora_modem_config cfg = {
@@ -58,7 +58,7 @@ static void send(uint8_t type, const uint8_t *payload, size_t len)
 
 	memcpy(&buf[HEADER_LEN], payload, len);
 	if (radio_mode(true) < 0 || lora_send(lora, buf, HEADER_LEN + len) < 0) {
-		LOG_ERR("Émission impossible (type %u)", type);
+		LOG_ERR("Transmit failed (type %u)", type);
 	}
 	radio_mode(false);
 }
@@ -71,7 +71,7 @@ static void on_setup(uint8_t session, const uint8_t *p, size_t len)
 		return;
 	}
 	if (ctx.active && session == ctx.session) {
-		send(P2P_READY, &status, 1); /* l'émetteur n'a pas reçu notre READY */
+		send(P2P_READY, &status, 1); /* the sender missed our READY */
 		return;
 	}
 
@@ -79,11 +79,11 @@ static void on_setup(uint8_t session, const uint8_t *p, size_t len)
 	ctx.nb_frag = sys_get_le16(p);
 	ctx.frag_size = p[2];
 	ctx.received = 0;
-	LOG_INF("Session %u : %u fragments de %u octets", session, ctx.nb_frag, ctx.frag_size);
+	LOG_INF("Session %u: %u fragments of %u bytes", session, ctx.nb_frag, ctx.frag_size);
 
 	if (ctx.nb_frag == 0 || ctx.nb_frag > FRAG_MAX_NB || ctx.frag_size > FRAG_MAX_SIZE) {
-		LOG_ERR("Session refusée : dépasse les capacités du décodeur");
-		screen_step("Session KO");
+		LOG_ERR("Session rejected: exceeds the decoder's capacity");
+		screen_step("Bad session");
 		ctx.active = false;
 		status = 1;
 		send(P2P_READY, &status, 1);
@@ -92,8 +92,8 @@ static void on_setup(uint8_t session, const uint8_t *p, size_t len)
 
 	screen_step("Session %u", session);
 	screen_step("%u frag.", ctx.nb_frag);
-	if (frag_flash_init(ctx.frag_size) < 0) { /* efface le slot secondaire */
-		LOG_ERR("Effacement du slot secondaire impossible");
+	if (frag_flash_init(ctx.frag_size) < 0) { /* erases the secondary slot */
+		LOG_ERR("Cannot erase the secondary slot");
 		status = 2;
 		send(P2P_READY, &status, 1);
 		return;
@@ -103,14 +103,14 @@ static void on_setup(uint8_t session, const uint8_t *p, size_t len)
 	send(P2P_READY, &status, 1);
 }
 
-/* Rend true quand l'image est complète dans le slot secondaire. */
+/* Returns true once the image is complete in the secondary slot. */
 static bool on_fragment(uint8_t session, const uint8_t *p, size_t len)
 {
 	uint16_t index;
 	int ret;
 
-	/* Longueur vérifiée avant toute lecture : c'est ce contrôle qui manquait
-	 * dans le décodeur TS004 de Zephyr avant la 4.4.2 (CVE-2026-13480).
+	/* Length checked before any read: this is the check that was missing in
+	 * Zephyr's TS004 decoder before 4.4.2 (CVE-2026-13480).
 	 */
 	if (!ctx.active || session != ctx.session || len != 2U + ctx.frag_size) {
 		return false;
@@ -120,19 +120,19 @@ static bool on_fragment(uint8_t session, const uint8_t *p, size_t len)
 		return false;
 	}
 	if (index > ctx.nb_frag) {
-		frag_flash_use_cache(); /* fragments de redondance : en RAM */
+		frag_flash_use_cache(); /* redundancy fragments: kept in RAM */
 	}
 
 	ret = frag_dec(&ctx.decoder, index, &p[2], ctx.frag_size);
 	ctx.received++;
 	if (ctx.received % PROGRESS_STEP == 0) {
-		LOG_INF("Fragment %u, %u reçus", index, ctx.received);
+		LOG_INF("Fragment %u, %u received", index, ctx.received);
 		screen_step("Frag %u/%u", MIN(index, ctx.nb_frag), ctx.nb_frag);
 	}
 
 	if (ret == FRAG_DEC_ERR_TOO_MANY_FRAMES_LOST || ret == FRAG_DEC_ERR) {
-		LOG_ERR("Trop de fragments perdus, session abandonnée (%d)", ret);
-		screen_step("Trop de perte");
+		LOG_ERR("Too many fragments lost, session aborted (%d)", ret);
+		screen_step("Too lossy");
 		ctx.active = false;
 		return false;
 	}
@@ -140,11 +140,11 @@ static bool on_fragment(uint8_t session, const uint8_t *p, size_t len)
 		return false;
 	}
 
-	/* Écrit le cache et demande à MCUboot un démarrage à l'essai */
+	/* Writes the cache and asks MCUboot for a test boot */
 	frag_flash_finish();
-	LOG_INF("Image complète : %u fragments reçus, %u perdus, %u reconstruits", ctx.received,
+	LOG_INF("Image complete: %u fragments received, %u lost, %u rebuilt", ctx.received,
 		ctx.decoder.lost_frame_count, ctx.decoder.filled_lost_frame_count);
-	screen_step("Image recue");
+	screen_step("Image rcvd");
 	return true;
 }
 
@@ -155,8 +155,8 @@ int p2p_fuota_run(void (*feed)(void))
 	if (radio_mode(false) < 0) {
 		return -EIO;
 	}
-	LOG_INF("En écoute : %u Hz, %d dBm", P2P_FREQUENCY, P2P_TX_POWER);
-	screen_step("Ecoute LoRa");
+	LOG_INF("Listening: %u Hz, %d dBm", P2P_FREQUENCY, P2P_TX_POWER);
+	screen_step("Listening");
 
 	for (;;) {
 		int16_t rssi;
@@ -179,8 +179,8 @@ int p2p_fuota_run(void (*feed)(void))
 
 				sys_put_le16(ctx.decoder.lost_frame_count, &stats[0]);
 				sys_put_le16(ctx.decoder.filled_lost_frame_count, &stats[2]);
-				/* L'émetteur écoute entre deux fragments : quelques
-				 * répétitions suffisent.
+				/* The sender listens between fragments: a few
+				 * repetitions are enough.
 				 */
 				for (int i = 0; i < 3; i++) {
 					send(P2P_DONE, stats, sizeof(stats));

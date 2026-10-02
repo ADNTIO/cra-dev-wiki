@@ -19,8 +19,8 @@ def receive(session, frames) -> Decoder:
 
 
 def test_matrix_line_matches_the_reference_decoder():
-    # Valeurs produites par FragGetParityMatrixRow() du décodeur de référence
-    # LoRaMac-node (FragDecoder.c), y compris le cas particulier M = puissance de 2.
+    # Values produced by FragGetParityMatrixRow() from the LoRaMac-node reference
+    # decoder (FragDecoder.c), including the special case M = power of 2.
     assert bits(matrix_line(1, 26), 26) == "11010011100011001100010110"
     assert bits(matrix_line(3, 32), 32) == "00000110001011000101010000110000"
 
@@ -44,7 +44,7 @@ def test_redundant_fragment_is_a_xor_of_original_fragments():
 
 
 def test_padding_is_removed():
-    data = b"firmware" * 13  # 104 octets : pas un multiple de 48
+    data = b"firmware" * 13  # 104 bytes: not a multiple of 48
     session, fragments = encode(data, frag_size=48, nb_redundant=0)
     assert session.padding == 40
     assert receive(session, enumerate(fragments, start=1)).data() == data
@@ -54,7 +54,7 @@ def test_image_survives_ten_percent_loss_with_twenty_percent_redundancy():
     data = random.Random(1).randbytes(20_000)
     session, fragments = encode(data, frag_size=48, nb_redundant=84)
     received = list(transmit(fragments, loss_rate=0.10, seed=1))
-    assert len(received) < len(fragments)  # des trames ont bien été perdues
+    assert len(received) < len(fragments)  # frames were indeed lost
 
     decoder = receive(session, received)
 

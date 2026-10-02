@@ -1,7 +1,7 @@
 [project]
 name = "fuota-lorawan-example"
 version = "0.1.0"
-description = "CRA & Dev #6 : une session FUOTA LoRaWAN simulée, de la signature à la vérification"
+description = "CRA & Dev #6: a simulated LoRaWAN FUOTA session, from signature to verification"
 requires-python = ">=3.10"
 dependencies = [
     "imgtool>=2.1",
@@ -11,8 +11,8 @@ dependencies = [
 dev = [
     "pytest>=8",
 ]
-# Outillage du firmware : west et les dépendances Python de Zephyr 4.4.2
-# (scripts/requirements-base.txt), esptool, et Pillow pour le logo.
+# Firmware tooling: west and the Python dependencies of Zephyr 4.4.2
+# (scripts/requirements-base.txt), esptool, and Pillow for the logo.
 firmware = [
     "west>=1.2",
     "pyelftools>=0.29",

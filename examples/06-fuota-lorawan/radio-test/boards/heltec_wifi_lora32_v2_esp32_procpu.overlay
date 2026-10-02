@@ -1,2 +1,2 @@
-/* Même écran que le firmware FUOTA */
+/* Same screen as the FUOTA firmware */
 #include "../../firmware/boards/heltec_wifi_lora32_v2_esp32_procpu.overlay"

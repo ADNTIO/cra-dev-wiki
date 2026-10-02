@@ -1,54 +1,54 @@
-mainmenu "Exemple FUOTA LoRaWAN"
+mainmenu "LoRaWAN FUOTA example"
 
 choice APP_TRANSPORT
-	prompt "Transport des mises à jour"
+	prompt "Update transport"
 	default APP_TRANSPORT_LORAWAN
 
 config APP_TRANSPORT_LORAWAN
-	bool "LoRaWAN : join OTAA et services FUOTA (TS003, TS004, TS005)"
+	bool "LoRaWAN: OTAA join and FUOTA services (TS003, TS004, TS005)"
 
 config APP_TRANSPORT_P2P
-	bool "LoRa point à point, depuis une autre carte, sans réseau LoRaWAN"
+	bool "Point-to-point LoRa, from another board, without a LoRaWAN network"
 	help
-	  Pour un banc sans passerelle : une deuxième carte diffuse l'image en
-	  fragments TS004 (voir radio-modem/ et tools/p2p_send.py). Le décodeur,
-	  l'écriture en flash et MCUboot sont les mêmes qu'en LoRaWAN.
+	  For a bench without a gateway: a second board broadcasts the image as
+	  TS004 fragments (see radio-modem/ and tools/p2p_send.py). The decoder,
+	  the flash writes and MCUboot are the same as with LoRaWAN.
 
 endchoice
 
 config APP_LORAWAN_DEV_EUI
-	string "DevEUI (16 caractères hexadécimaux)"
+	string "DevEUI (16 hex characters)"
 	default "0000000000000000"
 
 config APP_LORAWAN_JOIN_EUI
-	string "JoinEUI (16 caractères hexadécimaux)"
+	string "JoinEUI (16 hex characters)"
 	default "0000000000000000"
 
 config APP_LORAWAN_APP_KEY
-	string "AppKey (32 caractères hexadécimaux)"
+	string "AppKey (32 hex characters)"
 	default "00000000000000000000000000000000"
 	help
-	  Ne mettez jamais une vraie clé dans prj.conf : passez-la par un fichier
-	  hors dépôt, avec -DEXTRA_CONF_FILE.
+	  Never put a real key in prj.conf: pass it through a file kept out of
+	  the repository, with -DEXTRA_CONF_FILE.
 
 config APP_JOIN_ATTEMPTS
-	int "Tentatives de join avant d'abandonner"
+	int "Join attempts before giving up"
 	range 0 20
 	default 3
 	help
-	  À 0, l'appareil n'émet rien : utile sur un banc sans antenne.
+	  At 0, the device transmits nothing: useful on a bench without an antenna.
 
 config APP_UPLINK_PERIOD
-	int "Période des uplinks, en secondes"
+	int "Uplink period, in seconds"
 	default 180
 
 config APP_SELFTEST_REQUIRES_JOIN
-	bool "Ne confirmer une nouvelle image qu'après un join réussi"
+	bool "Only confirm a new image after a successful join"
 	default y
 	help
-	  Critère de bon fonctionnement d'une image démarrée à l'essai. Si le join
-	  échoue, l'appareil redémarre et MCUboot restaure l'image précédente.
-	  À désactiver uniquement sur un banc sans passerelle LoRaWAN : le critère
-	  devient alors « la radio répond ».
+	  Health check of an image booted on trial. If the join fails, the device
+	  reboots and MCUboot restores the previous image. Only disable it on a
+	  bench without a LoRaWAN gateway: the check then becomes "the radio
+	  answers".
 
 source "Kconfig.zephyr"

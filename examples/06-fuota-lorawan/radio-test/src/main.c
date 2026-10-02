@@ -1,9 +1,9 @@
 /*
- * Test radio LoRa point à point, entre deux cartes, sans LoRaWAN.
+ * Point-to-point LoRa radio test, between two boards, without LoRaWAN.
  *
- * La carte « ping » émet un ping numéroté, la carte « pong » répond en y joignant
- * la puissance à laquelle elle l'a reçu. Chaque échange réussi prouve les deux
- * sens : ping -> pong (aller), pong -> ping (retour).
+ * The "ping" board sends a numbered ping, the "pong" board answers and includes
+ * the power at which it received it. Each successful exchange proves both
+ * directions: ping -> pong (out), pong -> ping (back).
  */
 
 #include <zephyr/device.h>
@@ -21,10 +21,10 @@ LOG_MODULE_REGISTER(radio, LOG_LEVEL_INF);
 enum { MSG_PING = 1, MSG_PONG = 2 };
 
 struct __packed message {
-	char magic[4]; /* « ADNT » : ignorer tout autre émetteur LoRa du voisinage */
+	char magic[4]; /* "ADNT": ignore any other LoRa transmitter nearby */
 	uint8_t type;
 	uint32_t seq;
-	int16_t rssi; /* pong : puissance à laquelle le ping a été reçu */
+	int16_t rssi; /* pong: power at which the ping was received */
 	int8_t snr;
 };
 
@@ -57,7 +57,7 @@ static int send(uint8_t type, uint32_t seq, int16_t rssi, int8_t snr)
 	return lora_send(lora, (uint8_t *)&msg, sizeof(msg));
 }
 
-/* Attend un message du type voulu ; ignore le reste. */
+/* Waits for a message of the given type; ignores the rest. */
 static int receive(uint8_t type, k_timeout_t timeout, struct message *msg, int16_t *rssi,
 		   int8_t *snr)
 {
@@ -91,7 +91,7 @@ static void run_ping(void)
 
 		if (send(MSG_PING, seq, 0, 0) < 0) {
 			LOG_ERR("PING_TX_ERR seq=%u", seq);
-			screen_step("TX erreur");
+			screen_step("TX error");
 		} else {
 			LOG_INF("PING_TX seq=%u", seq);
 			screen_step("> ping %u", seq);
@@ -99,14 +99,14 @@ static void run_ping(void)
 			if (receive(MSG_PONG, PONG_TIMEOUT, &msg, &rssi, &snr) == 0 &&
 			    msg.seq == seq) {
 				ok++;
-				LOG_INF("PONG_RX seq=%u aller_rssi=%d aller_snr=%d retour_rssi=%d "
-					"retour_snr=%d ok=%u/%u",
+				LOG_INF("PONG_RX seq=%u out_rssi=%d out_snr=%d back_rssi=%d "
+					"back_snr=%d ok=%u/%u",
 					seq, msg.rssi, msg.snr, rssi, snr, ok, seq);
 				screen_step("< pong %u", seq);
 				screen_step("%d/%d dBm", msg.rssi, rssi);
 			} else {
 				LOG_WRN("PONG_TIMEOUT seq=%u ok=%u/%u", seq, ok, seq);
-				screen_step("pas de pong");
+				screen_step("no pong");
 			}
 		}
 		k_sleep(K_SECONDS(CONFIG_APP_PING_PERIOD));
@@ -121,7 +121,7 @@ static void run_pong(void)
 		int8_t snr;
 
 		if (receive(MSG_PING, K_SECONDS(30), &msg, &rssi, &snr) < 0) {
-			LOG_INF("En écoute, aucun ping");
+			LOG_INF("Listening, no ping");
 			continue;
 		}
 		LOG_INF("PING_RX seq=%u rssi=%d snr=%d", msg.seq, rssi, snr);
@@ -143,13 +143,13 @@ int main(void)
 
 	screen_init();
 	if (!device_is_ready(lora)) {
-		LOG_ERR("Radio LoRa indisponible");
-		screen_step("Radio KO");
+		LOG_ERR("LoRa radio unavailable");
+		screen_step("Radio error");
 		return 0;
 	}
-	LOG_INF("Test radio, role %s, %u Hz, %d dBm", ping ? "ping" : "pong",
+	LOG_INF("Radio test, role %s, %u Hz, %d dBm", ping ? "ping" : "pong",
 		CONFIG_APP_FREQUENCY, CONFIG_APP_TX_POWER);
-	screen_step("Test radio");
+	screen_step("Radio test");
 	screen_step("Role %s", ping ? "ping" : "pong");
 
 	if (ping) {

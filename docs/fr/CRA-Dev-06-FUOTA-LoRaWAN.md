@@ -202,7 +202,7 @@ répond, dans l'ordre :
 ```
 E: Image in the secondary slot is not valid!
 I: Image 0 in slot 1 erased due to downgrade prevention
-<wrn> fuota: Redémarrage : image à l'essai incapable de rejoindre le réseau
+<wrn> fuota: Rebooting: test image unable to join the network
 I: Image index: 0, Swap type: revert
 ```
 

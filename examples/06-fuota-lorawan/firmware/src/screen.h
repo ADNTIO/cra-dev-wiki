@@ -1,15 +1,15 @@
 /*
- * Écran de l'appareil : le logo au démarrage, puis les étapes, une par ligne.
- * Sans écran déclaré dans le devicetree, ces fonctions ne font rien.
+ * Device screen: the logo at boot, then the steps, one per line.
+ * Without a screen declared in the devicetree, these functions do nothing.
  */
 
 #ifndef SCREEN_H_
 #define SCREEN_H_
 
-/* Allume l'écran et affiche le logo. */
+/* Turns the screen on and shows the logo. */
 void screen_init(void);
 
-/* Ajoute une étape en bas de l'écran (ASCII, 12 caractères au plus). */
+/* Adds a step at the bottom of the screen (ASCII, 12 characters at most). */
 void screen_step(const char *fmt, ...);
 
 #endif
