@@ -123,6 +123,9 @@ rôle pour décider de chaque requête, un refus journalisé. À défaut, le ser
 *Épisode précédent : [Mille fragments, une seule signature, mettre à jour un
 firmware par LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
 
+*Épisode suivant : [Un journal qui ne peut pas mentir, chaîner et signer ses
+logs](CRA-Dev-08-Signed-Logs.md).*
+
 *Code d'accompagnement, dans [`examples/07-modbus-tls`][example] : les deux automates
 simulés, la démonstration et ses tests.*
 
