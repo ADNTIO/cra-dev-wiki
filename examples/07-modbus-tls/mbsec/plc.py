@@ -95,15 +95,19 @@ class AuthorisingHandler(ServerRequestHandler):
         self.role = role_from_certificate(der) if der else None
         log.info("TLS session from %s, role %s", self.peer, self.role or "none")
 
+    def reply_exception(self, code: ExcCodes) -> None:
+        """Answers the current request with a Modbus exception."""
+        pdu = self.last_pdu
+        response = ExceptionResponse(pdu.function_code, code)
+        response.transaction_id = pdu.transaction_id
+        response.dev_id = pdu.dev_id
+        self.server_send(response, self.last_addr)
+
     async def handle_request(self):
         pdu = self.last_pdu
         if pdu and not self.server.rules.authorise(self.role, pdu.function_code):
             name = FUNCTIONS.get(pdu.function_code, f"function {pdu.function_code}")
             log.warning("DENIED %s from %s (role %s)", name, self.peer, self.role or "none")
             self.server.denials.append(Denial(self.peer, self.role, pdu.function_code))
-            response = ExceptionResponse(pdu.function_code, ExcCodes.ILLEGAL_FUNCTION)  # R-31
-            response.transaction_id = pdu.transaction_id
-            response.dev_id = pdu.dev_id
-            self.server_send(response, self.last_addr)
-            return
+            return self.reply_exception(ExcCodes.ILLEGAL_FUNCTION)  # R-31
         await super().handle_request()
