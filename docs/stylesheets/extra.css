@@ -1,0 +1,13 @@
+/* Justified article text. Hyphenation keeps justified lines from leaving large gaps
+   between words, especially on narrow screens. */
+.md-typeset p,
+.md-typeset li {
+  text-align: justify;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+/* The episode header line (reading time, platform, tools) stays left-aligned. */
+.md-typeset blockquote p {
+  text-align: left;
+}
