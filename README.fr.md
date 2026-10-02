@@ -31,6 +31,7 @@ plein texte et sélecteur de langue.
 | 05 | [Générer un SBOM ne suffit pas : surveillez-le avec Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Gestion des vulnérabilités, surveillance continue | Partie II, point 1 | CI, multiplateforme |
 | 06 | [Mille fragments, une seule signature : mettre à jour un firmware par LoRaWAN](https://adntio.github.io/cra-dev-wiki/CRA-Dev-06-FUOTA-LoRaWAN/) | Mises à jour de sécurité, distribution sécurisée | Partie I, 2 c) ; partie II, 7 | Embarqué, LoRaWAN |
 | 07 | [Modbus ne demande jamais « qui est là ? » : TLS mutuel et rôles](https://adntio.github.io/cra-dev-wiki/CRA-Dev-07-Modbus-TLS/) | Protection contre l'accès non autorisé | Partie I, 2 d) | Industriel, Modbus |
+| 08 | [Un journal qui ne peut pas mentir : chaîner et signer ses logs](https://adntio.github.io/cra-dev-wiki/CRA-Dev-08-Signed-Logs/) | Journalisation de l'activité interne | Partie I, 2 l) | Multiplateforme |
 
 ## Organisation du dépôt
 

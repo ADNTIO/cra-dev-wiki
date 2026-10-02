@@ -119,6 +119,9 @@ restricted and isolated.
 *Previous episode: [A thousand fragments, one signature, updating firmware over
 LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
 
+*Next episode: [A log that cannot lie, chain and sign your
+logs](CRA-Dev-08-Signed-Logs.md).*
+
 *Companion code, in [`examples/07-modbus-tls`][example]: the two simulated PLCs, the
 demo and its tests.*
 
