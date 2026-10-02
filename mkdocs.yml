@@ -20,6 +20,7 @@ nav:
       - "Générer un SBOM ne suffit pas": fr/CRA-Dev-05-SBOM-DTRACK.md
   - Developer Guidance:
       - "Conventions de versioning": fr/guides/Version.md
+      - "Notifications CVE et KEV": fr/guides/Config-Notif-Dtrack.md
   - Ressources:
       - "DPAPI en détail": fr/ressources/DPAPI-Article-de-fond.md
 
@@ -69,6 +70,8 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
 
 plugins:
   - search

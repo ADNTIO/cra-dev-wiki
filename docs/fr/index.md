@@ -31,7 +31,7 @@ Les références renvoient à l'Annexe I du [Règlement (UE) 2024/2847][cra]. Sa
 liste les exigences de cybersécurité des produits (points a à m) ; sa partie II
 couvre la gestion des vulnérabilités.
 
-Guide : [les conventions de versioning](guides/Version.md) à appliquer.
+Guides : [les conventions de versioning](guides/Version.md) à appliquer et [les notifications CVE et KEV](guides/Config-Notif-Dtrack.md) dans Dependency-Track.
 
 Article de fond, version longue et sourcée pour approfondir :
 [la DPAPI en détail](ressources/DPAPI-Article-de-fond.md).
