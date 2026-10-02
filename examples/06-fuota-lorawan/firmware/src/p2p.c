@@ -24,6 +24,7 @@ enum { P2P_SETUP = 1, P2P_READY = 2, P2P_FRAG = 3, P2P_DONE = 4 };
 
 #define HEADER_LEN    4 /* "AD", type, session */
 #define PROGRESS_STEP 100
+#define MAX_RX_ERRORS 5 /* consecutive radio errors before giving up */
 
 static const struct device *const lora = DEVICE_DT_GET(DT_ALIAS(lora0));
 
@@ -32,6 +33,7 @@ static struct {
 	uint8_t session;
 	uint16_t nb_frag;
 	uint8_t frag_size;
+	uint8_t padding;
 	uint16_t received;
 	struct frag_decoder decoder;
 } ctx;
@@ -66,25 +68,39 @@ static void send(uint8_t type, const uint8_t *payload, size_t len)
 static void on_setup(uint8_t session, const uint8_t *p, size_t len)
 {
 	uint8_t status = 0;
+	uint16_t nb_frag;
+	uint8_t frag_size, padding;
 
 	if (len < 4) {
 		return;
 	}
-	if (ctx.active && session == ctx.session) {
-		send(P2P_READY, &status, 1); /* the sender missed our READY */
+	nb_frag = sys_get_le16(p);
+	frag_size = p[2];
+	padding = p[3];
+
+	/* Same session, same parameters: the sender missed our READY, or resumes an
+	 * interrupted transfer. Anything else starts over.
+	 */
+	if (ctx.active && session == ctx.session && nb_frag == ctx.nb_frag &&
+	    frag_size == ctx.frag_size && padding == ctx.padding) {
+		send(P2P_READY, &status, 1);
 		return;
 	}
 
+	ctx.active = false;
 	ctx.session = session;
-	ctx.nb_frag = sys_get_le16(p);
-	ctx.frag_size = p[2];
+	ctx.nb_frag = nb_frag;
+	ctx.frag_size = frag_size;
+	ctx.padding = padding;
 	ctx.received = 0;
-	LOG_INF("Session %u: %u fragments of %u bytes", session, ctx.nb_frag, ctx.frag_size);
+	LOG_INF("Session %u: %u fragments of %u bytes", session, nb_frag, frag_size);
 
-	if (ctx.nb_frag == 0 || ctx.nb_frag > FRAG_MAX_NB || ctx.frag_size > FRAG_MAX_SIZE) {
-		LOG_ERR("Session rejected: exceeds the decoder's capacity");
+	/* The protocol is not authenticated: bound every value before use. */
+	if (nb_frag == 0 || nb_frag > FRAG_MAX_NB || frag_size == 0 ||
+	    frag_size > FRAG_MAX_SIZE || padding >= frag_size ||
+	    (uint32_t)nb_frag * frag_size > CONFIG_LORAWAN_FRAG_TRANSPORT_IMAGE_SIZE) {
+		LOG_ERR("Session rejected: invalid or beyond the decoder's capacity");
 		screen_step("Bad session");
-		ctx.active = false;
 		status = 1;
 		send(P2P_READY, &status, 1);
 		return;
@@ -151,6 +167,7 @@ static bool on_fragment(uint8_t session, const uint8_t *p, size_t len)
 int p2p_fuota_run(void (*feed)(void))
 {
 	static uint8_t buf[255];
+	int errors = 0;
 
 	if (radio_mode(false) < 0) {
 		return -EIO;
@@ -165,6 +182,17 @@ int p2p_fuota_run(void (*feed)(void))
 
 		feed();
 		len = lora_recv(lora, buf, sizeof(buf), K_SECONDS(10), &rssi, &snr);
+		if (len == -EAGAIN) {
+			continue; /* nothing heard in 10 seconds */
+		}
+		if (len < 0) {
+			LOG_WRN("Receive error %d", len);
+			if (++errors >= MAX_RX_ERRORS) {
+				return -EIO;
+			}
+			continue;
+		}
+		errors = 0;
 		if (len < HEADER_LEN || buf[0] != 'A' || buf[1] != 'D') {
 			continue;
 		}

@@ -29,7 +29,7 @@ config APP_LORAWAN_APP_KEY
 	default "00000000000000000000000000000000"
 	help
 	  Never put a real key in prj.conf: pass it through a file kept out of
-	  the repository, with -DEXTRA_CONF_FILE.
+	  the repository, with -Dfirmware_EXTRA_CONF_FILE (sysbuild).
 
 config APP_JOIN_ATTEMPTS
 	int "Join attempts before giving up"
