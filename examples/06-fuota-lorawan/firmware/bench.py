@@ -65,6 +65,7 @@ def build(args) -> None:
     key = (WORK / "manufacturer.pem").resolve()
 
     common = [f'-DSB_CONFIG_BOOT_SIGNATURE_KEY_FILE="{key}"', f"-Dfirmware_EXTRA_CONF_FILE={APP / 'bench.conf'}"]
+    original_version = (APP / "VERSION").read_text()
     if args.xtal26:
         overlay = APP / "xtal-26mhz.overlay"
         common += [f"-Dfirmware_EXTRA_DTC_OVERLAY_FILE={overlay}", f"-Dmcuboot_EXTRA_DTC_OVERLAY_FILE={overlay}"]
@@ -75,7 +76,7 @@ def build(args) -> None:
             run("west", "build", "-p", "always", "-b", args.board, "--sysbuild",
                 "-s", APP, "-d", build_dir(version), "--", *common, *options)  # fmt: skip
     finally:
-        set_version("1.0.0")
+        (APP / "VERSION").write_text(original_version)
 
     # Same signing options as the Zephyr build, plus --pad: the image is then
     # marked "test", as after a FUOTA reception.

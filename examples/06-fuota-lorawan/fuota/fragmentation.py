@@ -127,3 +127,12 @@ class Decoder:
             solved[pivot] ^= value
         image = b"".join(v.to_bytes(size, "big") for v in solved)
         return image[: len(image) - self.session.padding]
+
+
+def rebuild(session: Session, frames) -> Decoder:
+    """Feeds (index, fragment) pairs to a new decoder until the image is complete."""
+    decoder = Decoder(session)
+    for index, fragment in frames:
+        if decoder.push(index, fragment):
+            break
+    return decoder

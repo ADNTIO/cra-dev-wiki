@@ -10,11 +10,17 @@ the PC waits nine times the airtime: a 10% duty cycle at most, the limit of the
 
 With --device, the console of the board being updated is followed in parallel and
 copied, prefixed with "[device]", until it reboots on the new image.
+
+If the transfer is cut (serial link lost, Ctrl-C), resume it with the session
+number it printed and the next fragment index, for example
+`--session 20 --start 151`. This only works if the device has not rebooted in the
+meantime: it keeps its session as long as it is powered.
 """
 
 import argparse
 import math
 import random
+import re
 import struct
 import sys
 import threading
@@ -46,8 +52,13 @@ class Modem:
                 raw, self._buffer = self._buffer.split(b"\n", 1)
                 line = raw.decode("ascii", "replace").strip()
                 if line.startswith("RX "):
-                    _, hexdata, rssi, snr = line.split()
-                    self.received.append((bytes.fromhex(hexdata), int(rssi), int(snr)))
+                    # The modem prints RX lines from its radio callback: one may
+                    # interleave with another output. Skip it rather than abort.
+                    try:
+                        _, hexdata, rssi, snr = line.split()
+                        self.received.append((bytes.fromhex(hexdata), int(rssi), int(snr)))
+                    except ValueError:
+                        pass
                     continue
                 yield line
 
@@ -114,7 +125,7 @@ def follow_device(port: str, stop: threading.Event) -> None:
         buffer += link.read(4096)
         while b"\n" in buffer:
             raw, buffer = buffer.split(b"\n", 1)
-            line = raw.decode("utf-8", "replace").strip()
+            line = re.sub(r"\x1b\[[0-9;]*m", "", raw.decode("utf-8", "replace")).strip()
             line = "".join(c for c in line if c.isprintable())
             if any(k in line for k in ("p2p:", "fuota:", "I: Image", "I: Starting swap", "E: ", "Swap type")):
                 print(f"[device] {line}", flush=True)
@@ -129,6 +140,8 @@ def main() -> None:
     parser.add_argument("--redundancy", type=float, default=0.08, help="share of redundant fragments")
     parser.add_argument("--limit", type=int, help="only send N fragments (link test)")
     parser.add_argument("--wait-reboot", type=float, default=60, help="seconds to follow the device after DONE")
+    parser.add_argument("--session", type=int, help="resume this session instead of starting a new one")
+    parser.add_argument("--start", type=int, default=1, help="first fragment index to send (to resume)")
     args = parser.parse_args()
 
     if args.redundancy > MAX_REDUNDANCY:
@@ -139,7 +152,7 @@ def main() -> None:
     session_info, fragments = encode(data, FRAG_SIZE, math.ceil(m * args.redundancy))
     if args.limit:
         fragments = fragments[: args.limit]
-    session = random.randint(1, 255)
+    session = args.session or random.randint(1, 255)
     print(f"Image {args.image.name}: {len(data)} bytes, {session_info.nb_frag} fragments "
           f"+ {len(fragments) - min(len(fragments), session_info.nb_frag)} redundant, session {session}")
 
@@ -172,13 +185,14 @@ def main() -> None:
     # 2. The fragments, at the pace the duty cycle allows
     start = time.monotonic()
     done = None
-    for index, fragment in enumerate(fragments, start=1):
+    index = args.start - 1
+    for index, fragment in enumerate(fragments[args.start - 1 :], start=args.start):
         airtime = modem.send(b"AD" + bytes([FRAG, session]) + struct.pack("<H", index) + fragment)
         modem.listen(airtime * (1 / DUTY_CYCLE - 1))
         done = modem.take(DONE, session)
         if index % 50 == 0 or index == len(fragments):
             elapsed = time.monotonic() - start
-            eta = elapsed / index * (len(fragments) - index)
+            eta = elapsed / (index - args.start + 1) * (len(fragments) - index)
             print(f"Fragment {index}/{len(fragments)}, {elapsed / 60:.1f} min, ~{eta / 60:.1f} min left",
                   flush=True)
             modem.command(f"SHOW Frag {index}")

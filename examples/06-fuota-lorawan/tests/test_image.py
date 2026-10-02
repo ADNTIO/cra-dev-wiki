@@ -6,7 +6,7 @@ import pytest
 
 from fuota import image
 from fuota.channel import transmit
-from fuota.fragmentation import Decoder, encode
+from fuota.fragmentation import encode, rebuild
 
 
 @pytest.fixture(scope="module")
@@ -22,11 +22,7 @@ def workdir(tmp_path_factory):
 def over_the_air(data: bytes, seed: int) -> bytes:
     """A full session: fragmentation, 10% loss, rebuild."""
     session, fragments = encode(data, frag_size=48, nb_redundant=60)
-    decoder = Decoder(session)
-    for index, fragment in transmit(fragments, loss_rate=0.10, seed=seed):
-        if decoder.push(index, fragment):
-            break
-    return decoder.data()
+    return rebuild(session, transmit(fragments, loss_rate=0.10, seed=seed)).data()
 
 
 def test_signed_image_is_accepted_after_a_lossy_transfer(workdir):

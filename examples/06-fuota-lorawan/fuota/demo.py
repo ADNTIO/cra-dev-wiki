@@ -7,20 +7,12 @@ from pathlib import Path
 
 from fuota import airtime, image
 from fuota.channel import transmit
-from fuota.fragmentation import Decoder, encode
+from fuota.fragmentation import encode, rebuild
 
 FIRMWARE_SIZE = 20_000
 FRAG_SIZE = 48  # 51 bytes at DR0-DR2, minus the fragment header
 REDUNDANCY = 0.20
 LOSS_RATE = 0.10
-
-
-def receive(session, frames) -> Decoder:
-    decoder = Decoder(session)
-    for index, fragment in frames:
-        if decoder.push(index, fragment):
-            break
-    return decoder
 
 
 def main() -> None:
@@ -35,12 +27,12 @@ def main() -> None:
         print(f"   signed image: {len(signed)} bytes")
 
         print("2. Server: fragment, with redundancy")
-        m = math.ceil(len(signed) / FRAG_SIZE)
+        m = airtime.fragments_needed(len(signed), FRAG_SIZE)
         session, fragments = encode(signed, FRAG_SIZE, math.ceil(m * REDUNDANCY))
         print(f"   {session.nb_frag} fragments + {len(fragments) - session.nb_frag} redundant")
 
         print(f"3. Radio: {LOSS_RATE:.0%} of frames lost")
-        decoder = receive(session, transmit(fragments, LOSS_RATE, seed=1))
+        decoder = rebuild(session, transmit(fragments, LOSS_RATE, seed=1))
         print(f"   image rebuilt: {decoder.complete}")
         (tmp / "received.bin").write_bytes(decoder.data())
 
@@ -52,7 +44,7 @@ def main() -> None:
         image.sign(tmp / "attacker.pem", tmp / "app.bin", tmp / "rogue.bin", "9.9.9")
         rogue = (tmp / "rogue.bin").read_bytes()
         session, fragments = encode(rogue, FRAG_SIZE, math.ceil(m * REDUNDANCY))
-        decoder = receive(session, transmit(fragments, LOSS_RATE, seed=2))
+        decoder = rebuild(session, transmit(fragments, LOSS_RATE, seed=2))
         (tmp / "received-rogue.bin").write_bytes(decoder.data())
         print(f"   image rebuilt: {decoder.complete}")
         print(f"   valid hash:      {image.hash_is_valid(tmp / 'received-rogue.bin')}")
