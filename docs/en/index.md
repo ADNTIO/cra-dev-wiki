@@ -1,6 +1,6 @@
 ---
 description: >-
-  The CRA & Dev series: the Cyber Resilience Act (Regulation (EU) 2024/2847) turned into engineering practice — SBOM and VEX, binary signing, encrypted secrets, data integrity, firmware updates over LoRaWAN, signed logs — with runnable code in Rust, Python, .NET and C.
+  The CRA & Dev series: the Cyber Resilience Act (Regulation (EU) 2024/2847) turned into engineering practice — SBOM and VEX, binary signing, encrypted secrets, data integrity, firmware updates over LoRaWAN, security logging — with runnable code in Rust, Python, .NET and C.
 ---
 
 # "CRA & Dev" series
@@ -25,7 +25,7 @@ it does not.
 | 04 | [Trust, but verify: sign your data](CRA-Dev-04-Integrite.md) | Data integrity | Part I, point 2, (f) | Cross-platform |
 | 05 | [Generating an SBOM is not enough: monitor it with Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Vulnerability handling, continuous monitoring | Part II, point 1 | CI, cross-platform |
 | 06 | [A thousand fragments, one signature: updating firmware over LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md) | Security updates, secure distribution | Part I, point 2, (c); Part II, point 7 | Embedded, LoRaWAN |
-| 07 | [A log that cannot lie: chain and sign your logs](CRA-Dev-07-Signed-Logs.md) | Logging and monitoring of internal activity | Part I, point 2, (l) | Cross-platform |
+| 07 | [Who did what, and when? Logging security activity](CRA-Dev-07-Security-Logs.md) | Logging and monitoring of internal activity | Part I, point 2, (l) | Cross-platform |
 
 
 The list will grow with each episode.
