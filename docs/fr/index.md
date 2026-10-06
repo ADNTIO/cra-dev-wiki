@@ -35,4 +35,8 @@ couvre la gestion des vulnérabilités.
 Article de fond, version longue et sourcée pour approfondir :
 [la DPAPI en détail](ressources/DPAPI-Article-de-fond.md).
 
+Par où commencer : [évaluer les risques de cybersécurité d'un
+produit](ressources/Evaluation-des-risques.md), ce que demande l'article 13 et
+comment choisir sa méthode.
+
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr

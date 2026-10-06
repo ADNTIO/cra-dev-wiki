@@ -21,6 +21,7 @@ nav:
       - "Mille fragments, une signature": fr/CRA-Dev-06-FUOTA-LoRaWAN.md
   - Ressources:
       - "DPAPI en détail": fr/ressources/DPAPI-Article-de-fond.md
+      - "Évaluer les risques": fr/ressources/Evaluation-des-risques.md
 
 theme:
   name: material
@@ -95,6 +96,7 @@ plugins:
             "Un colis sans expéditeur": "A parcel with no sender"
             "Générer un SBOM ne suffit pas": "Generating an SBOM is not enough"
             "DPAPI en détail": "DPAPI in detail"
+            "Évaluer les risques": "Assessing the risks"
 
 extra:
   social:

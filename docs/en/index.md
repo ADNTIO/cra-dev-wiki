@@ -36,4 +36,8 @@ vulnerability handling.
 In-depth article, a long and sourced version for going deeper:
 [DPAPI in detail](ressources/DPAPI-Article-de-fond.md).
 
+Where to start: [assessing the cybersecurity risks of a
+product](ressources/Evaluation-des-risques.md), what Article 13 asks for and how to
+choose a method.
+
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=en
