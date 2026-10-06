@@ -1,7 +1,7 @@
 [project]
 name = "secure-logging-example"
 version = "0.1.0"
-description = "CRA & Dev #7: a chained, signed security log, and why signatures give non-repudiation"
+description = "CRA & Dev #7: a chained, signed security log, and why signatures attribute each entry to the device key"
 requires-python = ">=3.11"
 dependencies = [
     "cryptography>=42",

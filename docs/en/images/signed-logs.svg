@@ -52,6 +52,6 @@
   <text x="785.0" y="287.0" text-anchor="middle" font-size="12.5" fill="#475569">outside the device</text>
   <text x="785.0" y="306.0" text-anchor="middle" font-size="12.5" fill="#475569">4 entries, sig 3</text>
   <line x1="690" y1="280" x2="664" y2="280" stroke="#0e7490" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arrow-cyan)"/>
-  <text x="460" y="372" text-anchor="middle" font-size="12.5" fill="#475569">Ed25519: only the device&#x27;s private key signs; the auditor verifies with the public key. That is non-repudiation.</text>
+  <text x="460" y="372" text-anchor="middle" font-size="12.5" fill="#475569">Ed25519: only the device&#x27;s private key signs; the auditor verifies with the public key. It attributes the entry to that key.</text>
   </g>
 </svg>

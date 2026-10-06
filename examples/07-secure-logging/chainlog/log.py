@@ -44,7 +44,7 @@ class Ed25519Signer:
 
 
 class HmacSigner:
-    """Symmetric: whoever can verify can also sign. No non-repudiation."""
+    """Symmetric: whoever can verify can also sign. No attribution to the device."""
 
     def __init__(self, key: bytes):
         self.key = key

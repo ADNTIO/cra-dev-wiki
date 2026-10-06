@@ -1,6 +1,6 @@
 ---
 description: >-
-  Un journal de sécurité qu'un attaquant peut effacer ne prouve rien. Chaîner chaque entrée à la signature de la précédente, signer en Ed25519, publier une ancre : la journalisation de l'activité interne exigée par le CRA (Annexe I, partie I, 2 l), avec la non-répudiation en prime.
+  Un journal de sécurité qu'un attaquant peut effacer ne prouve rien. Chaîner chaque entrée à la signature de la précédente, signer en Ed25519, publier une ancre : la journalisation de l'activité interne exigée par le CRA (Annexe I, partie I, 2 l), avec une attribution cryptographique en prime.
 ---
 
 # Un journal qui ne peut pas mentir : chaîner et signer ses logs
@@ -45,7 +45,7 @@ entrée n = { seq: n, heure, événement, prev: signature de l'entrée n-1, sig 
 
 Modifier une entrée invalide sa signature. Supprimer ou insérer une entrée casse le
 numéro de séquence ou le lien `prev`. Pour réécrire le passé sans être vu, il
-faudrait la clé de signature.
+faudrait la clé de signature et pouvoir remplacer les ancres déjà publiées.
 
 ![Chaque entrée porte la signature de la précédente ; modifier ou supprimer une entrée casse la chaîne ; couper la fin ne la casse pas, mais l'ancre publiée hors de l'appareil le révèle.](images/signed-logs.svg)
 
@@ -66,16 +66,16 @@ régulièrement hors de l'appareil, sur un serveur de journaux par exemple. La
 [démonstration][example] le montre :
 
 ```
-2. Attacker edits entry 1 (hides who changed the spindle speed)
-   verify: TAMPERING DETECTED, entry 1: bad signature (entry modified)
-3. Attacker deletes entry 2 (hides the firmware update)
-   verify: TAMPERING DETECTED, entry 2: sequence jumps to 3 (entry removed or inserted)
-4. Attacker cuts the last 2 entries
-   chain alone: OK
-   with anchor: TAMPERING DETECTED, log ends at 3 entries, the anchor says 5 (end truncated)
+2. L'attaquant modifie l'entrée 1 (il cache qui a changé la vitesse de broche)
+   vérification : ALTÉRATION DÉTECTÉE, entrée 1 : signature invalide (entrée modifiée)
+3. L'attaquant supprime l'entrée 2 (il cache la mise à jour du firmware)
+   vérification : ALTÉRATION DÉTECTÉE, entrée 2 : la séquence saute à 3 (entrée supprimée ou insérée)
+4. L'attaquant coupe les 2 dernières entrées
+   chaîne seule : OK
+   avec l'ancre : ALTÉRATION DÉTECTÉE, le journal s'arrête à 3 entrées, l'ancre en annonce 5 (fin tronquée)
 ```
 
-## La non-répudiation, ou pourquoi une signature et pas un HMAC
+## L'attribution cryptographique, ou pourquoi une signature et pas un HMAC
 
 Trois niveaux de preuve :
 
@@ -84,9 +84,11 @@ Trois niveaux de preuve :
 - un HMAC chaîné prouve que le journal vient d'un détenteur de la clé. Mais celui qui
   vérifie détient la même clé, et peut donc fabriquer une entrée valide. L'appareil
   pourra toujours nier ;
-- une signature Ed25519 ne peut venir que du détenteur de la clé privée, restée sur
-  l'appareil. L'auditeur ne vérifie qu'avec la clé publique. L'appareil ne peut pas
-  nier avoir écrit l'entrée : c'est la non-répudiation.
+- une signature Ed25519 ne peut venir que du détenteur de la clé privée, protégée sur
+  l'appareil. L'auditeur ne vérifie qu'avec la clé publique. Elle attribue donc
+  cryptographiquement l'entrée à cette clé, à condition que la clé soit protégée et
+  rattachée de façon fiable à l'appareil. Cette propriété contribue à la
+  non-répudiation ; elle ne suffit pas, à elle seule, à l'établir au sens juridique.
 
 La démonstration le fait voir : une fausse entrée signée avec la clé HMAC partagée
 passe la vérification, alors qu'un auditeur qui ne détient que la clé publique ne
@@ -103,10 +105,12 @@ peut rien signer.
    ([`Seal=`][journald-conf]). Pour des journaux transmis en
    syslog, le [RFC 5848][rfc5848] définit des messages signés, avec un compteur qui
    révèle les messages manquants.
-2. Tout repose sur la clé. Sur l'appareil, elle va dans un élément sécurisé ou un
-   TPM, au minimum dans un fichier que seul le service de journalisation peut lire.
-   Une clé qui ne change jamais permet à qui la vole de réécrire tout l'historique ;
-   une clé qui évolue limite les dégâts à la période en cours.
+2. Tout repose sur la clé. Sur l'appareil, elle va dans un élément sécurisé ou dans
+   un TPM compatible avec l'algorithme choisi, au minimum dans un fichier que seul
+   le service de journalisation peut lire. Une clé qui ne change jamais permet à qui
+   la vole de forger la suite du journal ; les ancres externes déjà publiées
+   empêchent toutefois de réécrire sans détection l'historique qu'elles couvrent.
+   Une clé qui évolue limite les dégâts à la période en cours.
 3. La désactivation que demande le CRA ne doit pas devenir un trou. Le texte ne dit
    pas comment l'offrir ; nous recommandons d'inscrire la désactivation elle-même,
    avec son auteur, comme dernière entrée signée de la chaîne. On sait alors quand et
@@ -118,8 +122,9 @@ peut rien signer.
 Un journal ne vaut que s'il résiste à celui qu'il doit confondre. Chaîner chaque
 entrée à la signature de la précédente rend visible toute modification, suppression
 ou insertion ; une ancre publiée ailleurs révèle la troncature ; une signature
-asymétrique ajoute la non-répudiation, qu'un HMAC ne peut pas donner. C'est ce qui
-transforme la journalisation exigée par le CRA en preuve.
+asymétrique apporte une attribution cryptographique qu'un HMAC partagé ne permet
+pas. C'est ce qui transforme la journalisation exigée par le CRA en élément de
+preuve.
 
 ---
 

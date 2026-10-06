@@ -30,7 +30,7 @@ Output (signatures are random, so the anchor changes from one run to the next):
 4. Attacker cuts the last 2 entries
    chain alone: OK
    with anchor: TAMPERING DETECTED, log ends at 3 entries, the anchor says 5 (end truncated)
-5. Non-repudiation: the auditor tries to add a fake entry
+5. Attribution: the auditor tries to add a fake entry
    HMAC log, fake entry signed with the shared key: OK
    -> the log cannot prove the device wrote it: the auditor could have
    Ed25519 log, auditor holds the public key only: a public key cannot sign

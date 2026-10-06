@@ -1,6 +1,6 @@
 ---
 description: >-
-  A security log an attacker can erase proves nothing. Chain each entry to the signature of the previous one, sign with Ed25519, publish an anchor: the logging of internal activity the CRA requires (Annex I, Part I, 2(l)), with non-repudiation on top.
+  A security log an attacker can erase proves nothing. Chain each entry to the signature of the previous one, sign with Ed25519, publish an anchor: the logging of internal activity the CRA requires (Annex I, Part I, 2(l)), with cryptographic attribution on top.
 ---
 
 # A log that cannot lie: chain and sign your logs
@@ -43,7 +43,7 @@ entry n = { seq: n, time, event, prev: signature of entry n-1, sig }
 
 Editing an entry invalidates its signature. Deleting or inserting an entry breaks
 the sequence number or the `prev` link. Rewriting the past unnoticed would take the
-signing key.
+signing key and the ability to replace the anchors already published.
 
 ![Each entry carries the signature of the previous one; editing or deleting an entry breaks the chain; cutting the end does not, but the anchor published outside the device reveals it.](images/signed-logs.svg)
 
@@ -72,7 +72,7 @@ outside the device, to a log server for example. The [demo][example] shows it:
    with anchor: TAMPERING DETECTED, log ends at 3 entries, the anchor says 5 (end truncated)
 ```
 
-## Non-repudiation, or why a signature and not an HMAC
+## Cryptographic attribution, or why a signature and not an HMAC
 
 Three levels of proof:
 
@@ -81,9 +81,11 @@ Three levels of proof:
 - a chained HMAC proves the log comes from a holder of the key. But the verifier
   holds the same key, and can therefore forge a valid entry. The device can always
   deny;
-- an Ed25519 signature can only come from the holder of the private key, which stays
-  on the device. The auditor verifies with the public key only. The device cannot
-  deny having written the entry: that is non-repudiation.
+- an Ed25519 signature can only come from the holder of the private key, protected
+  on the device. The auditor verifies with the public key only. The signature
+  therefore attributes the entry to that key, provided the key is protected and
+  reliably bound to the device. This property contributes to non-repudiation; on its
+  own, it is not enough to establish it in the legal sense.
 
 The demo makes it visible: a fake entry signed with the shared HMAC key passes
 verification, while an auditor holding only the public key cannot sign anything.
@@ -98,10 +100,12 @@ verification, while an auditor holding only the public key cannot sign anything.
    goes unnoticed ([`Seal=`][journald-conf]). For logs sent over syslog,
    [RFC 5848][rfc5848] defines signed messages, with a counter that reveals missing
    messages.
-2. Everything rests on the key. On the device, it belongs in a secure element or a
-   TPM, at the very least in a file only the logging service can read. A key that
-   never changes lets whoever steals it rewrite the whole history; a key that evolves
-   limits the damage to the current period.
+2. Everything rests on the key. On the device, it belongs in a secure element or in
+   a TPM that supports the chosen algorithm, at the very least in a file only the
+   logging service can read. A key that never changes lets whoever steals it forge
+   the rest of the log; the external anchors already published still prevent
+   rewriting, undetected, the history they cover. A key that evolves limits the
+   damage to the current period.
 3. The opt-out the CRA requires must not become a hole. The text does not say how to
    offer it; we recommend writing the opt-out itself, with its author, as the last
    signed entry of the chain. You then know when and by whom monitoring was turned
@@ -112,8 +116,8 @@ verification, while an auditor holding only the public key cannot sign anything.
 A log is only worth something if it withstands the person it should expose. Chaining
 each entry to the signature of the previous one makes any modification, deletion or
 insertion visible; an anchor published elsewhere reveals truncation; an asymmetric
-signature adds non-repudiation, which an HMAC cannot give. That is what turns the
-logging the CRA requires into evidence.
+signature brings a cryptographic attribution that a shared HMAC cannot. That is what
+turns the logging the CRA requires into a piece of evidence.
 
 ---
 

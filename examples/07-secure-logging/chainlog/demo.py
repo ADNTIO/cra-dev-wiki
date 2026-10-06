@@ -60,7 +60,7 @@ def main() -> None:
         print(f"   chain alone: {show(verify(tmp / 'c.log', auditor))}")
         print(f"   with anchor: {show(verify(tmp / 'c.log', auditor, anchor))}")
 
-        print("5. Non-repudiation: the auditor tries to add a fake entry")
+        print("5. Attribution: the auditor tries to add a fake entry")
         key = os.urandom(32)  # shared by device and auditor
         hlog = tmp / "hmac.log"
         hdevice = SignedLog(hlog, HmacSigner(key))
