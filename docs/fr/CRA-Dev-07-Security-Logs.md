@@ -17,7 +17,8 @@ modification des données, des services ou des fonctions, tout en laissant à
 l'utilisateur la possibilité de désactiver le mécanisme » (Annexe I, partie I,
 point 2, l).
 
-Trois verbes : enregistrer, surveiller, désactiver. Le texte n'en demande pas plus.
+Trois verbes : enregistrer, surveiller, désactiver. Pour ce point, le texte demande
+ces trois actions.
 
 ## Le piège classique
 
@@ -55,7 +56,8 @@ def record(self, event, actor, target, outcome="ok"):
 ```
 
 Un `RotatingFileHandler` borne la taille sur le disque : un journal plein ne doit pas
-remplir l'appareil.
+remplir l'appareil. La rotation efface les fichiers les plus anciens : ce qui doit
+être conservé plus longtemps doit être exporté avant (point 2 ci-dessous).
 
 Surveiller, c'est faire quelque chose de ces lignes. Une règle simple suffit pour
 commencer : cinq connexions refusées pour le même acteur déclenchent une alerte.
@@ -64,7 +66,7 @@ Désactiver, enfin. Le texte ne dit pas comment ; nous recommandons d'enregistre
 désactivation elle-même, avec son auteur, comme dernière ligne. On sait alors quand
 et par qui la journalisation a été coupée.
 
-La [démonstration][example] fait les trois :
+La [démonstration][example] fait les trois (sortie brute du programme, en anglais) :
 
 ```
 1. The device records who accessed or changed what
@@ -83,17 +85,19 @@ La [démonstration][example] fait les trois :
    mot de passe ni son adresse. C'est aussi ce que demande le point 2, g)
    (minimisation des données).
 2. Un attaquant qui prend la main sur l'appareil commence souvent par effacer les
-   journaux. Une copie envoyée hors de l'appareil, vers un serveur de journaux,
-   règle l'essentiel : en Python, c'est un `SysLogHandler` de plus.
-3. Le CRA n'exige pas un journal infalsifiable. Si votre évaluation des risques le
-   justifie, l'outil existe sur Linux : le [Forward Secure Sealing][journalctl] de
-   systemd-journald.
+   journaux. D'où une copie hors de l'appareil, vers un serveur de journaux, avec une
+   durée de conservation définie. L'envoi doit être authentifié, chiffré (par exemple
+   syslog sur TLS, [RFC 5425][rfc5425]) et résister aux coupures réseau. Le
+   `SysLogHandler` de Python n'assure rien de tout cela ([documentation][syslogh]).
+3. Le point 2, l) n'exige pas un journal infalsifiable. Si votre évaluation des
+   risques le justifie, l'outil existe sur Linux : le
+   [Forward Secure Sealing][journalctl] de systemd-journald.
 
 ## À retenir
 
 Une liste fermée d'événements, une ligne structurée par événement, une règle de
 surveillance, une désactivation qui laisse une trace : c'est le minimum que demande
-le CRA, et il tient dans quelques dizaines de lignes.
+le CRA pour ce point, et il tient dans quelques dizaines de lignes.
 
 ---
 
@@ -105,5 +109,7 @@ la règle de surveillance, la démonstration et ses tests. Le README de l'exempl
 en anglais.*
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr
+[rfc5425]: https://www.rfc-editor.org/rfc/rfc5425
+[syslogh]: https://docs.python.org/3/library/logging.handlers.html#sysloghandler
 [journalctl]: https://www.freedesktop.org/software/systemd/man/latest/journalctl.html
 [example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/07-security-logging

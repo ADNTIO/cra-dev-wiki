@@ -36,8 +36,10 @@ One event, one JSON line:
 
 ## What it does not do
 
-- Send a copy off the device. In a product, add a handler to a log server, for
-  example `logging.handlers.SysLogHandler`, so that an attacker who takes over the
-  device cannot erase the history.
-- Make the log tamper-evident. The CRA does not require it; if the risk assessment
+- Send a copy off the device. In a product, export the log to a log server, with a
+  defined retention period, so that an attacker who takes over the device cannot
+  erase the history and rotation does not delete what must be kept. The transfer
+  must be authenticated, encrypted and survive network outages, which
+  `logging.handlers.SysLogHandler` alone does not provide.
+- Make the log tamper-evident. Point 2 (l) does not require it; if the risk assessment
   calls for it, see systemd-journald's Forward Secure Sealing.

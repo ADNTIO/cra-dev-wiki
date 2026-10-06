@@ -16,7 +16,8 @@ monitoring relevant internal activity, including the access to or modification o
 data, services or functions, with an opt-out mechanism for the user" (Annex I,
 Part I, point 2, l).
 
-Three verbs: record, monitor, opt out. The text asks for nothing more.
+Three verbs: record, monitor, opt out. For this point, the text asks for these three
+actions.
 
 ## The classic trap
 
@@ -54,7 +55,8 @@ def record(self, event, actor, target, outcome="ok"):
 ```
 
 A `RotatingFileHandler` bounds the size on disk: a full log must not fill the
-device.
+device. Rotation deletes the oldest files: whatever must be kept longer has to be
+exported first (point 2 below).
 
 Monitoring means doing something with those lines. One simple rule is enough to
 start: five refused logins for the same actor raise an alert.
@@ -63,7 +65,7 @@ Finally, the opt-out. The text does not say how; we recommend recording the opt-
 itself, with its author, as the last line. You then know when and by whom logging
 was turned off.
 
-The [demo][example] does all three:
+The [demo][example] does all three (raw program output):
 
 ```
 1. The device records who accessed or changed what
@@ -80,17 +82,19 @@ The [demo][example] does all three:
 
 1. No secret and no needless data in the log: an operator id, not their password or
    their address. That is also what point 2, (g) asks for (data minimisation).
-2. An attacker who takes over the device often starts by erasing the logs. A copy
-   sent off the device, to a log server, covers the essentials: in Python, it is one
-   more `SysLogHandler`.
-3. The CRA does not require a tamper-proof log. If your risk assessment calls for
+2. An attacker who takes over the device often starts by erasing the logs. Hence a
+   copy off the device, to a log server, with a defined retention period. The
+   transfer must be authenticated, encrypted (for example syslog over TLS,
+   [RFC 5425][rfc5425]) and survive network outages. Python's `SysLogHandler`
+   provides none of this ([documentation][syslogh]).
+3. Point 2, (l) does not require a tamper-proof log. If your risk assessment calls for
    one, the tool exists on Linux: systemd-journald's
    [Forward Secure Sealing][journalctl].
 
 ## Takeaway
 
 A closed list of events, one structured line per event, one monitoring rule, an
-opt-out that leaves a trace: that is the minimum the CRA asks for, and it fits in a
+opt-out that leaves a trace: that is the minimum the CRA asks for on this point, and it fits in a
 few dozen lines.
 
 ---
@@ -102,5 +106,7 @@ LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
 monitoring rule, the demo and its tests.*
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=en
+[rfc5425]: https://www.rfc-editor.org/rfc/rfc5425
+[syslogh]: https://docs.python.org/3/library/logging.handlers.html#sysloghandler
 [journalctl]: https://www.freedesktop.org/software/systemd/man/latest/journalctl.html
 [example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/07-security-logging
