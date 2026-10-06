@@ -5,7 +5,7 @@ description: >-
 
 # Qui a fait quoi, et quand ? Journaliser l'activité de sécurité
 
-> **CRA & Dev #7** · [Série « CRA & Dev »](index.md) · Lecture : environ 4 min · Multiplateforme ·
+> **CRA & Dev #7** · [Série « CRA & Dev »](index.md) · Lecture : environ 5 min · Multiplateforme ·
 > Exemple : Python (bibliothèque standard)
 
 ## Ce que demande le CRA
@@ -79,6 +79,17 @@ La [démonstration][example] fait les trois (sortie brute du programme, en angla
    last line: logging.off by admin, nothing recorded after it
 ```
 
+## Sur l'embarqué
+
+Les mêmes briques existent sur chaque cible :
+
+| Cible | Enregistrer, en taille bornée | Exporter |
+| --- | --- | --- |
+| Microcontrôleur, C ou C++ | [journalisation Zephyr][zephyr-log] : backend fichier `CONFIG_LOG_BACKEND_FS`, taille et nombre de fichiers bornés | backend `CONFIG_LOG_BACKEND_NET` : syslog en UDP ou TCP, sans TLS |
+| Microcontrôleur, Rust | façade [`log`][log-rs] (`no_std`) et file FIFO en flash [`sequential-storage`][seqstor], qui peut écraser la plus ancienne entrée | à écrire |
+| Linux embarqué, C ou C++ | `syslog(3)` ou `sd_journal_send(3)` ; en C++, [spdlog][spdlog] (fichiers tournants, sortie syslog) | le démon système, par exemple [rsyslog en TLS][rsyslog-tls] |
+| Linux embarqué, Rust | [`log`][log-rs] avec [`systemd-journal-logger`][sdjl] ou [`syslog`][syslog-rs] | idem |
+
 ## Trois choses à savoir
 
 1. Ni secret ni donnée inutile dans le journal : un identifiant d'opérateur, pas son
@@ -111,5 +122,12 @@ en anglais.*
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr
 [rfc5425]: https://www.rfc-editor.org/rfc/rfc5425
 [syslogh]: https://docs.python.org/3/library/logging.handlers.html#sysloghandler
+[zephyr-log]: https://docs.zephyrproject.org/latest/services/logging/index.html
+[log-rs]: https://docs.rs/log/latest/log/
+[seqstor]: https://docs.rs/sequential-storage/latest/sequential_storage/
+[spdlog]: https://github.com/gabime/spdlog
+[rsyslog-tls]: https://docs.rsyslog.com/doc/tutorials/tls_cert_summary.html
+[sdjl]: https://docs.rs/systemd-journal-logger/latest/systemd_journal_logger/
+[syslog-rs]: https://docs.rs/syslog/latest/syslog/
 [journalctl]: https://www.freedesktop.org/software/systemd/man/latest/journalctl.html
 [example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/07-security-logging

@@ -5,7 +5,7 @@ description: >-
 
 # Who did what, and when? Logging security activity
 
-> **CRA & Dev #7** · ["CRA & Dev" series](index.md) · Reading time: about 4 min · Cross-platform ·
+> **CRA & Dev #7** · ["CRA & Dev" series](index.md) · Reading time: about 5 min · Cross-platform ·
 > Example: Python (standard library)
 
 ## What the CRA requires
@@ -78,6 +78,17 @@ The [demo][example] does all three (raw program output):
    last line: logging.off by admin, nothing recorded after it
 ```
 
+## On embedded targets
+
+The same building blocks exist on each target:
+
+| Target | Record, with a bounded size | Export |
+| --- | --- | --- |
+| Microcontroller, C or C++ | [Zephyr logging][zephyr-log]: file backend `CONFIG_LOG_BACKEND_FS`, bounded file size and count | `CONFIG_LOG_BACKEND_NET` backend: syslog over UDP or TCP, no TLS |
+| Microcontroller, Rust | the [`log`][log-rs] facade (`no_std`) and the [`sequential-storage`][seqstor] flash FIFO queue, which can overwrite the oldest entry | yours to write |
+| Embedded Linux, C or C++ | `syslog(3)` or `sd_journal_send(3)`; in C++, [spdlog][spdlog] (rotating files, syslog sink) | the system daemon, for example [rsyslog over TLS][rsyslog-tls] |
+| Embedded Linux, Rust | [`log`][log-rs] with [`systemd-journal-logger`][sdjl] or [`syslog`][syslog-rs] | same |
+
 ## Three things to know
 
 1. No secret and no needless data in the log: an operator id, not their password or
@@ -108,5 +119,12 @@ monitoring rule, the demo and its tests.*
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=en
 [rfc5425]: https://www.rfc-editor.org/rfc/rfc5425
 [syslogh]: https://docs.python.org/3/library/logging.handlers.html#sysloghandler
+[zephyr-log]: https://docs.zephyrproject.org/latest/services/logging/index.html
+[log-rs]: https://docs.rs/log/latest/log/
+[seqstor]: https://docs.rs/sequential-storage/latest/sequential_storage/
+[spdlog]: https://github.com/gabime/spdlog
+[rsyslog-tls]: https://docs.rsyslog.com/doc/tutorials/tls_cert_summary.html
+[sdjl]: https://docs.rs/systemd-journal-logger/latest/systemd_journal_logger/
+[syslog-rs]: https://docs.rs/syslog/latest/syslog/
 [journalctl]: https://www.freedesktop.org/software/systemd/man/latest/journalctl.html
 [example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/07-security-logging
