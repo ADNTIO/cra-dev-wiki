@@ -5,53 +5,62 @@ description: >-
 
 # Assessing the cybersecurity risks of a product
 
-> **Resource** · ["CRA & Dev" series](../index.md) · Reading time: about 7 min
+> **Resource** · ["CRA & Dev" series](../index.md) · Reading time: about 8 min
 
 ## What the CRA requires
 
-The risk assessment is the starting point of the [Cyber Resilience Act][cra]: it is
-what says which Annex I requirements apply to the product, and how. Article 13 sets
-its minimum content:
+Before you sign a binary or encrypt a secret, you need to know what you are protecting
+against. That is the job of the risk assessment, and the [Cyber Resilience Act][cra]
+makes it the starting point of everything else: it is what says which Annex I
+requirements apply to your product, and how you meet them.
 
-- an analysis of the risks "based on the intended purpose and reasonably foreseeable
-  use, as well as the conditions of use": operational environment, assets to be
-  protected, expected time in use (paragraph 3);
-- for each requirement of Annex I, Part I, point 2 (a to m): whether it applies, and
-  how it is implemented (paragraph 3); a requirement left out needs "a clear
-  justification" (paragraph 4);
-- how point 1 of Part I and the vulnerability handling of Part II are applied
-  (paragraph 3);
-- a document kept up to date during the support period (paragraph 3), included in
-  the technical documentation (paragraph 4), and taken into account from design to
-  maintenance (paragraph 2).
+Article 13 sets out what it must contain, at a minimum.
 
-The regulation imposes no method.
+- **An analysis of the risks**, "based on the intended purpose and reasonably
+  foreseeable use, as well as the conditions of use": where the product will be
+  installed, what needs protecting, how long it will be in service (paragraph 3).
+- **A review of the Annex I requirements**, Part I, point 2, from (a) to (m): for
+  each one, say whether it applies and how you implement it. If you leave one out,
+  you need "a clear justification" (paragraphs 3 and 4).
+- **How you apply** point 1 of Part I (a security level appropriate to the risks)
+  and the vulnerability handling of Part II (paragraph 3).
+- **A living document**: it guides the product from design to maintenance
+  (paragraph 2), goes into the technical documentation (paragraph 4), and stays up
+  to date throughout the support period, the time during which you handle the
+  product's vulnerabilities: at least five years, unless the product is expected to
+  be in use for less (paragraphs 3 and 8).
+
+The regulation, however, imposes no method. Choosing one that suits your product is
+up to you, and that is what the rest of this page is about.
 
 ## The classic trap
 
-A document filled in once, for the audit, from a generic template: it describes "a
-connected product", not yours, and it is out of date by the next release. The useful
-assessment is short, specific to the product, and lives in the repository next to
-the code.
+You download a template, fill it in one afternoon for the audit, and never touch it
+again. The document describes "a connected product" in general, not yours, and it is
+already wrong by the next release. A useful assessment is the opposite: short,
+specific to your product, and stored in the repository, next to the code it
+justifies.
 
 ## The four-question approach
 
-The [Threat Modeling Manifesto][tmm] sums up the approach in four questions. They
-cover what Article 13 asks for.
+The [Threat Modeling Manifesto][tmm] boils the whole approach down to four simple
+questions. The good news: by answering them, you cover what Article 13 asks for.
 
-1. **What are we working on?** The intended use and the foreseeable use, misuse
-   included; the environment (workshop, home, outdoors); the assets to protect
-   (firmware, keys, data, essential function); the lifetime. A data flow diagram,
-   with the trust boundaries, on one page.
-2. **What can go wrong?** For each interface and each flow of the diagram, the
-   threats. A checklist avoids gaps: [STRIDE][stride] (spoofing, tampering,
-   repudiation, information disclosure, denial of service, elevation of privilege);
-   for an embedded device, MITRE's [EMB3D][emb3d] catalogue.
+1. **What are we working on?** Describe the product as it will really be used,
+   misuse included: in which environment (a workshop, a living room, a pole
+   outdoors), with which assets to protect (the firmware, the keys, the data, the
+   essential function) and for how many years. Draw the data flows and the trust
+   boundaries: one page is enough.
+2. **What can go wrong?** Go through each interface and each flow of the diagram,
+   and ask who could turn it against you. A checklist helps you miss nothing:
+   [STRIDE][stride] covers six families of threats (spoofing, tampering,
+   repudiation, information disclosure, denial of service, elevation of privilege).
+   For an embedded device, add MITRE's [EMB3D][emb3d] catalogue.
 3. **What are we going to do about it?** Rate each risk by likelihood and impact;
-   three levels are enough. Then decide: a measure, tied to the Annex I point it
-   covers, or accepting the risk, with a justification.
-4. **Did we do a good enough job?** A review by someone who did not write the
-   analysis. And an update with each release, and with each vulnerability that
+   three levels are enough. Then decide: either a measure, which you tie to the
+   Annex I point it covers, or accepting the risk, with its justification.
+4. **Did we do a good enough job?** Have the analysis reviewed by someone who did
+   not write it. Then update it with each release, and whenever a vulnerability
    changes the picture (Article 13, paragraph 7).
 
 ## Choosing a method
@@ -67,21 +76,25 @@ cover what Article 13 asks for.
 | [ISO/IEC 27005][iso] | Information security risk management | Risks of the organisation (ISO 27001 ISMS) rather than of the product | Paid |
 | [EN 40000-1-2][en40000] | Horizontal harmonised standard for the CRA: principles, product risk management, lifecycle activities | Aiming for presumption of conformity, once the standard is published | Under approval |
 
-**Finding your way:**
+**How to choose?**
 
-- **First exercise, small team**: the four questions and STRIDE, plus EMB3D for an
-  embedded device. A few hours, and the result covers Article 13.
-- **Personal data**: add LINDDUN.
-- **Industrial sector**: IEC 62443-4-1, which your customers already know.
-- **Critical product, or a case to argue**: EBIOS RM.
-- **Presumption of conformity**: a product that conforms to a harmonised standard
-  whose reference is published in the Official Journal is presumed to conform to the
-  requirements it covers (Article 27). EN 40000-1-2 is under approval; CEN-CENELEC
-  plans its availability for 25 November 2026.
+- **It is your first exercise, and the team is small**: start with the four
+  questions and STRIDE, plus EMB3D if the product is embedded. A few hours are
+  enough for a first version that answers what Article 13 asks for.
+- **The product processes personal data**: add LINDDUN.
+- **You sell to industry**: start from IEC 62443-4-1, which your customers already
+  know.
+- **The product is critical, or you need to convince management or customers**:
+  EBIOS RM gives you a complete framework and a well-argued case.
+- **You are aiming for presumption of conformity**: a product that conforms to a
+  harmonised standard whose reference is published in the Official Journal is
+  presumed to conform to the requirements it covers (Article 27). EN 40000-1-2 is
+  still under approval; CEN-CENELEC plans its availability for 25 November 2026.
 
 ## A template to copy
 
-Kept in Markdown in the repository, reviewed in pull requests:
+Keep it in Markdown in the repository: it will be reviewed in pull requests, just
+like the code.
 
 ```markdown
 # Risk assessment: <product> <version>
@@ -114,7 +127,8 @@ Kept in Markdown in the repository, reviewed in pull requests:
 | --- | --- | --- |
 ```
 
-Example rows for a LoRaWAN sensor (see [episode 6](../CRA-Dev-06-FUOTA-LoRaWAN.md)):
+To make it concrete, here are three filled-in rows for a LoRaWAN sensor, the one
+from [episode 6](../CRA-Dev-06-FUOTA-LoRaWAN.md):
 
 | # | Threat: who, through what | L. | I. | Decision | Measure or justification |
 | --- | --- | --- | --- | --- | --- |
@@ -126,8 +140,8 @@ Example rows for a LoRaWAN sensor (see [episode 6](../CRA-Dev-06-FUOTA-LoRaWAN.m
 
 The risk assessment is not one more document: it is the one that justifies all the
 others. Four questions, a threat checklist, a table of the Annex I requirements, all
-kept up to date in the repository: that is what Article 13 asks for. The method is
-chosen according to the product and its customers.
+kept up to date in the repository: that is what Article 13 asks for. As for the
+method, choose it according to your product and your customers.
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=en
 [tmm]: https://www.threatmodelingmanifesto.org/

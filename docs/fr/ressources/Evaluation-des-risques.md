@@ -5,55 +5,66 @@ description: >-
 
 # Évaluer les risques de cybersécurité d'un produit
 
-> **Ressource** · [Série « CRA & Dev »](../index.md) · Lecture : environ 7 min
+> **Ressource** · [Série « CRA & Dev »](../index.md) · Lecture : environ 8 min
 
 ## Ce que demande le CRA
 
-L'évaluation des risques est le point de départ du [Cyber Resilience Act][cra] : c'est
-elle qui dit quelles exigences de l'Annexe I s'appliquent au produit, et comment.
-L'article 13 en fixe le contenu minimal :
+Avant de signer un binaire ou de chiffrer un secret, il faut savoir contre quoi on se
+protège. C'est le rôle de l'évaluation des risques, et le [Cyber Resilience Act][cra]
+en fait le point de départ de tout le reste : c'est elle qui dit quelles exigences de
+l'Annexe I s'appliquent à votre produit, et comment vous y répondez.
 
-- une analyse des risques « fondée sur l'utilisation prévue et l'utilisation
-  raisonnablement prévisible, ainsi que sur les conditions d'utilisation » :
-  environnement opérationnel, actifs à protéger, durée prévue d'utilisation
-  (paragraphe 3) ;
-- pour chaque exigence de l'Annexe I, partie I, point 2 (a à m) : si elle s'applique,
-  et comment elle est mise en œuvre (paragraphe 3) ; une exigence écartée demande
-  une « justification claire » (paragraphe 4) ;
-- comment sont appliqués le point 1 de la partie I et la gestion des vulnérabilités
-  de la partie II (paragraphe 3) ;
-- un document tenu à jour pendant la période d'assistance (paragraphe 3), versé à la
-  documentation technique (paragraphe 4), et pris en compte de la conception à la
-  maintenance (paragraphe 2).
+L'article 13 précise ce qu'elle doit contenir, au minimum.
 
-Le règlement n'impose aucune méthode.
+- **Une analyse des risques**, « fondée sur l'utilisation prévue et l'utilisation
+  raisonnablement prévisible, ainsi que sur les conditions d'utilisation » : où le
+  produit sera installé, ce qu'il faut protéger, combien de temps il servira
+  (paragraphe 3).
+- **Un passage en revue des exigences de l'Annexe I**, partie I, point 2, de a à m :
+  pour chacune, dites si elle s'applique et comment vous la mettez en œuvre. Si vous
+  en écartez une, il faut une « justification claire » (paragraphes 3 et 4).
+- **La façon dont vous appliquez** le point 1 de la partie I (un niveau de sécurité
+  adapté aux risques) et la gestion des vulnérabilités de la partie II
+  (paragraphe 3).
+- **Un document vivant** : il guide le produit de la conception à la maintenance
+  (paragraphe 2), rejoint la documentation technique (paragraphe 4), et reste à jour
+  pendant toute la période d'assistance, c'est-à-dire la durée pendant laquelle vous
+  traitez les vulnérabilités du produit : au moins cinq ans, sauf si le produit est
+  prévu pour servir moins longtemps (paragraphes 3 et 8).
+
+En revanche, le règlement n'impose aucune méthode. À vous de choisir celle qui
+convient à votre produit, et c'est l'objet de la suite.
 
 ## Le piège classique
 
-Un document rempli une fois, pour l'audit, à partir d'un modèle générique : il décrit
-« un produit connecté », pas le vôtre, et il est périmé à la version suivante.
-L'évaluation utile est courte, propre au produit, et vit dans le dépôt à côté du
-code.
+On télécharge un modèle, on le remplit en une après-midi pour l'audit, et on n'y
+touche plus. Le document décrit « un produit connecté » en général, pas le vôtre, et
+il est déjà faux à la version suivante. Une évaluation utile est l'inverse : courte,
+propre à votre produit, et rangée dans le dépôt, à côté du code qu'elle justifie.
 
 ## La démarche en quatre questions
 
-Le [Threat Modeling Manifesto][tmm] résume la démarche en quatre questions. Elles
-couvrent ce que demande l'article 13.
+Le [Threat Modeling Manifesto][tmm] ramène toute la démarche à quatre questions
+simples. Bonne nouvelle : en y répondant, vous couvrez ce que demande l'article 13.
 
-1. **Sur quoi travaillons-nous ?** L'usage prévu et l'usage prévisible, y compris
-   détourné ; l'environnement (atelier, domicile, extérieur) ; les actifs à protéger
-   (firmware, clés, données, fonction essentielle) ; la durée de vie. Un schéma des
-   flux de données, avec les frontières de confiance, en une page.
-2. **Qu'est-ce qui peut mal tourner ?** Pour chaque interface et chaque flux du
-   schéma, les menaces. Une grille évite les oublis : [STRIDE][stride] (usurpation,
-   altération, répudiation, divulgation, déni de service, élévation de privilèges) ;
-   pour un appareil embarqué, le catalogue [EMB3D][emb3d] du MITRE.
-3. **Que faisons-nous ?** Coter chaque risque en vraisemblance et en impact, sur
-   trois niveaux suffisent. Puis décider : une mesure, rattachée au point de
-   l'Annexe I qu'elle couvre, ou l'acceptation du risque, justifiée.
-4. **Avons-nous bien travaillé ?** Une relecture par quelqu'un qui n'a pas écrit
-   l'analyse. Et une mise à jour à chaque version, et à chaque vulnérabilité qui
-   change la donne (article 13, paragraphe 7).
+1. **Sur quoi travaillons-nous ?** Décrivez le produit tel qu'il sera vraiment
+   utilisé, y compris de travers : dans quel environnement (un atelier, un salon, un
+   poteau en plein air), avec quels actifs à protéger (le firmware, les clés, les
+   données, la fonction essentielle) et pour combien d'années. Dessinez les flux de
+   données et les frontières de confiance : une page suffit.
+2. **Qu'est-ce qui peut mal tourner ?** Reprenez chaque interface et chaque flux du
+   schéma, et demandez-vous qui pourrait s'en servir contre vous. Une grille aide à
+   ne rien oublier : [STRIDE][stride] passe en revue six familles de menaces
+   (usurpation, altération, répudiation, divulgation, déni de service, élévation de
+   privilèges). Pour un appareil embarqué, complétez avec le catalogue
+   [EMB3D][emb3d] du MITRE.
+3. **Que faisons-nous ?** Cotez chaque risque selon sa vraisemblance et son impact ;
+   trois niveaux suffisent. Puis tranchez : soit une mesure, que vous rattachez au
+   point de l'Annexe I qu'elle couvre, soit l'acceptation du risque, avec sa
+   justification.
+4. **Avons-nous bien travaillé ?** Faites relire l'analyse par quelqu'un qui ne l'a
+   pas écrite. Puis remettez-la à jour à chaque version, et chaque fois qu'une
+   vulnérabilité change la donne (article 13, paragraphe 7).
 
 ## Choisir une méthode
 
@@ -68,21 +79,25 @@ couvrent ce que demande l'article 13.
 | [ISO/IEC 27005][iso] | Gestion des risques de la sécurité de l'information | Risques de l'organisation (SMSI ISO 27001) plutôt que du produit | Payant |
 | [EN 40000-1-2][en40000] | Norme harmonisée horizontale du CRA : principes, gestion des risques produit, activités du cycle de vie | Viser la présomption de conformité, une fois la norme publiée | En approbation |
 
-**Pour s'orienter :**
+**Comment choisir ?**
 
-- **Premier exercice, petite équipe** : les quatre questions et STRIDE, plus EMB3D
-  pour un appareil embarqué. Quelques heures, et le résultat couvre l'article 13.
-- **Données personnelles** : ajoutez LINDDUN.
-- **Secteur industriel** : IEC 62443-4-1, que vos clients connaissent déjà.
-- **Produit critique, ou besoin d'un dossier argumenté** : EBIOS RM.
-- **Présomption de conformité** : un produit conforme à une norme harmonisée dont la
-  référence est publiée au Journal officiel est présumé conforme aux exigences
-  qu'elle couvre (article 27). EN 40000-1-2 est en approbation ; le CEN-CENELEC
-  prévoit sa disponibilité pour le 25 novembre 2026.
+- **C'est votre premier exercice, et l'équipe est petite** : commencez par les
+  quatre questions et STRIDE, avec EMB3D si le produit est embarqué. Quelques heures
+  suffisent pour une première version qui répond à ce que demande l'article 13.
+- **Le produit traite des données personnelles** : ajoutez LINDDUN.
+- **Vous vendez à l'industrie** : partez d'IEC 62443-4-1, que vos clients
+  connaissent déjà.
+- **Le produit est critique, ou vous devez convaincre une direction ou des
+  clients** : EBIOS RM vous donne un cadre complet et un dossier argumenté.
+- **Vous visez la présomption de conformité** : un produit conforme à une norme
+  harmonisée dont la référence est publiée au Journal officiel est présumé conforme
+  aux exigences qu'elle couvre (article 27). EN 40000-1-2 est encore en
+  approbation ; le CEN-CENELEC prévoit sa disponibilité pour le 25 novembre 2026.
 
 ## Un modèle à copier
 
-À garder en Markdown dans le dépôt, relu dans les pull requests :
+Gardez-le en Markdown dans le dépôt : il sera relu dans les pull requests, comme le
+code.
 
 ```markdown
 # Évaluation des risques : <produit> <version>
@@ -115,7 +130,8 @@ couvrent ce que demande l'article 13.
 | --- | --- | --- |
 ```
 
-Exemple de lignes pour un capteur LoRaWAN (voir l'[épisode 6](../CRA-Dev-06-FUOTA-LoRaWAN.md)) :
+Pour fixer les idées, voici trois lignes remplies pour un capteur LoRaWAN, celui de
+l'[épisode 6](../CRA-Dev-06-FUOTA-LoRaWAN.md) :
 
 | # | Menace : qui, par où | V. | I. | Décision | Mesure ou justification |
 | --- | --- | --- | --- | --- | --- |
@@ -125,10 +141,10 @@ Exemple de lignes pour un capteur LoRaWAN (voir l'[épisode 6](../CRA-Dev-06-FUO
 
 ## À retenir
 
-L'évaluation des risques n'est pas un document de plus : c'est celui qui justifie tous
-les autres. Quatre questions, une grille de menaces, un tableau des exigences de
-l'Annexe I, le tout tenu à jour dans le dépôt : c'est ce que demande l'article 13.
-La méthode se choisit selon le produit et ses clients.
+L'évaluation des risques n'est pas un document de plus : c'est celui qui justifie
+tous les autres. Quatre questions, une grille de menaces, un tableau des exigences de
+l'Annexe I, le tout tenu à jour dans le dépôt : voilà ce que demande l'article 13.
+Quant à la méthode, choisissez-la selon votre produit et vos clients.
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr
 [tmm]: https://www.threatmodelingmanifesto.org/
