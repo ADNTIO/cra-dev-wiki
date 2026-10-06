@@ -139,6 +139,13 @@ l'[épisode 6](../CRA-Dev-06-FUOTA-LoRaWAN.md) :
 | 2 | Vulnérabilité connue dans une dépendance | élevée | élevé | réduire | SBOM et surveillance continue ([épisodes 1](../CRA-Dev-01-SBOM-VEX.md) et [5](../CRA-Dev-05-SBOM-DTRACK.md)) |
 | 3 | Brouillage radio | faible | moyen | accepter | Hors de portée de l'appareil ; perte de mesures tolérée par la fonction |
 
+Deux évaluations complètes, avec leur schéma, sont à télécharger en PDF : un
+[capteur d'ensoleillement](exemples/evaluation-risques-capteur-ensoleillement.pdf),
+à faible enjeu, et une [sonde de niveau d'eau pour réservoirs
+publics](exemples/evaluation-risques-sonde-niveau-eau.pdf), dont peut dépendre une
+réserve incendie. Les comparer montre comment la même démarche s'ajuste au risque.
+Leurs sources, en Markdown, sont dans [`examples/risk-assessment`][example].
+
 ## À retenir
 
 L'évaluation des risques n'est pas un document de plus : c'est celui qui justifie
@@ -156,3 +163,4 @@ Quant à la méthode, choisissez-la selon votre produit et vos clients.
 [iec]: https://webstore.iec.ch/en/publication/33615
 [iso]: https://www.iso.org/fr/standard/80585.html
 [en40000]: https://standards.cencenelec.eu/ords/f?cs=1D72BA048927BF4E6076BA309587EA01A&p=CEN%3A110%3A%3A%3A%3A%3AFSP_PROJECT%2CFSP_ORG_ID%3A81335%2C2307986
+[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/risk-assessment

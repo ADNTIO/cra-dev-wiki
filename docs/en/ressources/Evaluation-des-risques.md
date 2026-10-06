@@ -136,6 +136,13 @@ from [episode 6](../CRA-Dev-06-FUOTA-LoRaWAN.md):
 | 2 | Known vulnerability in a dependency | high | high | reduce | SBOM and continuous monitoring ([episodes 1](../CRA-Dev-01-SBOM-VEX.md) and [5](../CRA-Dev-05-SBOM-DTRACK.md)) |
 | 3 | Radio jamming | low | medium | accept | Out of the device's reach; loss of readings tolerated by the function |
 
+Two complete assessments, with their diagram, can be downloaded as PDF: a
+[sunlight sensor](exemples/risk-assessment-sunlight-sensor.pdf), with low stakes,
+and a [water level probe for public reservoirs](exemples/risk-assessment-water-level-sensor.pdf),
+on which a firefighting reserve may depend. Comparing them shows how the same
+approach scales with the risk. Their Markdown sources are in
+[`examples/risk-assessment`][example].
+
 ## Takeaway
 
 The risk assessment is not one more document: it is the one that justifies all the
@@ -153,3 +160,4 @@ method, choose it according to your product and your customers.
 [iec]: https://webstore.iec.ch/en/publication/33615
 [iso]: https://www.iso.org/standard/80585.html
 [en40000]: https://standards.cencenelec.eu/ords/f?cs=1D72BA048927BF4E6076BA309587EA01A&p=CEN%3A110%3A%3A%3A%3A%3AFSP_PROJECT%2CFSP_ORG_ID%3A81335%2C2307986
+[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/risk-assessment
