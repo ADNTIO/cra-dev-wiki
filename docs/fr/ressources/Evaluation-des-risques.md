@@ -66,6 +66,25 @@ simples. Bonne nouvelle : en y répondant, vous couvrez ce que demande l'article
    pas écrite. Puis remettez-la à jour à chaque version, et chaque fois qu'une
    vulnérabilité change la donne (article 13, paragraphe 7).
 
+### Trouver les frontières de confiance
+
+Dessinez les blocs du système, puis regroupez-les selon qui les contrôle : le terrain,
+où n'importe qui peut toucher l'appareil ; le réseau de l'opérateur ; les serveurs de
+l'exploitant ; le poste du fabricant. Chaque flèche qui traverse un pointillé franchit
+une frontière de confiance. C'est là que se logent la plupart des menaces, et c'est
+là que vous appliquez la grille STRIDE en premier.
+
+![Schéma en blocs d'un capteur LoRaWAN : terrain, réseau de l'opérateur, exploitant et fabricant ; quatre frontières de confiance repérées de A à D.](../images/frontieres-de-confiance.svg)
+
+Pour ce capteur LoRaWAN, on en compte quatre :
+
+- **A**, la liaison radio entre le capteur et la passerelle : n'importe qui peut
+  écouter, brouiller ou émettre ;
+- **B**, l'arrivée des données chez l'exploitant : le réseau de l'opérateur est un
+  tiers ;
+- **C**, l'arrivée d'une mise à jour signée par le fabricant ;
+- **D**, l'accès physique au capteur, sur son mât.
+
 ## Choisir une méthode
 
 | Méthode | Ce que c'est | Quand la choisir | Accès |
@@ -130,21 +149,18 @@ code.
 | --- | --- | --- |
 ```
 
-Pour fixer les idées, voici trois lignes remplies pour un capteur LoRaWAN, celui de
-l'[épisode 6](../CRA-Dev-06-FUOTA-LoRaWAN.md) :
+!!! example "Un exemple complet : le capteur d'ensoleillement LoRaWAN"
 
-| # | Menace : qui, par où | V. | I. | Décision | Mesure ou justification |
-| --- | --- | --- | --- | --- | --- |
-| 1 | Firmware malveillant poussé par la mise à jour radio | moyenne | élevé | réduire | Image signée, vérifiée par MCUboot (point 2 c et f) |
-| 2 | Vulnérabilité connue dans une dépendance | élevée | élevé | réduire | SBOM et surveillance continue ([épisodes 1](../CRA-Dev-01-SBOM-VEX.md) et [5](../CRA-Dev-05-SBOM-DTRACK.md)) |
-| 3 | Brouillage radio | faible | moyen | accepter | Hors de portée de l'appareil ; perte de mesures tolérée par la fonction |
+    L'évaluation complète d'un capteur LoRaWAN fictif, remplie avec ce modèle :
+    contexte, schéma, sept risques, tableau de l'Annexe I.
+    [Lire en ligne](exemples/evaluation-risques-capteur-ensoleillement.md) ·
+    [PDF](exemples/evaluation-risques-capteur-ensoleillement.pdf)
 
-Deux évaluations complètes, avec leur schéma, sont à télécharger en PDF : un
-[capteur d'ensoleillement](exemples/evaluation-risques-capteur-ensoleillement.pdf),
-à faible enjeu, et une [sonde de niveau d'eau pour réservoirs
-publics](exemples/evaluation-risques-sonde-niveau-eau.pdf), dont peut dépendre une
-réserve incendie. Les comparer montre comment la même démarche s'ajuste au risque.
-Leurs sources, en Markdown, sont dans [`examples/risk-assessment`][example].
+    Pour comparer, la même démarche sur un produit à plus fort enjeu, une sonde de
+    niveau d'eau pour réservoirs publics, dont peut dépendre une réserve incendie :
+    [lire en ligne](exemples/evaluation-risques-sonde-niveau-eau.md) ·
+    [PDF](exemples/evaluation-risques-sonde-niveau-eau.pdf).
+    Les sources en Markdown sont dans [`examples/risk-assessment`][example].
 
 ## À retenir
 

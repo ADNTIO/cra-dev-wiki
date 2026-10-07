@@ -63,6 +63,24 @@ questions. The good news: by answering them, you cover what Article 13 asks for.
    not write it. Then update it with each release, and whenever a vulnerability
    changes the picture (Article 13, paragraph 7).
 
+### Finding the trust boundaries
+
+Draw the blocks of the system, then group them by who controls them: the field,
+where anyone can touch the device; the operator's network; the operator's servers;
+the manufacturer's workstation. Every arrow that crosses a dashed line crosses a
+trust boundary. That is where most threats hide, and where you apply the STRIDE
+checklist first.
+
+![Block diagram of a LoRaWAN sensor: field, network operator, operator and manufacturer; four trust boundaries marked A to D.](../images/frontieres-de-confiance.svg)
+
+For this LoRaWAN sensor, there are four:
+
+- **A**, the radio link between the sensor and the gateway: anyone can listen, jam
+  or transmit;
+- **B**, the data reaching the operator: the network operator is a third party;
+- **C**, a signed update arriving from the manufacturer;
+- **D**, physical access to the sensor, on its pole.
+
 ## Choosing a method
 
 | Method | What it is | When to choose it | Access |
@@ -127,21 +145,18 @@ like the code.
 | --- | --- | --- |
 ```
 
-To make it concrete, here are three filled-in rows for a LoRaWAN sensor, the one
-from [episode 6](../CRA-Dev-06-FUOTA-LoRaWAN.md):
+!!! example "A complete example: the LoRaWAN sunlight sensor"
 
-| # | Threat: who, through what | L. | I. | Decision | Measure or justification |
-| --- | --- | --- | --- | --- | --- |
-| 1 | Malicious firmware pushed through the radio update | medium | high | reduce | Signed image, verified by MCUboot (point 2 (c) and (f)) |
-| 2 | Known vulnerability in a dependency | high | high | reduce | SBOM and continuous monitoring ([episodes 1](../CRA-Dev-01-SBOM-VEX.md) and [5](../CRA-Dev-05-SBOM-DTRACK.md)) |
-| 3 | Radio jamming | low | medium | accept | Out of the device's reach; loss of readings tolerated by the function |
+    The full assessment of a fictional LoRaWAN sensor, filled in with this template:
+    context, diagram, seven risks, Annex I table.
+    [Read online](exemples/evaluation-risques-capteur-ensoleillement.md) ·
+    [PDF](exemples/evaluation-risques-capteur-ensoleillement.pdf)
 
-Two complete assessments, with their diagram, can be downloaded as PDF: a
-[sunlight sensor](exemples/risk-assessment-sunlight-sensor.pdf), with low stakes,
-and a [water level probe for public reservoirs](exemples/risk-assessment-water-level-sensor.pdf),
-on which a firefighting reserve may depend. Comparing them shows how the same
-approach scales with the risk. Their Markdown sources are in
-[`examples/risk-assessment`][example].
+    For comparison, the same approach on a product with higher stakes, a water level
+    probe for public reservoirs, on which a firefighting reserve may depend:
+    [read online](exemples/evaluation-risques-sonde-niveau-eau.md) ·
+    [PDF](exemples/evaluation-risques-sonde-niveau-eau.pdf).
+    The Markdown sources are in [`examples/risk-assessment`][example].
 
 ## Takeaway
 

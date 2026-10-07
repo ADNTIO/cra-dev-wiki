@@ -11,8 +11,8 @@ DOCS = HERE.parent.parent / "docs"
 EXAMPLES = [
     ("fr", "capteur-ensoleillement", "evaluation-risques-capteur-ensoleillement"),
     ("fr", "sonde-niveau-eau", "evaluation-risques-sonde-niveau-eau"),
-    ("en", "sunlight-sensor", "risk-assessment-sunlight-sensor"),
-    ("en", "water-level-sensor", "risk-assessment-water-level-sensor"),
+    ("en", "sunlight-sensor", "evaluation-risques-capteur-ensoleillement"),
+    ("en", "water-level-sensor", "evaluation-risques-sonde-niveau-eau"),
 ]
 
 LABELS = {
@@ -51,14 +51,15 @@ def arrow(x1, y1, x2, y2, label="", dashed=False, both=False):
     return out
 
 
-def marker(n, x, y):
-    return (f'<circle cx="{x}" cy="{y}" r="10" fill="#b91c1c"/>'
+def marker(n, x, y, color="#b91c1c"):
+    return (f'<circle cx="{x}" cy="{y}" r="10" fill="{color}"/>'
             f'<text x="{x}" y="{y + 4}" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">{n}</text>')
 
 
-def diagram(lang, device_title, device_lines, risks):
+def diagram(lang, device_title, device_lines, risks, color="#b91c1c"):
     t = LABELS[lang]
     parts = [
+        '<rect width="920" height="270" fill="#ffffff"/>',
         zone(10, 10, 205, 250, t["field"], "#b45309"),
         zone(225, 10, 305, 135, t["net"], "#475569"),
         zone(545, 10, 365, 250, t["op"], "#0e7490"),
@@ -77,7 +78,7 @@ def diagram(lang, device_title, device_lines, risks):
         f'<text x="440" y="252" text-anchor="middle" font-size="10" fill="#6d28d9">{t["image"]}</text>',
         f'<text x="375" y="133" text-anchor="middle" font-size="10" fill="#0e7490">{t["radio"]}</text>',
     ]
-    parts += [marker(n, x, y) for n, x, y in risks]
+    parts += [marker(n, x, y, color) for n, x, y in risks]
     return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 270" width="100%">'
             '<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
             '<path d="M0 0 L10 5 L0 10 z" fill="#0e7490"/></marker></defs>'
@@ -99,18 +100,42 @@ svg { margin: 4pt 0 2pt; }
 """
 
 
+PAGE_INTRO = {
+    "fr": "Version PDF : [{name}.pdf]({name}.pdf). Source : `examples/risk-assessment/{lang}/{source}.md`.",
+    "en": "PDF version: [{name}.pdf]({name}.pdf). Source: `examples/risk-assessment/{lang}/{source}.md`.",
+}
+
+# The four trust boundaries of the LoRaWAN sensor, for the resource page.
+BOUNDARIES = [("A", 220, 80), ("B", 533, 80), ("C", 545, 144), ("D", 12, 150)]
+
+
 def build(lang, source, output):
     text = (HERE / lang / f"{source}.md").read_text()
     meta, body = text.split("\n---\n", 1)
     conf = dict(line.split(": ", 1) for line in meta.strip().splitlines())
     risks = [tuple(int(v) for v in r.split(",")) for r in conf["markers"].split()]
     svg = diagram(lang, conf["device"], conf["lines"].split(" | "), risks)
+    out = DOCS / lang / "ressources" / "exemples"
+    out.mkdir(parents=True, exist_ok=True)
+
     html = markdown.markdown(body.replace("{{schema}}", svg), extensions=["tables", "md_in_html"])
     page = f'<html lang="{lang}"><head><meta charset="utf-8"><style>{CSS}</style></head><body>{html}</body></html>'
-    out = DOCS / lang / "ressources" / "exemples" / f"{output}.pdf"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    HTML(string=page).write_pdf(out)
-    print(out.relative_to(DOCS.parent))
+    HTML(string=page).write_pdf(out / f"{output}.pdf")
+
+    # The same assessment as a page of the site, with its diagram as an SVG file.
+    (out / f"{output}.svg").write_text(svg)
+    title = next(line for line in body.splitlines() if line.startswith("# "))[2:]
+    intro = PAGE_INTRO[lang].format(name=output, lang=lang, source=source)
+    md = body.replace("{{schema}}", f"![{title}]({output}.svg)")
+    md = md.replace("## 1.", f"{intro}\n\n## 1.", 1)
+    (out / f"{output}.md").write_text(f"---\ndescription: >-\n  {title}\n---\n{md}")
+    print(out.relative_to(DOCS.parent) / output)
+
+    if source in ("capteur-ensoleillement", "sunlight-sensor"):
+        images = DOCS / lang / "images"
+        images.mkdir(exist_ok=True)
+        boundaries = diagram(lang, conf["device"], conf["lines"].split(" | "), BOUNDARIES, color="#b45309")
+        (images / "frontieres-de-confiance.svg").write_text(boundaries)
 
 
 if __name__ == "__main__":

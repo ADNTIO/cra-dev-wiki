@@ -22,4 +22,6 @@ uv run python build.py
 
 `build.py` turns each Markdown file into HTML, draws its diagram (the numbered
 markers point to the risks of the table), and writes the PDF to
-`docs/<lang>/ressources/exemples/`, where the site serves it.
+`docs/<lang>/ressources/exemples/`, together with the same assessment as a page of
+the site and its diagram as SVG. It also draws the trust boundary diagram of the
+resource page, `docs/<lang>/images/frontieres-de-confiance.svg`.
