@@ -5,7 +5,8 @@ description: >-
 
 # Assessing the cybersecurity risks of a product
 
-> **Resource** · ["CRA & Dev" series](../index.md) · Reading time: about 8 min
+> **CRA & Dev #8** · ["CRA & Dev" series](index.md) · Reading time: about 8 min · All platforms ·
+> Example: two assessments in Markdown and PDF
 
 ## What the CRA requires
 
@@ -71,7 +72,7 @@ the manufacturer's workstation. Every arrow that crosses a dashed line crosses a
 trust boundary. That is where most threats hide, and where you apply the STRIDE
 checklist first.
 
-![Block diagram of a LoRaWAN sensor: field, network operator, operator and manufacturer; four trust boundaries marked A to D.](../images/frontieres-de-confiance.svg)
+![Block diagram of a LoRaWAN sensor: field, network operator, operator and manufacturer; four trust boundaries marked A to D.](images/frontieres-de-confiance.svg)
 
 For this LoRaWAN sensor, there are four:
 
@@ -149,14 +150,14 @@ like the code.
 
     The full assessment of a fictional LoRaWAN sensor, filled in with this template:
     context, diagram, seven risks, Annex I table.
-    [Read online](exemples/evaluation-risques-capteur-ensoleillement.md) ·
-    [PDF](exemples/evaluation-risques-capteur-ensoleillement.pdf)
+    [Read online](ressources/exemples/evaluation-risques-capteur-ensoleillement.md) ·
+    [PDF](ressources/exemples/evaluation-risques-capteur-ensoleillement.pdf)
 
     For comparison, the same approach on a product with higher stakes, a water level
     probe for public reservoirs, on which a firefighting reserve may depend:
-    [read online](exemples/evaluation-risques-sonde-niveau-eau.md) ·
-    [PDF](exemples/evaluation-risques-sonde-niveau-eau.pdf).
-    The Markdown sources are in [`examples/risk-assessment`][example].
+    [read online](ressources/exemples/evaluation-risques-sonde-niveau-eau.md) ·
+    [PDF](ressources/exemples/evaluation-risques-sonde-niveau-eau.pdf).
+    The Markdown sources are in [`examples/08-risk-assessment`][example].
 
 ## Takeaway
 
@@ -164,6 +165,14 @@ The risk assessment is not one more document: it is the one that justifies all t
 others. Four questions, a threat checklist, a table of the Annex I requirements, all
 kept up to date in the repository: that is what Article 13 asks for. As for the
 method, choose it according to your product and your customers.
+
+---
+
+*Previous episode: [Who did what, and when? Logging security
+activity](CRA-Dev-07-Security-Logs.md).*
+
+*Companion code, in [`examples/08-risk-assessment`][example]: the two example
+assessments in Markdown and the script that builds their PDFs.*
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=en
 [tmm]: https://www.threatmodelingmanifesto.org/
@@ -175,4 +184,4 @@ method, choose it according to your product and your customers.
 [iec]: https://webstore.iec.ch/en/publication/33615
 [iso]: https://www.iso.org/standard/80585.html
 [en40000]: https://standards.cencenelec.eu/ords/f?cs=1D72BA048927BF4E6076BA309587EA01A&p=CEN%3A110%3A%3A%3A%3A%3AFSP_PROJECT%2CFSP_ORG_ID%3A81335%2C2307986
-[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/risk-assessment
+[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/08-risk-assessment

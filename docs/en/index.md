@@ -25,6 +25,7 @@ it does not.
 | 04 | [Trust, but verify: sign your data](CRA-Dev-04-Integrite.md) | Data integrity | Part I, point 2, (f) | Cross-platform |
 | 05 | [Generating an SBOM is not enough: monitor it with Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Vulnerability handling, continuous monitoring | Part II, point 1 | CI, cross-platform |
 | 06 | [A thousand fragments, one signature: updating firmware over LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md) | Security updates, secure distribution | Part I, point 2, (c); Part II, point 7 | Embedded, LoRaWAN |
+| 08 | [Assessing the cybersecurity risks of a product](CRA-Dev-08-Evaluation-Risques.md) | Cybersecurity risk assessment | Part I, point 1; Article 13 | All platforms |
 
 
 The list will grow with each episode.
@@ -35,9 +36,5 @@ vulnerability handling.
 
 In-depth article, a long and sourced version for going deeper:
 [DPAPI in detail](ressources/DPAPI-Article-de-fond.md).
-
-Where to start: [assessing the cybersecurity risks of a
-product](ressources/Evaluation-des-risques.md), what Article 13 asks for and how to
-choose a method.
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=en

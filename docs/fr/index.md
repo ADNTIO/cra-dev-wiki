@@ -25,6 +25,7 @@ protège et ce qu'elle ne protège pas.
 | 04 | [Faites confiance, mais vérifiez : signer vos données](CRA-Dev-04-Integrite.md) | Intégrité des données | Partie I, point 2, f) | Multiplateforme |
 | 05 | [Générer un SBOM ne suffit pas : surveillez-le avec Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Gestion des vulnérabilités, surveillance continue | Partie II, point 1 | CI, multiplateforme |
 | 06 | [Mille fragments, une seule signature : mettre à jour un firmware par LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md) | Mises à jour de sécurité, distribution sécurisée | Partie I, point 2, c) ; partie II, point 7 | Embarqué, LoRaWAN |
+| 08 | [Évaluer les risques de cybersécurité d'un produit](CRA-Dev-08-Evaluation-Risques.md) | Évaluation des risques de cybersécurité | Partie I, point 1 ; article 13 | Toutes plateformes |
 
 La liste s'enrichira au fil des épisodes.
 
@@ -34,9 +35,5 @@ couvre la gestion des vulnérabilités.
 
 Article de fond, version longue et sourcée pour approfondir :
 [la DPAPI en détail](ressources/DPAPI-Article-de-fond.md).
-
-Par où commencer : [évaluer les risques de cybersécurité d'un
-produit](ressources/Evaluation-des-risques.md), ce que demande l'article 13 et
-comment choisir sa méthode.
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr

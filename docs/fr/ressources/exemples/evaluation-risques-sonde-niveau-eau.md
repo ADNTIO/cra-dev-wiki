@@ -8,7 +8,7 @@ description: >-
 > Cyber Resilience Act. Le produit, les choix et les cotations sont des exemples : ils
 > ne remplacent pas l'analyse de votre propre produit.
 
-Version PDF : [evaluation-risques-sonde-niveau-eau.pdf](evaluation-risques-sonde-niveau-eau.pdf). Source : `examples/risk-assessment/fr/sonde-niveau-eau.md`.
+Version PDF : [evaluation-risques-sonde-niveau-eau.pdf](evaluation-risques-sonde-niveau-eau.pdf). Source : `examples/08-risk-assessment/fr/sonde-niveau-eau.md`.
 
 ## 1. Contexte
 

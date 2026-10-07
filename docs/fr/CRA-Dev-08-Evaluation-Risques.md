@@ -5,7 +5,8 @@ description: >-
 
 # Évaluer les risques de cybersécurité d'un produit
 
-> **Ressource** · [Série « CRA & Dev »](../index.md) · Lecture : environ 8 min
+> **CRA & Dev #8** · [Série « CRA & Dev »](index.md) · Lecture : environ 8 min · Toutes plateformes ·
+> Exemple : deux évaluations en Markdown et en PDF
 
 ## Ce que demande le CRA
 
@@ -74,7 +75,7 @@ l'exploitant ; le poste du fabricant. Chaque flèche qui traverse un pointillé 
 une frontière de confiance. C'est là que se logent la plupart des menaces, et c'est
 là que vous appliquez la grille STRIDE en premier.
 
-![Schéma en blocs d'un capteur LoRaWAN : terrain, réseau de l'opérateur, exploitant et fabricant ; quatre frontières de confiance repérées de A à D.](../images/frontieres-de-confiance.svg)
+![Schéma en blocs d'un capteur LoRaWAN : terrain, réseau de l'opérateur, exploitant et fabricant ; quatre frontières de confiance repérées de A à D.](images/frontieres-de-confiance.svg)
 
 Pour ce capteur LoRaWAN, on en compte quatre :
 
@@ -153,14 +154,14 @@ code.
 
     L'évaluation complète d'un capteur LoRaWAN fictif, remplie avec ce modèle :
     contexte, schéma, sept risques, tableau de l'Annexe I.
-    [Lire en ligne](exemples/evaluation-risques-capteur-ensoleillement.md) ·
-    [PDF](exemples/evaluation-risques-capteur-ensoleillement.pdf)
+    [Lire en ligne](ressources/exemples/evaluation-risques-capteur-ensoleillement.md) ·
+    [PDF](ressources/exemples/evaluation-risques-capteur-ensoleillement.pdf)
 
     Pour comparer, la même démarche sur un produit à plus fort enjeu, une sonde de
     niveau d'eau pour réservoirs publics, dont peut dépendre une réserve incendie :
-    [lire en ligne](exemples/evaluation-risques-sonde-niveau-eau.md) ·
-    [PDF](exemples/evaluation-risques-sonde-niveau-eau.pdf).
-    Les sources en Markdown sont dans [`examples/risk-assessment`][example].
+    [lire en ligne](ressources/exemples/evaluation-risques-sonde-niveau-eau.md) ·
+    [PDF](ressources/exemples/evaluation-risques-sonde-niveau-eau.pdf).
+    Les sources en Markdown sont dans [`examples/08-risk-assessment`][example].
 
 ## À retenir
 
@@ -168,6 +169,14 @@ L'évaluation des risques n'est pas un document de plus : c'est celui qui justif
 tous les autres. Quatre questions, une grille de menaces, un tableau des exigences de
 l'Annexe I, le tout tenu à jour dans le dépôt : voilà ce que demande l'article 13.
 Quant à la méthode, choisissez-la selon votre produit et vos clients.
+
+---
+
+*Épisode précédent : [Qui a fait quoi, et quand ? Journaliser l'activité de
+sécurité](CRA-Dev-07-Security-Logs.md).*
+
+*Code d'accompagnement, dans [`examples/08-risk-assessment`][example] : les deux
+évaluations d'exemple en Markdown et le script qui produit leurs PDF.*
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr
 [tmm]: https://www.threatmodelingmanifesto.org/
@@ -179,4 +188,4 @@ Quant à la méthode, choisissez-la selon votre produit et vos clients.
 [iec]: https://webstore.iec.ch/en/publication/33615
 [iso]: https://www.iso.org/fr/standard/80585.html
 [en40000]: https://standards.cencenelec.eu/ords/f?cs=1D72BA048927BF4E6076BA309587EA01A&p=CEN%3A110%3A%3A%3A%3A%3AFSP_PROJECT%2CFSP_ORG_ID%3A81335%2C2307986
-[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/risk-assessment
+[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/08-risk-assessment

@@ -1,7 +1,7 @@
 # Example: two risk assessments, built to PDF
 
-Companion files for the "CRA & Dev" resource page
-[Assessing the cybersecurity risks of a product](../../docs/en/ressources/Evaluation-des-risques.md).
+Companion files for episode 8 of the "CRA & Dev" series,
+[Assessing the cybersecurity risks of a product](../../docs/en/CRA-Dev-08-Evaluation-Risques.md).
 
 Two fictional LoRaWAN products, assessed with the template of the page, in French
 and English:
@@ -24,4 +24,4 @@ uv run python build.py
 markers point to the risks of the table), and writes the PDF to
 `docs/<lang>/ressources/exemples/`, together with the same assessment as a page of
 the site and its diagram as SVG. It also draws the trust boundary diagram of the
-resource page, `docs/<lang>/images/frontieres-de-confiance.svg`.
+episode, `docs/<lang>/images/frontieres-de-confiance.svg`.
