@@ -7,3 +7,9 @@
     <script data-goatcounter="https://{{ config.extra.goatcounter }}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
   {% endif %}
 {% endblock %}
+
+{% block extrahead %}
+  {{ super() }}
+  <!-- Google Search Console ownership check -->
+  <meta name="google-site-verification" content="y1EKkuzNi5jGcgYPX0g3m7S0CYrHlYS-Q75e7N8TqSU">
+{% endblock %}
