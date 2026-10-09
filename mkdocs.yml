@@ -19,6 +19,7 @@ nav:
       - "Faites confiance, mais vérifiez": fr/CRA-Dev-04-Integrite.md
       - "Générer un SBOM ne suffit pas": fr/CRA-Dev-05-SBOM-DTRACK.md
       - "Mille fragments, une signature": fr/CRA-Dev-06-FUOTA-LoRaWAN.md
+      - "Évaluer les risques": fr/CRA-Dev-07-Evaluation-Risques.md
   - Ressources:
       - "DPAPI en détail": fr/ressources/DPAPI-Article-de-fond.md
 
@@ -95,6 +96,7 @@ plugins:
             "Un colis sans expéditeur": "A parcel with no sender"
             "Générer un SBOM ne suffit pas": "Generating an SBOM is not enough"
             "DPAPI en détail": "DPAPI in detail"
+            "Évaluer les risques": "Assessing the risks"
 
 extra:
   social:

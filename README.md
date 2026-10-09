@@ -30,6 +30,7 @@ and a language switcher.
 | 04 | [Trust, but verify: sign your data](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-04-Integrite/) | Data integrity | Part I, 2 (f) | Cross-platform |
 | 05 | [Generating an SBOM is not enough: monitor it with Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Vulnerability handling, continuous monitoring | Part II, point 1 | CI, cross-platform |
 | 06 | [A thousand fragments, one signature: updating firmware over LoRaWAN](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-06-FUOTA-LoRaWAN/) | Security updates, secure distribution | Part I, 2 (c); Part II, 7 | Embedded, LoRaWAN |
+| 07 | [Assessing the cybersecurity risks of a product](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-07-Evaluation-Risques/) | Cybersecurity risk assessment | Part I, 1; Article 13 | All platforms |
 
 
 ## Repository layout

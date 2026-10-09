@@ -257,6 +257,9 @@ turns a channel of a few bytes into a secure update mechanism in the CRA's sense
 *Previous episode: [Generating an SBOM is not enough, monitor it with
 Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md).*
 
+*Next episode: [Assessing the cybersecurity risks of a
+product](CRA-Dev-07-Evaluation-Risques.md).*
+
 *Companion code, in [`examples/06-fuota-lorawan`][example]: a full simulated FUOTA
 session with its tests, and the complete Zephyr firmware, with its test bench on a
 Heltec ESP32 board.*

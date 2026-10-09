@@ -1,0 +1,9 @@
+[project]
+name = "risk-assessment-examples"
+version = "0.1.0"
+description = "CRA & Dev: two example risk assessments (LoRaWAN sensors), built to PDF"
+requires-python = ">=3.11"
+dependencies = [
+    "markdown>=3.6",
+    "weasyprint>=62",
+]
