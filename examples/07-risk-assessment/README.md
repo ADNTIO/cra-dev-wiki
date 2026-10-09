@@ -1,7 +1,7 @@
 # Example: two risk assessments, built to PDF
 
-Companion files for episode 8 of the "CRA & Dev" series,
-[Assessing the cybersecurity risks of a product](../../docs/en/CRA-Dev-08-Evaluation-Risques.md).
+Companion files for episode 7 of the "CRA & Dev" series,
+[Assessing the cybersecurity risks of a product](../../docs/en/CRA-Dev-07-Evaluation-Risques.md).
 
 Two fictional LoRaWAN products, assessed with the template of the page, in French
 and English:

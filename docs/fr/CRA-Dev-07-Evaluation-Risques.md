@@ -5,7 +5,7 @@ description: >-
 
 # Évaluer les risques de cybersécurité d'un produit
 
-> **CRA & Dev #8** · [Série « CRA & Dev »](index.md) · Lecture : environ 8 min · Toutes plateformes ·
+> **CRA & Dev #7** · [Série « CRA & Dev »](index.md) · Lecture : environ 8 min · Toutes plateformes ·
 > Exemple : deux évaluations en Markdown et en PDF
 
 ## Ce que demande le CRA
@@ -46,7 +46,9 @@ propre à votre produit, et rangée dans le dépôt, à côté du code qu'elle j
 ## La démarche en quatre questions
 
 Le [Threat Modeling Manifesto][tmm] ramène toute la démarche à quatre questions
-simples. Bonne nouvelle : en y répondant, vous couvrez ce que demande l'article 13.
+simples. En y répondant, vous posez les bases de ce que demande l'article 13 ;
+il restera à documenter l'applicabilité de chaque exigence de l'Annexe I et à tenir
+l'évaluation à jour.
 
 1. **Sur quoi travaillons-nous ?** Décrivez le produit tel qu'il sera vraiment
    utilisé, y compris de travers : dans quel environnement (un atelier, un salon, un
@@ -97,7 +99,7 @@ Pour ce capteur LoRaWAN, on en compte quatre :
 | [NIST SP 800-30][nist] | Guide générique : vocabulaire, échelles, déroulé | Structurer les cotations et le vocabulaire | Libre |
 | [IEC 62443-4-1][iec] | Cycle de développement sécurisé ; l'exigence SR-2 demande un modèle de menaces par produit | Produit industriel, client qui exige IEC 62443 | Payant |
 | [ISO/IEC 27005][iso] | Gestion des risques de la sécurité de l'information | Risques de l'organisation (SMSI ISO 27001) plutôt que du produit | Payant |
-| [EN 40000-1-2][en40000] | Norme harmonisée horizontale du CRA : principes, gestion des risques produit, activités du cycle de vie | Viser la présomption de conformité, une fois la norme publiée | En approbation |
+| [EN 40000-1-2][en40000] | Norme harmonisée horizontale du CRA : principes, gestion des risques produit, activités du cycle de vie | Viser la présomption de conformité, une fois la norme publiée | En cours de normalisation |
 
 **Comment choisir ?**
 
@@ -111,8 +113,8 @@ Pour ce capteur LoRaWAN, on en compte quatre :
   clients** : EBIOS RM vous donne un cadre complet et un dossier argumenté.
 - **Vous visez la présomption de conformité** : un produit conforme à une norme
   harmonisée dont la référence est publiée au Journal officiel est présumé conforme
-  aux exigences qu'elle couvre (article 27). EN 40000-1-2 est encore en
-  approbation ; le CEN-CENELEC prévoit sa disponibilité pour le 25 novembre 2026.
+  aux exigences qu'elle couvre (article 27). EN 40000-1-2 est encore en cours de
+  normalisation, et sa référence n'est pas publiée au Journal officiel.
 
 ## Un modèle à copier
 
@@ -161,7 +163,7 @@ code.
     niveau d'eau pour réservoirs publics, dont peut dépendre une réserve incendie :
     [lire en ligne](ressources/exemples/evaluation-risques-sonde-niveau-eau.md) ·
     [PDF](ressources/exemples/evaluation-risques-sonde-niveau-eau.pdf).
-    Les sources en Markdown sont dans [`examples/08-risk-assessment`][example].
+    Les sources en Markdown sont dans [`examples/07-risk-assessment`][example].
 
 ## À retenir
 
@@ -172,10 +174,10 @@ Quant à la méthode, choisissez-la selon votre produit et vos clients.
 
 ---
 
-*Épisode précédent : [Qui a fait quoi, et quand ? Journaliser l'activité de
-sécurité](CRA-Dev-07-Security-Logs.md).*
+*Épisode précédent : [Mille fragments, une seule signature, mettre à jour un
+firmware par LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
 
-*Code d'accompagnement, dans [`examples/08-risk-assessment`][example] : les deux
+*Code d'accompagnement, dans [`examples/07-risk-assessment`][example] : les deux
 évaluations d'exemple en Markdown et le script qui produit leurs PDF.*
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr
@@ -188,4 +190,4 @@ sécurité](CRA-Dev-07-Security-Logs.md).*
 [iec]: https://webstore.iec.ch/en/publication/33615
 [iso]: https://www.iso.org/fr/standard/80585.html
 [en40000]: https://standards.cencenelec.eu/ords/f?cs=1D72BA048927BF4E6076BA309587EA01A&p=CEN%3A110%3A%3A%3A%3A%3AFSP_PROJECT%2CFSP_ORG_ID%3A81335%2C2307986
-[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/08-risk-assessment
+[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/07-risk-assessment

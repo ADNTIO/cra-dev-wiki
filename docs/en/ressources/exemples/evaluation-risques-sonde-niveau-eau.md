@@ -8,7 +8,7 @@ description: >-
 > the Cyber Resilience Act. The product, the choices and the ratings are examples:
 > they do not replace the analysis of your own product.
 
-PDF version: [evaluation-risques-sonde-niveau-eau.pdf](evaluation-risques-sonde-niveau-eau.pdf). Source: `examples/08-risk-assessment/en/water-level-sensor.md`.
+PDF version: [evaluation-risques-sonde-niveau-eau.pdf](evaluation-risques-sonde-niveau-eau.pdf). Source: `examples/07-risk-assessment/en/water-level-sensor.md`.
 
 ## 1. Context
 

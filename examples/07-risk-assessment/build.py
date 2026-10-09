@@ -101,8 +101,8 @@ svg { margin: 4pt 0 2pt; }
 
 
 PAGE_INTRO = {
-    "fr": "Version PDF : [{name}.pdf]({name}.pdf). Source : `examples/08-risk-assessment/{lang}/{source}.md`.",
-    "en": "PDF version: [{name}.pdf]({name}.pdf). Source: `examples/08-risk-assessment/{lang}/{source}.md`.",
+    "fr": "Version PDF : [{name}.pdf]({name}.pdf). Source : `examples/07-risk-assessment/{lang}/{source}.md`.",
+    "en": "PDF version: [{name}.pdf]({name}.pdf). Source: `examples/07-risk-assessment/{lang}/{source}.md`.",
 }
 
 # The four trust boundaries of the LoRaWAN sensor, for the episode page.

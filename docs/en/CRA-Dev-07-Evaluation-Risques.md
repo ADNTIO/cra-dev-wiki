@@ -5,7 +5,7 @@ description: >-
 
 # Assessing the cybersecurity risks of a product
 
-> **CRA & Dev #8** · ["CRA & Dev" series](index.md) · Reading time: about 8 min · All platforms ·
+> **CRA & Dev #7** · ["CRA & Dev" series](index.md) · Reading time: about 8 min · All platforms ·
 > Example: two assessments in Markdown and PDF
 
 ## What the CRA requires
@@ -45,7 +45,9 @@ justifies.
 ## The four-question approach
 
 The [Threat Modeling Manifesto][tmm] boils the whole approach down to four simple
-questions. The good news: by answering them, you cover what Article 13 asks for.
+questions. By answering them, you lay the groundwork for what Article 13 asks for;
+you still have to document whether each Annex I requirement applies, and keep the
+assessment up to date.
 
 1. **What are we working on?** Describe the product as it will really be used,
    misuse included: in which environment (a workshop, a living room, a pole
@@ -93,7 +95,7 @@ For this LoRaWAN sensor, there are four:
 | [NIST SP 800-30][nist] | Generic guide: vocabulary, scales, process | Structuring the ratings and the vocabulary | Free |
 | [IEC 62443-4-1][iec] | Secure development lifecycle; requirement SR-2 asks for a threat model per product | Industrial product, customer requiring IEC 62443 | Paid |
 | [ISO/IEC 27005][iso] | Information security risk management | Risks of the organisation (ISO 27001 ISMS) rather than of the product | Paid |
-| [EN 40000-1-2][en40000] | Horizontal harmonised standard for the CRA: principles, product risk management, lifecycle activities | Aiming for presumption of conformity, once the standard is published | Under approval |
+| [EN 40000-1-2][en40000] | Horizontal harmonised standard for the CRA: principles, product risk management, lifecycle activities | Aiming for presumption of conformity, once the standard is published | Being standardised |
 
 **How to choose?**
 
@@ -108,7 +110,8 @@ For this LoRaWAN sensor, there are four:
 - **You are aiming for presumption of conformity**: a product that conforms to a
   harmonised standard whose reference is published in the Official Journal is
   presumed to conform to the requirements it covers (Article 27). EN 40000-1-2 is
-  still under approval; CEN-CENELEC plans its availability for 25 November 2026.
+  still being standardised, and its reference is not published in the Official
+  Journal.
 
 ## A template to copy
 
@@ -157,7 +160,7 @@ like the code.
     probe for public reservoirs, on which a firefighting reserve may depend:
     [read online](ressources/exemples/evaluation-risques-sonde-niveau-eau.md) ·
     [PDF](ressources/exemples/evaluation-risques-sonde-niveau-eau.pdf).
-    The Markdown sources are in [`examples/08-risk-assessment`][example].
+    The Markdown sources are in [`examples/07-risk-assessment`][example].
 
 ## Takeaway
 
@@ -168,10 +171,10 @@ method, choose it according to your product and your customers.
 
 ---
 
-*Previous episode: [Who did what, and when? Logging security
-activity](CRA-Dev-07-Security-Logs.md).*
+*Previous episode: [A thousand fragments, one signature, updating firmware over
+LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
 
-*Companion code, in [`examples/08-risk-assessment`][example]: the two example
+*Companion code, in [`examples/07-risk-assessment`][example]: the two example
 assessments in Markdown and the script that builds their PDFs.*
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=en
@@ -184,4 +187,4 @@ assessments in Markdown and the script that builds their PDFs.*
 [iec]: https://webstore.iec.ch/en/publication/33615
 [iso]: https://www.iso.org/standard/80585.html
 [en40000]: https://standards.cencenelec.eu/ords/f?cs=1D72BA048927BF4E6076BA309587EA01A&p=CEN%3A110%3A%3A%3A%3A%3AFSP_PROJECT%2CFSP_ORG_ID%3A81335%2C2307986
-[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/08-risk-assessment
+[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/07-risk-assessment

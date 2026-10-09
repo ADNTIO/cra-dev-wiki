@@ -8,7 +8,7 @@ description: >-
 > Cyber Resilience Act. Le produit, les choix et les cotations sont des exemples : ils
 > ne remplacent pas l'analyse de votre propre produit.
 
-Version PDF : [evaluation-risques-capteur-ensoleillement.pdf](evaluation-risques-capteur-ensoleillement.pdf). Source : `examples/08-risk-assessment/fr/capteur-ensoleillement.md`.
+Version PDF : [evaluation-risques-capteur-ensoleillement.pdf](evaluation-risques-capteur-ensoleillement.pdf). Source : `examples/07-risk-assessment/fr/capteur-ensoleillement.md`.
 
 ## 1. Contexte
 
