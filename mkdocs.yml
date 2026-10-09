@@ -4,7 +4,9 @@ site_description: >-
   développeurs à se rapprocher des exigences du Cyber Resilience Act.
 site_url: https://adntio.github.io/cra-dev-wiki/
 site_author: ADNT Sàrl
-copyright: Copyright © 2026 ADNT Sàrl · CC BY-SA 4.0
+copyright: >-
+  Copyright © 2026 ADNT Sàrl · CC BY-SA 4.0 ·
+  <a href="#__consent">Paramètres des cookies</a>
 
 repo_url: https://github.com/ADNTIO/cra-dev-wiki
 repo_name: ADNTIO/cra-dev-wiki
@@ -85,6 +87,19 @@ plugins:
         - locale: en
           name: English
           build: true
+          copyright: >-
+            Copyright © 2026 ADNT Sàrl · CC BY-SA 4.0 ·
+            <a href="#__consent">Cookie settings</a>
+          extra:
+            consent:
+              title: Cookies
+              description: >-
+                With your consent, we use Google Analytics to count visits and
+                see which episodes are read. Nothing is collected if you decline.
+              actions:
+                - accept
+                - reject
+                - manage
           nav_translations:
             Accueil: Home
             Épisodes: Episodes
@@ -99,6 +114,18 @@ plugins:
             "Évaluer les risques": "Assessing the risks"
 
 extra:
+  analytics:
+    provider: google
+    property: G-45FKCBFHDE
+  consent:
+    title: Cookies
+    description: >-
+      Avec votre accord, nous utilisons Google Analytics pour compter les visites
+      et savoir quels épisodes sont lus. Rien n'est collecté si vous refusez.
+    actions:
+      - accept
+      - reject
+      - manage
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/ADNTIO
