@@ -27,6 +27,7 @@ nav:
 
 theme:
   name: material
+  custom_dir: overrides
   language: fr
   icon:
     repo: fontawesome/brands/github
@@ -94,8 +95,9 @@ plugins:
             consent:
               title: Cookies
               description: >-
-                With your consent, we use Google Analytics to count visits and
-                see which episodes are read. Nothing is collected if you decline.
+                Visits are counted anonymously, without cookies, with GoatCounter.
+                With your consent, we also use Google Analytics to see how the
+                episodes are read. Google Analytics is not loaded if you decline.
               actions:
                 - accept
                 - reject
@@ -114,14 +116,17 @@ plugins:
             "Évaluer les risques": "Assessing the risks"
 
 extra:
+  # Cookieless count of every visit, outside the consent banner
+  goatcounter: cra-dev-wiki
   analytics:
     provider: google
     property: G-45FKCBFHDE
   consent:
     title: Cookies
     description: >-
-      Avec votre accord, nous utilisons Google Analytics pour compter les visites
-      et savoir quels épisodes sont lus. Rien n'est collecté si vous refusez.
+      Les visites sont comptées de façon anonyme, sans cookie, avec GoatCounter.
+      Avec votre accord, nous utilisons aussi Google Analytics pour savoir comment
+      les épisodes sont lus. Google Analytics n'est pas chargé si vous refusez.
     actions:
       - accept
       - reject

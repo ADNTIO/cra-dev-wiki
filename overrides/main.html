@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block analytics %}
+  {{ super() }}
+  {% if config.extra.goatcounter %}
+    <!-- Cookieless visit count, no consent needed: https://www.goatcounter.com/help/gdpr -->
+    <script data-goatcounter="https://{{ config.extra.goatcounter }}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+  {% endif %}
+{% endblock %}
