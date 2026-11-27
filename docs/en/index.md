@@ -1,6 +1,6 @@
 ---
 description: >-
-  The CRA & Dev series: the Cyber Resilience Act (Regulation (EU) 2024/2847) turned into engineering practice — SBOM and VEX, binary signing, encrypted secrets, data integrity, firmware updates over LoRaWAN, risk assessment — with runnable code in Rust, Python, .NET and C.
+  The CRA & Dev series: the Cyber Resilience Act (Regulation (EU) 2024/2847) turned into engineering practice — SBOM and VEX, binary signing, encrypted secrets, data integrity, firmware updates over LoRaWAN, risk assessment, authenticated Modbus — with runnable code in Rust, Python, .NET and C.
 ---
 
 # "CRA & Dev" series
@@ -26,6 +26,7 @@ it does not.
 | 05 | [Generating an SBOM is not enough: monitor it with Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Vulnerability handling, continuous monitoring | Part II, point 1 | CI, cross-platform |
 | 06 | [A thousand fragments, one signature: updating firmware over LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md) | Security updates, secure distribution | Part I, point 2, (c); Part II, point 7 | Embedded, LoRaWAN |
 | 07 | [Assessing the cybersecurity risks of a product](CRA-Dev-07-Evaluation-Risques.md) | Cybersecurity risk assessment | Part I, point 1; Article 13 | All platforms |
+| 08 | [Modbus never asks "who is there?": mutual TLS and roles](CRA-Dev-08-Modbus-TLS.md) | Protection from unauthorised access | Part I, point 2, (d) | Industrial, Modbus |
 
 
 The list will grow with each episode.

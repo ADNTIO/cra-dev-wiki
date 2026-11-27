@@ -174,6 +174,9 @@ method, choose it according to your product and your customers.
 *Previous episode: [A thousand fragments, one signature, updating firmware over
 LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
 
+*Next episode: [Modbus never asks "who is there?", mutual TLS and
+roles](CRA-Dev-08-Modbus-TLS.md).*
+
 *Companion code, in [`examples/07-risk-assessment`][example]: the two example
 assessments in Markdown and the script that builds their PDFs.*
 

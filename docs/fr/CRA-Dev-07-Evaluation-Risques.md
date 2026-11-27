@@ -177,6 +177,9 @@ Quant à la méthode, choisissez-la selon votre produit et vos clients.
 *Épisode précédent : [Mille fragments, une seule signature, mettre à jour un
 firmware par LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
 
+*Épisode suivant : [Modbus ne demande jamais « qui est là ? », TLS mutuel et
+rôles](CRA-Dev-08-Modbus-TLS.md).*
+
 *Code d'accompagnement, dans [`examples/07-risk-assessment`][example] : les deux
 évaluations d'exemple en Markdown et le script qui produit leurs PDF.*
 
