@@ -4,7 +4,9 @@ site_description: >-
   développeurs à se rapprocher des exigences du Cyber Resilience Act.
 site_url: https://adntio.github.io/cra-dev-wiki/
 site_author: ADNT Sàrl
-copyright: Copyright © 2026 ADNT Sàrl · CC BY-SA 4.0
+copyright: >-
+  Copyright © 2026 ADNT Sàrl · CC BY-SA 4.0 ·
+  <a href="#__consent">Paramètres des cookies</a>
 
 repo_url: https://github.com/ADNTIO/cra-dev-wiki
 repo_name: ADNTIO/cra-dev-wiki
@@ -19,12 +21,14 @@ nav:
       - "Faites confiance, mais vérifiez": fr/CRA-Dev-04-Integrite.md
       - "Générer un SBOM ne suffit pas": fr/CRA-Dev-05-SBOM-DTRACK.md
       - "Mille fragments, une signature": fr/CRA-Dev-06-FUOTA-LoRaWAN.md
+      - "Évaluer les risques": fr/CRA-Dev-07-Evaluation-Risques.md
       - "Modbus ne demande pas qui parle": fr/CRA-Dev-07-Modbus-TLS.md
   - Ressources:
       - "DPAPI en détail": fr/ressources/DPAPI-Article-de-fond.md
 
 theme:
   name: material
+  custom_dir: overrides
   language: fr
   icon:
     repo: fontawesome/brands/github
@@ -85,6 +89,20 @@ plugins:
         - locale: en
           name: English
           build: true
+          copyright: >-
+            Copyright © 2026 ADNT Sàrl · CC BY-SA 4.0 ·
+            <a href="#__consent">Cookie settings</a>
+          extra:
+            consent:
+              title: Cookies
+              description: >-
+                Visits are counted anonymously, without cookies, with GoatCounter.
+                With your consent, we also use Google Analytics to see how the
+                episodes are read. Google Analytics is not loaded if you decline.
+              actions:
+                - accept
+                - reject
+                - manage
           nav_translations:
             Accueil: Home
             Épisodes: Episodes
@@ -97,8 +115,24 @@ plugins:
             "Un colis sans expéditeur": "A parcel with no sender"
             "Générer un SBOM ne suffit pas": "Generating an SBOM is not enough"
             "DPAPI en détail": "DPAPI in detail"
+            "Évaluer les risques": "Assessing the risks"
 
 extra:
+  # Cookieless count of every visit, outside the consent banner
+  goatcounter: cra-dev-wiki
+  analytics:
+    provider: google
+    property: G-45FKCBFHDE
+  consent:
+    title: Cookies
+    description: >-
+      Les visites sont comptées de façon anonyme, sans cookie, avec GoatCounter.
+      Avec votre accord, nous utilisons aussi Google Analytics pour savoir comment
+      les épisodes sont lus. Google Analytics n'est pas chargé si vous refusez.
+    actions:
+      - accept
+      - reject
+      - manage
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/ADNTIO
