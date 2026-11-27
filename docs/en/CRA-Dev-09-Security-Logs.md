@@ -5,7 +5,7 @@ description: >-
 
 # Who did what, and when? Logging security activity
 
-> **CRA & Dev #7** · ["CRA & Dev" series](index.md) · Reading time: about 5 min · Cross-platform ·
+> **CRA & Dev #9** · ["CRA & Dev" series](index.md) · Reading time: about 5 min · Cross-platform ·
 > Example: Python (standard library)
 
 ## What the CRA requires
@@ -110,10 +110,10 @@ few dozen lines.
 
 ---
 
-*Previous episode: [A thousand fragments, one signature, updating firmware over
-LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
+*Previous episode: [Modbus never asks "who is there?", mutual TLS and
+roles](CRA-Dev-08-Modbus-TLS.md).*
 
-*Companion code, in [`examples/07-security-logging`][example]: the log, the
+*Companion code, in [`examples/09-security-logging`][example]: the log, the
 monitoring rule, the demo and its tests.*
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=en
@@ -127,4 +127,4 @@ monitoring rule, the demo and its tests.*
 [sdjl]: https://docs.rs/systemd-journal-logger/latest/systemd_journal_logger/
 [syslog-rs]: https://docs.rs/syslog/latest/syslog/
 [journalctl]: https://www.freedesktop.org/software/systemd/man/latest/journalctl.html
-[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/07-security-logging
+[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/09-security-logging

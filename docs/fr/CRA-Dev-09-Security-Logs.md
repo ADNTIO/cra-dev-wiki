@@ -5,7 +5,7 @@ description: >-
 
 # Qui a fait quoi, et quand ? Journaliser l'activité de sécurité
 
-> **CRA & Dev #7** · [Série « CRA & Dev »](index.md) · Lecture : environ 5 min · Multiplateforme ·
+> **CRA & Dev #9** · [Série « CRA & Dev »](index.md) · Lecture : environ 5 min · Multiplateforme ·
 > Exemple : Python (bibliothèque standard)
 
 ## Ce que demande le CRA
@@ -112,10 +112,10 @@ le CRA pour ce point, et il tient dans quelques dizaines de lignes.
 
 ---
 
-*Épisode précédent : [Mille fragments, une seule signature, mettre à jour un
-firmware par LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
+*Épisode précédent : [Modbus ne demande jamais « qui est là ? », TLS mutuel et
+rôles](CRA-Dev-08-Modbus-TLS.md).*
 
-*Code d'accompagnement, dans [`examples/07-security-logging`][example] : le journal,
+*Code d'accompagnement, dans [`examples/09-security-logging`][example] : le journal,
 la règle de surveillance, la démonstration et ses tests. Le README de l'exemple est
 en anglais.*
 
@@ -130,4 +130,4 @@ en anglais.*
 [sdjl]: https://docs.rs/systemd-journal-logger/latest/systemd_journal_logger/
 [syslog-rs]: https://docs.rs/syslog/latest/syslog/
 [journalctl]: https://www.freedesktop.org/software/systemd/man/latest/journalctl.html
-[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/07-security-logging
+[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/09-security-logging

@@ -1,7 +1,7 @@
 # Example: recording and monitoring security events
 
-Companion code for episode 7 of the "CRA & Dev" series,
-[Who did what, and when?](../../docs/en/CRA-Dev-07-Security-Logs.md).
+Companion code for episode 9 of the "CRA & Dev" series,
+[Who did what, and when?](../../docs/en/CRA-Dev-09-Security-Logs.md).
 
 The minimum asked by the CRA (Annex I, Part I, point 2 (l)): record the relevant
 internal activity, monitor it, and let the user opt out. Standard library only.

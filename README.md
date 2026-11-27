@@ -32,7 +32,7 @@ and a language switcher.
 | 06 | [A thousand fragments, one signature: updating firmware over LoRaWAN](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-06-FUOTA-LoRaWAN/) | Security updates, secure distribution | Part I, 2 (c); Part II, 7 | Embedded, LoRaWAN |
 | 07 | [Assessing the cybersecurity risks of a product](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-07-Evaluation-Risques/) | Cybersecurity risk assessment | Part I, 1; Article 13 | All platforms |
 | 08 | [Modbus never asks "who is there?": mutual TLS and roles](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-08-Modbus-TLS/) | Protection from unauthorised access | Part I, 2 (d) | Industrial, Modbus |
-| 07 | [Who did what, and when? Logging security activity](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-07-Security-Logs/) | Logging of internal activity | Part I, 2 (l) | Cross-platform |
+| 09 | [Who did what, and when? Logging security activity](https://adntio.github.io/cra-dev-wiki/en/CRA-Dev-09-Security-Logs/) | Logging of internal activity | Part I, 2 (l) | Cross-platform |
 
 
 ## Repository layout

@@ -123,6 +123,9 @@ rôle pour décider de chaque requête, un refus journalisé. À défaut, le ser
 *Épisode précédent : [Évaluer les risques de cybersécurité d'un
 produit](CRA-Dev-07-Evaluation-Risques.md).*
 
+*Épisode suivant : [Qui a fait quoi, et quand ? Journaliser l'activité de
+sécurité](CRA-Dev-09-Security-Logs.md).*
+
 *Code d'accompagnement, dans [`examples/08-modbus-tls`][example] : les deux automates
 simulés, la démonstration et ses tests.*
 

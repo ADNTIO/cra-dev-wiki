@@ -27,7 +27,7 @@ it does not.
 | 06 | [A thousand fragments, one signature: updating firmware over LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md) | Security updates, secure distribution | Part I, point 2, (c); Part II, point 7 | Embedded, LoRaWAN |
 | 07 | [Assessing the cybersecurity risks of a product](CRA-Dev-07-Evaluation-Risques.md) | Cybersecurity risk assessment | Part I, point 1; Article 13 | All platforms |
 | 08 | [Modbus never asks "who is there?": mutual TLS and roles](CRA-Dev-08-Modbus-TLS.md) | Protection from unauthorised access | Part I, point 2, (d) | Industrial, Modbus |
-| 07 | [Who did what, and when? Logging security activity](CRA-Dev-07-Security-Logs.md) | Logging and monitoring of internal activity | Part I, point 2, (l) | Cross-platform |
+| 09 | [Who did what, and when? Logging security activity](CRA-Dev-09-Security-Logs.md) | Logging and monitoring of internal activity | Part I, point 2, (l) | Cross-platform |
 
 
 The list will grow with each episode.

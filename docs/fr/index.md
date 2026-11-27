@@ -27,7 +27,7 @@ protège et ce qu'elle ne protège pas.
 | 06 | [Mille fragments, une seule signature : mettre à jour un firmware par LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md) | Mises à jour de sécurité, distribution sécurisée | Partie I, point 2, c) ; partie II, point 7 | Embarqué, LoRaWAN |
 | 07 | [Évaluer les risques de cybersécurité d'un produit](CRA-Dev-07-Evaluation-Risques.md) | Évaluation des risques de cybersécurité | Partie I, point 1 ; article 13 | Toutes plateformes |
 | 08 | [Modbus ne demande jamais « qui est là ? » : TLS mutuel et rôles](CRA-Dev-08-Modbus-TLS.md) | Protection contre l'accès non autorisé | Partie I, point 2, d) | Industriel, Modbus |
-| 07 | [Qui a fait quoi, et quand ? Journaliser l'activité de sécurité](CRA-Dev-07-Security-Logs.md) | Journalisation et surveillance de l'activité interne | Partie I, point 2, l) | Multiplateforme |
+| 09 | [Qui a fait quoi, et quand ? Journaliser l'activité de sécurité](CRA-Dev-09-Security-Logs.md) | Journalisation et surveillance de l'activité interne | Partie I, point 2, l) | Multiplateforme |
 
 La liste s'enrichira au fil des épisodes.
 

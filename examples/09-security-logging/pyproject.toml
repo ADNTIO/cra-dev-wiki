@@ -1,7 +1,7 @@
 [project]
 name = "security-logging-example"
 version = "0.1.0"
-description = "CRA & Dev #7: record and monitor security events, with an opt-out"
+description = "CRA & Dev #9: record and monitor security events, with an opt-out"
 requires-python = ">=3.11"
 dependencies = []
 
