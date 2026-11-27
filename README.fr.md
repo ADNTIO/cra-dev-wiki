@@ -32,6 +32,7 @@ plein texte et sélecteur de langue.
 | 06 | [Mille fragments, une seule signature : mettre à jour un firmware par LoRaWAN](https://adntio.github.io/cra-dev-wiki/CRA-Dev-06-FUOTA-LoRaWAN/) | Mises à jour de sécurité, distribution sécurisée | Partie I, 2 c) ; partie II, 7 | Embarqué, LoRaWAN |
 | 07 | [Évaluer les risques de cybersécurité d'un produit](https://adntio.github.io/cra-dev-wiki/CRA-Dev-07-Evaluation-Risques/) | Évaluation des risques de cybersécurité | Partie I, 1 ; article 13 | Toutes plateformes |
 | 08 | [Modbus ne demande jamais « qui est là ? » : TLS mutuel et rôles](https://adntio.github.io/cra-dev-wiki/CRA-Dev-08-Modbus-TLS/) | Protection contre l'accès non autorisé | Partie I, 2 d) | Industriel, Modbus |
+| 09 | [Qui a fait quoi, et quand ? Journaliser l'activité de sécurité](https://adntio.github.io/cra-dev-wiki/CRA-Dev-09-Security-Logs/) | Journalisation de l'activité interne | Partie I, 2 l) | Multiplateforme |
 
 ## Organisation du dépôt
 

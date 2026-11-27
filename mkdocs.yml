@@ -23,6 +23,7 @@ nav:
       - "Mille fragments, une signature": fr/CRA-Dev-06-FUOTA-LoRaWAN.md
       - "Évaluer les risques": fr/CRA-Dev-07-Evaluation-Risques.md
       - "Modbus ne demande pas qui parle": fr/CRA-Dev-08-Modbus-TLS.md
+      - "Qui a fait quoi, et quand": fr/CRA-Dev-09-Security-Logs.md
   - Ressources:
       - "DPAPI en détail": fr/ressources/DPAPI-Article-de-fond.md
 
@@ -111,6 +112,7 @@ plugins:
             "Faites confiance, mais vérifiez": "Trust, but verify"
             "Mille fragments, une signature": "A thousand fragments, one signature"
             "Modbus ne demande pas qui parle": "Modbus never asks who is there"
+            "Qui a fait quoi, et quand": "Who did what, and when"
             "Corriger ce qu'on ignore": "Fix what you don't know"
             "Un colis sans expéditeur": "A parcel with no sender"
             "Générer un SBOM ne suffit pas": "Generating an SBOM is not enough"

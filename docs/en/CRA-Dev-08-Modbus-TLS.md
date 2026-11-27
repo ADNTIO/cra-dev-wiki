@@ -119,6 +119,9 @@ restricted and isolated.
 *Previous episode: [Assessing the cybersecurity risks of a
 product](CRA-Dev-07-Evaluation-Risques.md).*
 
+*Next episode: [Who did what, and when? Logging security
+activity](CRA-Dev-09-Security-Logs.md).*
+
 *Companion code, in [`examples/08-modbus-tls`][example]: the two simulated PLCs, the
 demo and its tests.*
 
