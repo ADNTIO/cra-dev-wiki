@@ -26,7 +26,7 @@ protège et ce qu'elle ne protège pas.
 | 05 | [Générer un SBOM ne suffit pas : surveillez-le avec Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Gestion des vulnérabilités, surveillance continue | Partie II, point 1 | CI, multiplateforme |
 | 06 | [Mille fragments, une seule signature : mettre à jour un firmware par LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md) | Mises à jour de sécurité, distribution sécurisée | Partie I, point 2, c) ; partie II, point 7 | Embarqué, LoRaWAN |
 | 07 | [Évaluer les risques de cybersécurité d'un produit](CRA-Dev-07-Evaluation-Risques.md) | Évaluation des risques de cybersécurité | Partie I, point 1 ; article 13 | Toutes plateformes |
-| 07 | [Modbus ne demande jamais « qui est là ? » : TLS mutuel et rôles](CRA-Dev-07-Modbus-TLS.md) | Protection contre l'accès non autorisé | Partie I, point 2, d) | Industriel, Modbus |
+| 08 | [Modbus ne demande jamais « qui est là ? » : TLS mutuel et rôles](CRA-Dev-08-Modbus-TLS.md) | Protection contre l'accès non autorisé | Partie I, point 2, d) | Industriel, Modbus |
 
 La liste s'enrichira au fil des épisodes.
 

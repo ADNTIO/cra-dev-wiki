@@ -1,7 +1,7 @@
 [project]
 name = "modbus-tls-example"
 version = "0.1.0"
-description = "CRA & Dev #7: Modbus/TCP versus Modbus/TCP Security (mutual TLS and roles)"
+description = "CRA & Dev #8: Modbus/TCP versus Modbus/TCP Security (mutual TLS and roles)"
 requires-python = ">=3.11"
 dependencies = [
     "pymodbus>=3.8",

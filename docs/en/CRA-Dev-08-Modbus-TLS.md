@@ -5,7 +5,7 @@ description: >-
 
 # Modbus never asks "who is there?": mutual TLS and roles
 
-> **CRA & Dev #7** · ["CRA & Dev" series](index.md) · Reading time: about 6 min · Industrial, Modbus ·
+> **CRA & Dev #8** · ["CRA & Dev" series](index.md) · Reading time: about 6 min · Industrial, Modbus ·
 > Example: Python (pymodbus)
 
 ## What the CRA requires
@@ -116,10 +116,10 @@ restricted and isolated.
 
 ---
 
-*Previous episode: [A thousand fragments, one signature, updating firmware over
-LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
+*Previous episode: [Assessing the cybersecurity risks of a
+product](CRA-Dev-07-Evaluation-Risques.md).*
 
-*Companion code, in [`examples/07-modbus-tls`][example]: the two simulated PLCs, the
+*Companion code, in [`examples/08-modbus-tls`][example]: the two simulated PLCs, the
 demo and its tests.*
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=en
@@ -128,4 +128,4 @@ demo and its tests.*
 [dragos]: https://www.dragos.com/blog/protect-against-frostygoop-ics-malware-targeting-operational-technology/
 [cve-advantech]: https://www.cve.org/CVERecord?id=CVE-2025-48466
 [pymodbus]: https://pymodbus.readthedocs.io/
-[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/07-modbus-tls
+[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/08-modbus-tls

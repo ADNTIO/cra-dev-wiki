@@ -1,7 +1,7 @@
 # Example: plain Modbus/TCP versus Modbus/TCP Security
 
-Companion code for episode 7 of the "CRA & Dev" series,
-[Modbus never asks who is there](../../docs/en/CRA-Dev-07-Modbus-TLS.md).
+Companion code for episode 8 of the "CRA & Dev" series,
+[Modbus never asks who is there](../../docs/en/CRA-Dev-08-Modbus-TLS.md).
 
 Two simulated PLCs, driving the spindle of a machine tool, run on your machine; no
 hardware needed:

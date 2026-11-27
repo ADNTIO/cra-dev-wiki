@@ -5,7 +5,7 @@ description: >-
 
 # Modbus ne demande jamais « qui est là ? » : TLS mutuel et rôles
 
-> **CRA & Dev #7** · [Série « CRA & Dev »](index.md) · Lecture : environ 6 min · Industriel, Modbus ·
+> **CRA & Dev #8** · [Série « CRA & Dev »](index.md) · Lecture : environ 6 min · Industriel, Modbus ·
 > Exemple : Python (pymodbus)
 
 ## Ce que demande le CRA
@@ -120,10 +120,10 @@ rôle pour décider de chaque requête, un refus journalisé. À défaut, le ser
 
 ---
 
-*Épisode précédent : [Mille fragments, une seule signature, mettre à jour un
-firmware par LoRaWAN](CRA-Dev-06-FUOTA-LoRaWAN.md).*
+*Épisode précédent : [Évaluer les risques de cybersécurité d'un
+produit](CRA-Dev-07-Evaluation-Risques.md).*
 
-*Code d'accompagnement, dans [`examples/07-modbus-tls`][example] : les deux automates
+*Code d'accompagnement, dans [`examples/08-modbus-tls`][example] : les deux automates
 simulés, la démonstration et ses tests.*
 
 [cra]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr
@@ -132,4 +132,4 @@ simulés, la démonstration et ses tests.*
 [dragos]: https://www.dragos.com/blog/protect-against-frostygoop-ics-malware-targeting-operational-technology/
 [cve-advantech]: https://www.cve.org/CVERecord?id=CVE-2025-48466
 [pymodbus]: https://pymodbus.readthedocs.io/
-[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/07-modbus-tls
+[example]: https://github.com/ADNTIO/cra-dev-wiki/tree/main/examples/08-modbus-tls
