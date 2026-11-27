@@ -267,8 +267,8 @@ quelques octets en mécanisme de mise à jour sécurisé au sens du CRA.
 *Épisode précédent : [Générer un SBOM ne suffit pas, surveillez-le avec
 Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md).*
 
-*Épisode suivant : [Qui a fait quoi, et quand ? Journaliser l'activité de
-sécurité](CRA-Dev-07-Security-Logs.md).*
+*Épisode suivant : [Évaluer les risques de cybersécurité d'un
+produit](CRA-Dev-07-Evaluation-Risques.md).*
 
 *Code d'accompagnement, dans [`examples/06-fuota-lorawan`][example] : une session
 FUOTA simulée de bout en bout avec ses tests, et le firmware Zephyr complet, avec

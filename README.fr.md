@@ -30,6 +30,8 @@ plein texte et sélecteur de langue.
 | 04 | [Faites confiance, mais vérifiez : signer vos données](https://adntio.github.io/cra-dev-wiki/CRA-Dev-04-Integrite/) | Intégrité des données | Partie I, 2 f) | Multiplateforme |
 | 05 | [Générer un SBOM ne suffit pas : surveillez-le avec Dependency-Track](CRA-Dev-05-SBOM-DTRACK.md) | Gestion des vulnérabilités, surveillance continue | Partie II, point 1 | CI, multiplateforme |
 | 06 | [Mille fragments, une seule signature : mettre à jour un firmware par LoRaWAN](https://adntio.github.io/cra-dev-wiki/CRA-Dev-06-FUOTA-LoRaWAN/) | Mises à jour de sécurité, distribution sécurisée | Partie I, 2 c) ; partie II, 7 | Embarqué, LoRaWAN |
+| 07 | [Évaluer les risques de cybersécurité d'un produit](https://adntio.github.io/cra-dev-wiki/CRA-Dev-07-Evaluation-Risques/) | Évaluation des risques de cybersécurité | Partie I, 1 ; article 13 | Toutes plateformes |
+| 08 | [Modbus ne demande jamais « qui est là ? » : TLS mutuel et rôles](https://adntio.github.io/cra-dev-wiki/CRA-Dev-08-Modbus-TLS/) | Protection contre l'accès non autorisé | Partie I, 2 d) | Industriel, Modbus |
 | 07 | [Qui a fait quoi, et quand ? Journaliser l'activité de sécurité](https://adntio.github.io/cra-dev-wiki/CRA-Dev-07-Security-Logs/) | Journalisation de l'activité interne | Partie I, 2 l) | Multiplateforme |
 
 ## Organisation du dépôt
